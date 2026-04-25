@@ -364,17 +364,65 @@ function PositionRow({ pick, rank, onExpand, expanded }:
 
 // ── System Setup (capital input) ──────────────────────────────────────────────
 function SystemSetup({
-  capital, onChange,
-}: { capital: number; onChange: (v: number) => void }) {
+  capital, onChange, alloc,
+}: { capital: number; onChange: (v: number) => void; alloc: PortfolioAllocation }) {
   const [raw, setRaw] = useState(capital.toString());
   const presets = [10000, 15000, 25000, 50000, 100000];
+
+  const allPicks = [...alloc.breakout_picks, ...alloc.core_picks];
+  const totalGain = allPicks.reduce((s, p) => s + p.max_gain, 0);
+  const totalRisk = allPicks.reduce((s, p) => s + p.max_loss, 0);
+
+  // 3-month hold → annualise ×4
+  const ANNUAL_FACTOR = 4;
+  const worst     = -totalRisk;
+  const realistic = totalGain * 0.65 - totalRisk * 0.35;
+  const optimistic = totalGain;
+
+  const worstPct      = (worst / capital) * 100;
+  const realisticPct  = (realistic / capital) * 100;
+  const optimisticPct = (optimistic / capital) * 100;
+
+  const scenarios = [
+    {
+      label: "WORST CASE",
+      tag: "All stops triggered, 0 targets hit",
+      amount: worst,
+      pct: worstPct,
+      annualPct: worstPct * ANNUAL_FACTOR,
+      color: "#ef4444",
+      barColor: "#ef4444",
+    },
+    {
+      label: "REALISTIC CASE",
+      tag: "65% win rate — system historical avg",
+      amount: realistic,
+      pct: realisticPct,
+      annualPct: realisticPct * ANNUAL_FACTOR,
+      color: "#ff4500",
+      barColor: "#ff4500",
+    },
+    {
+      label: "OPTIMISTIC CASE",
+      tag: "All targets hit, zero stops triggered",
+      amount: optimistic,
+      pct: optimisticPct,
+      annualPct: optimisticPct * ANNUAL_FACTOR,
+      color: "#22c55e",
+      barColor: "#22c55e",
+    },
+  ];
+
   return (
-    <div style={{ padding: "32px", maxWidth: 560 }}>
+    <div style={{ padding: "32px", maxWidth: 680 }}>
       <div className="label" style={{ marginBottom: 8, color: "#555", letterSpacing: "0.18em" }}>
         SYSTEM SETUP
       </div>
-      <div style={{ fontSize: "1.8rem", fontWeight: 700, marginBottom: 32 }}>
+      <div style={{ fontSize: "1.8rem", fontWeight: 700, marginBottom: 4 }}>
         Portfolio Configuration
+      </div>
+      <div className="label" style={{ color: "#ff4500", marginBottom: 32, letterSpacing: "0.12em" }}>
+        LIVE CAPITAL DEPLOYMENT — REAL MONEY TRADING ENGINE
       </div>
 
       <div className="label" style={{ marginBottom: 10 }}>INVESTMENT CAPITAL</div>
@@ -398,7 +446,7 @@ function SystemSetup({
           onBlur={e => { (e.currentTarget as HTMLInputElement).style.borderColor = "#2a2a2a"; }}
         />
       </div>
-      <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 32 }}>
+      <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 40 }}>
         {presets.map(p => (
           <button key={p} onClick={() => { setRaw(p.toString()); onChange(p); }}
             className="label mono"
@@ -414,6 +462,59 @@ function SystemSetup({
         ))}
       </div>
 
+      {/* Return scenarios */}
+      <div className="label" style={{ marginBottom: 16, color: "#555" }}>RETURN SCENARIOS — 3-MONTH CYCLE</div>
+      <div style={{ display: "flex", flexDirection: "column", gap: 2, marginBottom: 40 }}>
+        {scenarios.map(s => {
+          const absPct = Math.abs(s.pct);
+          const maxPct = Math.abs(optimisticPct);
+          const barW = maxPct > 0 ? (absPct / maxPct) * 100 : 0;
+          return (
+            <div key={s.label} style={{
+              border: "1px solid #1a1a1a", padding: "20px 24px",
+              background: "#0d0d0d",
+            }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 14 }}>
+                <div>
+                  <div className="label" style={{ color: s.color, marginBottom: 4, letterSpacing: "0.14em" }}>
+                    {s.label}
+                  </div>
+                  <div className="label" style={{ color: "#444" }}>{s.tag}</div>
+                </div>
+                <div style={{ textAlign: "right" }}>
+                  <div className="mono" style={{ fontSize: "1.5rem", fontWeight: 700, color: s.color, lineHeight: 1 }}>
+                    {s.amount >= 0 ? "+" : "−"}{fmtINR(Math.abs(s.amount))}
+                  </div>
+                  <div className="mono" style={{ fontSize: "0.8rem", color: "#555", marginTop: 4 }}>
+                    {s.pct >= 0 ? "+" : ""}{s.pct.toFixed(1)}% this cycle
+                  </div>
+                </div>
+              </div>
+
+              {/* Bar */}
+              <div style={{ background: "#111", height: 2, marginBottom: 14 }}>
+                <div style={{
+                  width: `${barW}%`, height: "100%",
+                  background: s.barColor, transition: "width 1s ease",
+                }} />
+              </div>
+
+              {/* Annual row */}
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <span className="label" style={{ color: "#333" }}>ANNUALISED RETURN (4 CYCLES / YR)</span>
+                <span className="mono" style={{
+                  fontSize: "0.9rem", fontWeight: 600,
+                  color: s.annualPct >= 0 ? s.color : "#ef4444",
+                }}>
+                  {s.annualPct >= 0 ? "+" : ""}{s.annualPct.toFixed(1)}% p.a.
+                </span>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Allocation strategy */}
       <div className="label" style={{ marginBottom: 16, color: "#555" }}>ALLOCATION STRATEGY</div>
       {[
         { l: "Core Long-Term", v: "60%", desc: "High-conviction, 2–4 month holds" },
@@ -865,7 +966,7 @@ export default function Dashboard() {
           {/* ── SYSTEM SETUP ── */}
           {nav === "system" && (
             <div className="fade-up">
-              <SystemSetup capital={capital} onChange={handleCapital} />
+              <SystemSetup capital={capital} onChange={handleCapital} alloc={alloc} />
             </div>
           )}
         </div>
