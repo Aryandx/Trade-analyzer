@@ -1,0 +1,169 @@
+{
+  "predictions": [
+    {
+      "date": "2026-04-25",
+      "symbol": "NESTLEIND.NS",
+      "entry_price": 1421.3,
+      "target": 1675.34,
+      "stop_loss": 1336.62,
+      "total_score": 126,
+      "patterns": [],
+      "status": "pending",
+      "resolved_date": null,
+      "resolved_price": null,
+      "return_pct": null
+    },
+    {
+      "date": "2026-04-25",
+      "symbol": "SBIN.NS",
+      "entry_price": 1101.1,
+      "target": 1234.7,
+      "stop_loss": 1029.62,
+      "total_score": 125,
+      "patterns": [
+        "Falling Wedge",
+        "Double Bottom",
+        "Bullish Engulfing",
+        "MACD Divergence",
+        "Trend:LH/LL"
+      ],
+      "status": "pending",
+      "resolved_date": null,
+      "resolved_price": null,
+      "return_pct": null
+    },
+    {
+      "date": "2026-04-25",
+      "symbol": "AXISBANK.NS",
+      "entry_price": 1365.9,
+      "target": 1618.35,
+      "stop_loss": 1281.75,
+      "total_score": 123,
+      "patterns": [
+        "Trend:LH/LL",
+        "MACD Divergence",
+        "RSI Divergence"
+      ],
+      "status": "pending",
+      "resolved_date": null,
+      "resolved_price": null,
+      "return_pct": null
+    },
+    {
+      "date": "2026-04-25",
+      "symbol": "MUTHOOTFIN.NS",
+      "entry_price": 3493.5,
+      "target": 4375.86,
+      "stop_loss": 3199.38,
+      "total_score": 121,
+      "patterns": [
+        "MACD Divergence"
+      ],
+      "status": "pending",
+      "resolved_date": null,
+      "resolved_price": null,
+      "return_pct": null
+    },
+    {
+      "date": "2026-04-25",
+      "symbol": "JSWSTEEL.NS",
+      "entry_price": 1255.7,
+      "target": 1497.62,
+      "stop_loss": 1175.06,
+      "total_score": 119,
+      "patterns": [
+        "MACD Divergence",
+        "Falling Wedge",
+        "RSI Divergence"
+      ],
+      "status": "pending",
+      "resolved_date": null,
+      "resolved_price": null,
+      "return_pct": null
+    },
+    {
+      "date": "2026-04-25",
+      "symbol": "NATIONALUM.NS",
+      "entry_price": 437.05,
+      "target": 549.31,
+      "stop_loss": 399.63,
+      "total_score": 119,
+      "patterns": [
+        "Trend:HH/HL"
+      ],
+      "status": "pending",
+      "resolved_date": null,
+      "resolved_price": null,
+      "return_pct": null
+    },
+    {
+      "date": "2026-04-25",
+      "symbol": "ADANIPORTS.NS",
+      "entry_price": 1585.1,
+      "target": 1935.08,
+      "stop_loss": 1468.44,
+      "total_score": 118,
+      "patterns": [],
+      "status": "pending",
+      "resolved_date": null,
+      "resolved_price": null,
+      "return_pct": null
+    },
+    {
+      "date": "2026-04-25",
+      "symbol": "OBEROIRLTY.NS",
+      "entry_price": 1687.0,
+      "target": 2070.43,
+      "stop_loss": 1559.19,
+      "total_score": 117,
+      "patterns": [
+        "Trend:LH/LL",
+        "MACD Divergence",
+        "Falling Wedge"
+      ],
+      "status": "pending",
+      "resolved_date": null,
+      "resolved_price": null,
+      "return_pct": null
+    },
+    {
+      "date": "2026-04-25",
+      "symbol": "HINDUNILVR.NS",
+      "entry_price": 2327.3,
+      "target": 2799.62,
+      "stop_loss": 2169.86,
+      "total_score": 116,
+      "patterns": [
+        "Trend:LH/LL",
+        "Double Bottom",
+        "Falling Wedge",
+        "Breakout"
+      ],
+      "status": "pending",
+      "resolved_date": null,
+      "resolved_price": null,
+      "return_pct": null
+    },
+    {
+      "date": "2026-04-25",
+      "symbol": "BEL.NS",
+      "entry_price": 444.45,
+      "target": 532.95,
+      "stop_loss": 414.95,
+      "total_score": 116,
+      "patterns": [],
+      "status": "pending",
+      "resolved_date": null,
+      "resolved_price": null,
+      "return_pct": null
+    }
+  ],
+  "daily_accuracy": {},
+  "pattern_accuracy": {},
+  "overall": {
+    "total": 0,
+    "target_hit": 0,
+    "stop_hit": 0,
+    "expired": 0
+  }
+}

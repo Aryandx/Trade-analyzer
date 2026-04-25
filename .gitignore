@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# Analysis cache (large binary files)
+results/cache/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Keep analysis JSON (needed for webapp deploy)
+!results/latest_analysis.json
+!webapp/public/data/analysis.json
