@@ -150,7 +150,7 @@ function Sidebar({
         {NAV_ITEMS.map(item => (
           <button key={item.id} onClick={() => setActive(item.id)}
             style={{
-              background: "none", border: "none", cursor: "pointer",
+              background: "none", cursor: "pointer",
               textAlign: "left", padding: "11px 16px",
               display: "flex", alignItems: "center", gap: 12,
               ...(active === item.id
