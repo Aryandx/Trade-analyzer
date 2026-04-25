@@ -1,40 +1,86 @@
-import re
+"""
+Stock-targeted news fetcher using yfinance.
+Replaces RSS feeds — every article is already relevant to the stocks we trade.
+"""
 import time
-import requests
-import feedparser
+import yfinance as yf
 from datetime import datetime, timedelta
-from config import NEWS_RSS_FEEDS, POSITIVE_KEYWORDS, NEGATIVE_KEYWORDS, THEME_DETECTORS
+from config import STOCK_UNIVERSE, POSITIVE_KEYWORDS, NEGATIVE_KEYWORDS, THEME_DETECTORS
 from rich.console import Console
 
 console = Console()
-HEADERS = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}
+
+# Module-level cache so we fetch each ticker's news only once per analysis run
+_NEWS_CACHE: dict[str, list[dict]] = {}
+
+
+def _parse_item(item: dict, symbol: str) -> dict | None:
+    """Parse a yfinance news item — handles both old and new API formats."""
+    try:
+        # New format (yfinance ≥ 0.2.50): item['content'] sub-dict
+        if "content" in item:
+            c = item["content"]
+            return {
+                "title":   c.get("title", ""),
+                "summary": c.get("summary", ""),
+                "link":    (c.get("canonicalUrl") or {}).get("url", ""),
+                "source":  (c.get("provider") or {}).get("displayName", ""),
+                "published": c.get("pubDate", ""),
+                "symbol":  symbol,
+            }
+        # Old format: flat dict with direct keys
+        return {
+            "title":   item.get("title", ""),
+            "summary": item.get("summary", ""),
+            "link":    item.get("link", ""),
+            "source":  item.get("publisher", ""),
+            "published": str(item.get("providerPublishTime", "")),
+            "symbol":  symbol,
+        }
+    except Exception:
+        return None
+
+
+def fetch_stock_news(symbol: str, max_count: int = 10) -> list[dict]:
+    """Fetch yfinance news for one symbol. Cached per analysis run."""
+    if symbol in _NEWS_CACHE:
+        return _NEWS_CACHE[symbol]
+    try:
+        raw = yf.Ticker(symbol).news or []
+        articles = []
+        for item in raw[:max_count]:
+            parsed = _parse_item(item, symbol)
+            if parsed and parsed["title"]:
+                articles.append(parsed)
+        _NEWS_CACHE[symbol] = articles
+    except Exception:
+        _NEWS_CACHE[symbol] = []
+    return _NEWS_CACHE[symbol]
 
 
 def fetch_all_news(max_age_days: int = 7) -> list[dict]:
-    all_articles = []
-    cutoff = datetime.now() - timedelta(days=max_age_days)
+    """
+    Fetch news for every stock in the universe via yfinance.
+    Returns only articles directly relevant to stocks we trade — no noise.
+    """
+    all_articles: list[dict] = []
+    seen_titles: set[str] = set()
+    total = len(STOCK_UNIVERSE)
 
-    for feed_url in NEWS_RSS_FEEDS:
-        try:
-            feed = feedparser.parse(feed_url)
-            for entry in feed.entries[:40]:
-                title = entry.get("title", "")
-                summary = entry.get("summary", entry.get("description", ""))
-                published = entry.get("published", "")
-                link = entry.get("link", "")
-                all_articles.append({
-                    "title": title,
-                    "summary": summary[:500],
-                    "published": published,
-                    "link": link,
-                    "source": feed_url.split("/")[2],
-                })
-        except Exception as e:
-            console.print(f"[yellow]RSS feed error ({feed_url}): {e}[/yellow]")
-        time.sleep(0.5)
+    for i, symbol in enumerate(STOCK_UNIVERSE, 1):
+        console.print(f"  [dim]news [{i}/{total}] {symbol}[/dim]", end="\r")
+        for art in fetch_stock_news(symbol):
+            key = art["title"][:80]
+            if key and key not in seen_titles:
+                seen_titles.add(key)
+                all_articles.append(art)
+        time.sleep(0.08)
 
+    console.print()
     return all_articles
 
+
+# ── Sentiment ────────────────────────────────────────────────────────────────
 
 def score_sentiment(text: str) -> float:
     text_lower = text.lower()
@@ -46,49 +92,67 @@ def score_sentiment(text: str) -> float:
     return round((pos - neg) / total, 3)
 
 
-def get_stock_sentiment(symbol: str, articles: list[dict]) -> dict:
-    # Extract base name from symbol (e.g., "RELIANCE" from "RELIANCE.NS")
-    base = symbol.replace(".NS", "").replace(".BO", "").replace("&", "AND")
-    # Also try common name mappings
-    name_map = {
-        "HDFCBANK": ["HDFC Bank", "HDFCBANK"],
-        "ICICIBANK": ["ICICI Bank", "ICICIBANK"],
-        "SBIN": ["SBI", "State Bank"],
-        "TCS": ["TCS", "Tata Consultancy"],
-        "INFY": ["Infosys", "INFY"],
-        "WIPRO": ["Wipro"],
-        "BHARTIARTL": ["Airtel", "Bharti"],
-        "HINDUNILVR": ["HUL", "Hindustan Unilever"],
-        "BAJFINANCE": ["Bajaj Finance"],
-        "KOTAKBANK": ["Kotak"],
-        "LT": ["L&T", "Larsen"],
-        "MARUTI": ["Maruti"],
-        "TATAMOTORS": ["Tata Motors"],
-        "TATASTEEL": ["Tata Steel"],
-        "TATAPOWER": ["Tata Power"],
-        "IRCTC": ["IRCTC"],
-        "HAL": ["HAL", "Hindustan Aeronautics"],
-        "BEL": ["BEL", "Bharat Electronics"],
-    }
-    search_terms = name_map.get(base, [base])
+# Stock name aliases — yfinance already targets articles, but cross-reference helps
+_NAME_MAP: dict[str, list[str]] = {
+    "HDFCBANK":   ["HDFC Bank", "HDFCBANK"],
+    "ICICIBANK":  ["ICICI Bank", "ICICIBANK"],
+    "SBIN":       ["SBI", "State Bank"],
+    "TCS":        ["TCS", "Tata Consultancy"],
+    "INFY":       ["Infosys", "INFY"],
+    "WIPRO":      ["Wipro"],
+    "BHARTIARTL": ["Airtel", "Bharti"],
+    "HINDUNILVR": ["HUL", "Hindustan Unilever"],
+    "BAJFINANCE": ["Bajaj Finance"],
+    "KOTAKBANK":  ["Kotak"],
+    "LT":         ["L&T", "Larsen"],
+    "MARUTI":     ["Maruti", "Suzuki"],
+    "TATAMOTORS": ["Tata Motors"],
+    "TATASTEEL":  ["Tata Steel"],
+    "TATAPOWER":  ["Tata Power"],
+    "INDHOTEL":   ["Indian Hotels", "Taj Hotels", "IHCL"],
+    "INTERGLOBE": ["IndiGo", "InterGlobe"],
+    "MARICO":     ["Marico", "Parachute"],
+    "COLPAL":     ["Colgate", "Palmolive"],
+    "DLF":        ["DLF"],
+    "RVNL":       ["RVNL", "Rail Vikas"],
+    "IRFC":       ["IRFC", "Indian Railway Finance"],
+    "MAZAGON":    ["Mazagon", "MDL"],
+    "ASHOKLEY":   ["Ashok Leyland"],
+    "BHARATFORG": ["Bharat Forge"],
+    "KPITTECH":   ["KPIT"],
+    "COFORGE":    ["Coforge"],
+}
 
-    relevant = []
+
+def get_stock_sentiment(symbol: str, articles: list[dict]) -> dict:
+    """Filter pre-fetched articles for a specific stock and compute sentiment."""
+    base = symbol.replace(".NS", "").replace(".BO", "").replace("&", "AND")
+    search_terms = _NAME_MAP.get(base, [base])
+
+    # Primary: articles directly tagged to this symbol by yfinance
+    relevant = [a for a in articles if a.get("symbol") == symbol]
+
+    # Secondary: cross-reference by name mention in other stocks' articles
+    seen = {a["title"][:60] for a in relevant}
     for art in articles:
-        combined = (art["title"] + " " + art["summary"]).lower()
-        if any(term.lower() in combined for term in search_terms):
-            relevant.append(art)
+        if art.get("symbol") == symbol:
+            continue
+        combined = (art["title"] + " " + art.get("summary", "")).lower()
+        if any(t.lower() in combined for t in search_terms):
+            key = art["title"][:60]
+            if key not in seen:
+                seen.add(key)
+                relevant.append(art)
 
     if not relevant:
         return {"symbol": symbol, "article_count": 0, "sentiment": 0.0, "articles": []}
 
-    sentiments = [score_sentiment(a["title"] + " " + a["summary"]) for a in relevant]
-    avg_sentiment = round(sum(sentiments) / len(sentiments), 3)
-
+    sentiments = [score_sentiment(a["title"] + " " + a.get("summary", "")) for a in relevant]
     return {
-        "symbol": symbol,
+        "symbol":        symbol,
         "article_count": len(relevant),
-        "sentiment": avg_sentiment,
-        "articles": [{"title": a["title"], "source": a["source"]} for a in relevant[:5]],
+        "sentiment":     round(sum(sentiments) / len(sentiments), 3),
+        "articles":      [{"title": a["title"], "source": a.get("source", "")} for a in relevant[:5]],
     }
 
 
@@ -98,80 +162,51 @@ def fetch_event_news(
     max_age_days: int = 3,
 ) -> list[dict]:
     """
-    Fetch news articles matching any of the given keywords from standard + extra RSS feeds.
-    Returns filtered list of relevant articles sorted by relevance (match count desc).
+    Search the targeted stock news corpus for articles matching event keywords.
+    extra_feeds is accepted for backward compatibility but ignored.
     """
-    feeds = list(NEWS_RSS_FEEDS) + (extra_feeds or [])
-    cutoff = datetime.now() - timedelta(days=max_age_days)
+    all_news = fetch_all_news(max_age_days)
     keywords_lower = [kw.lower() for kw in keywords]
+    matched: list[dict] = []
+    seen: set[str] = set()
 
-    all_articles = []
-    seen_titles: set[str] = set()
+    for art in all_news:
+        combined = (art["title"] + " " + art.get("summary", "")).lower()
+        match_count = sum(1 for kw in keywords_lower if kw in combined)
+        if match_count == 0:
+            continue
+        key = art["title"][:60]
+        if key not in seen:
+            seen.add(key)
+            matched.append({**art, "match_count": match_count})
 
-    for feed_url in feeds:
-        try:
-            feed = feedparser.parse(feed_url)
-            for entry in feed.entries[:50]:
-                title = entry.get("title", "")
-                summary = entry.get("summary", entry.get("description", ""))
-                link = entry.get("link", "")
-                combined = (title + " " + summary).lower()
-
-                match_count = sum(1 for kw in keywords_lower if kw in combined)
-                if match_count == 0:
-                    continue
-
-                title_key = title[:60]
-                if title_key in seen_titles:
-                    continue
-                seen_titles.add(title_key)
-
-                all_articles.append({
-                    "title": title,
-                    "summary": summary[:500],
-                    "link": link,
-                    "source": feed_url.split("/")[2],
-                    "match_count": match_count,
-                })
-        except Exception as e:
-            console.print(f"[yellow]Event feed error ({feed_url}): {e}[/yellow]")
-        time.sleep(0.3)
-
-    all_articles.sort(key=lambda x: x["match_count"], reverse=True)
-    return all_articles
+    matched.sort(key=lambda x: x["match_count"], reverse=True)
+    return matched
 
 
 def auto_detect_themes(articles: list[dict]) -> dict[str, dict]:
-    """
-    Scan all articles for pre-defined themes. Any theme whose keywords appear
-    >= threshold times in the article corpus is considered active.
-    Returns {theme_name: {hits, impacts, sectors_affected}}.
-    """
-    # Build one large lowercased text blob per article
-    texts = [(a["title"] + " " + a["summary"]).lower() for a in articles]
+    """Scan article corpus for pre-defined market themes."""
+    texts = [(a["title"] + " " + a.get("summary", "")).lower() for a in articles]
     total = len(texts)
-
     detected: dict[str, dict] = {}
+
     for theme, cfg in THEME_DETECTORS.items():
         keywords  = cfg["keywords"]
         threshold = cfg["threshold"]
-
         hit_count = 0
-        matched_kw = set()
+        matched_kw: set[str] = set()
         for text in texts:
             for kw in keywords:
                 if kw in text:
                     hit_count += 1
                     matched_kw.add(kw)
-                    break   # count each article once per theme
-
-        # Scale threshold: more articles = slightly higher bar
+                    break
         effective_threshold = max(threshold, int(total * 0.03))
         if hit_count >= effective_threshold:
             detected[theme] = {
-                "hits":            hit_count,
+                "hits":             hit_count,
                 "matched_keywords": list(matched_kw)[:5],
-                "impacts":         cfg["impacts"],
+                "impacts":          cfg["impacts"],
                 "sectors_affected": list({s for s, _, _ in cfg["impacts"]}),
             }
 
@@ -179,12 +214,12 @@ def auto_detect_themes(articles: list[dict]) -> dict[str, dict]:
 
 
 def get_market_sentiment(articles: list[dict]) -> dict:
-    all_sentiments = [score_sentiment(a["title"] + " " + a["summary"]) for a in articles]
+    all_sentiments = [score_sentiment(a["title"] + " " + a.get("summary", "")) for a in articles]
     if not all_sentiments:
         return {"overall_sentiment": 0.0, "total_articles": 0}
     return {
         "overall_sentiment": round(sum(all_sentiments) / len(all_sentiments), 3),
-        "total_articles": len(articles),
-        "positive_count": sum(1 for s in all_sentiments if s > 0),
-        "negative_count": sum(1 for s in all_sentiments if s < 0),
+        "total_articles":    len(all_sentiments),
+        "positive_count":    sum(1 for s in all_sentiments if s > 0),
+        "negative_count":    sum(1 for s in all_sentiments if s < 0),
     }

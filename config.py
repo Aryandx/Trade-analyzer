@@ -16,6 +16,7 @@ DATA_CACHE_DIR = os.path.join(RESULTS_DIR, "cache")
 
 # Nifty 100 + quality midcap universe — large/liquid = hard to manipulate
 STOCK_UNIVERSE = [
+    # ── Large-cap / Nifty 50 core ───────────────────────────────────────────
     "RELIANCE.NS", "TCS.NS", "HDFCBANK.NS", "INFY.NS", "HINDUNILVR.NS",
     "ICICIBANK.NS", "KOTAKBANK.NS", "BHARTIARTL.NS", "ITC.NS", "LT.NS",
     "SBIN.NS", "BAJFINANCE.NS", "ASIANPAINT.NS", "AXISBANK.NS", "MARUTI.NS",
@@ -26,55 +27,73 @@ STOCK_UNIVERSE = [
     "CIPLA.NS", "BPCL.NS", "BRITANNIA.NS", "DRREDDY.NS", "DIVISLAB.NS",
     "EICHERMOT.NS", "APOLLOHOSP.NS", "TECHM.NS", "HINDALCO.NS", "TATACONSUM.NS",
     "SBILIFE.NS", "ADANIPORTS.NS", "HDFCLIFE.NS", "PIDILITIND.NS", "DABUR.NS",
-    "HAVELLS.NS", "TORNTPHARM.NS", "MUTHOOTFIN.NS", "CHOLAFIN.NS",
-    "BANKBARODA.NS", "LUPIN.NS", "IDFCFIRSTB.NS", "FEDERALBNK.NS",
-    "PERSISTENT.NS", "MPHASIS.NS", "LTIM.NS", "TRENT.NS", "NMDC.NS",
+
+    # ── Financials / Banks / NBFC ────────────────────────────────────────────
+    "HAVELLS.NS", "MUTHOOTFIN.NS", "CHOLAFIN.NS",
+    "BANKBARODA.NS", "IDFCFIRSTB.NS", "FEDERALBNK.NS",
+    "AUBANK.NS", "BANDHANBNK.NS",
+    "HDFCAMC.NS", "ICICIGI.NS", "ICICIPRULI.NS",
+
+    # ── IT / Technology ──────────────────────────────────────────────────────
+    "PERSISTENT.NS", "MPHASIS.NS", "LTIM.NS", "LTTS.NS", "OFSS.NS",
+    "COFORGE.NS", "KPITTECH.NS", "MASTEK.NS",
+
+    # ── Pharma / Healthcare ──────────────────────────────────────────────────
+    "TORNTPHARM.NS", "LUPIN.NS", "ZYDUSLIFE.NS", "MANKIND.NS",
+    "LAURUSLABS.NS", "GLENMARK.NS", "ALKEM.NS", "BIOCON.NS", "AUROPHARMA.NS",
+    "APLLTD.NS", "SYNGENE.NS", "IPCA.NS", "GRANULES.NS",
+
+    # ── Consumer / FMCG ─────────────────────────────────────────────────────
+    "TRENT.NS", "JUBLFOOD.NS", "DMART.NS", "GODREJCP.NS",
+    "MARICO.NS", "COLPAL.NS", "EMAMILTD.NS", "RADICO.NS",
+
+    # ── Auto / Auto ancillaries ──────────────────────────────────────────────
+    "TVSMOTOR.NS", "MOTHERSON.NS", "BOSCHLTD.NS",
+    "ASHOKLEY.NS", "MRF.NS", "BALKRISIND.NS",
+    "BHARATFORG.NS", "TIINDIA.NS",
+
+    # ── Metals / Mining ──────────────────────────────────────────────────────
+    "NMDC.NS", "SAIL.NS", "VEDL.NS", "NATIONALUM.NS", "HINDALCO.NS",
+
+    # ── Energy / Oil & Gas ───────────────────────────────────────────────────
     "IOC.NS", "GAIL.NS", "PETRONET.NS", "TATAPOWER.NS", "TORNTPOWER.NS",
-    "SIEMENS.NS", "BEL.NS", "HAL.NS", "IRCTC.NS", "ZYDUSLIFE.NS",
-    "MANKIND.NS", "JUBLFOOD.NS", "DMART.NS", "POLYCAB.NS", "DIXON.NS",
-    "LTTS.NS", "OFSS.NS", "CUMMINSIND.NS", "GODREJPROP.NS", "PRESTIGE.NS",
-    "SAIL.NS", "VEDL.NS", "HINDPETRO.NS", "MGL.NS", "ABB.NS",
-    "BHEL.NS", "CONCOR.NS", "LAURUSLABS.NS", "GLENMARK.NS", "NATIONALUM.NS",
-    "DEEPAKNTR.NS", "PIIND.NS", "APLLTD.NS", "SYNGENE.NS", "ALKEM.NS",
-    "BIOCON.NS", "AUROPHARMA.NS", "OBEROIRLTY.NS", "GODREJCP.NS",
-    "BERGEPAINT.NS", "VOLTAS.NS", "BALKRISIND.NS", "ASTRAL.NS", "SUPREMEIND.NS",
-    "TVSMOTOR.NS", "MOTHERSON.NS", "BOSCHLTD.NS", "SHREECEM.NS",
+    "HINDPETRO.NS", "MGL.NS",
+
+    # ── Infrastructure / Capital Goods ───────────────────────────────────────
+    "SIEMENS.NS", "ABB.NS", "BHEL.NS", "CONCOR.NS", "CUMMINSIND.NS",
+    "POLYCAB.NS", "AIAENG.NS", "THERMAX.NS", "KEI.NS",
+
+    # ── Defense / PSU ────────────────────────────────────────────────────────
+    "BEL.NS", "HAL.NS", "IRCTC.NS",
+    "NHPC.NS", "SJVN.NS", "RVNL.NS", "IRFC.NS",
+    "MAZAGON.NS", "COCHINSHIP.NS", "GRSE.NS",
+
+    # ── Chemicals / Specialty ────────────────────────────────────────────────
+    "DEEPAKNTR.NS", "PIIND.NS", "TATACHEM.NS", "FINEORG.NS",
+
+    # ── Cement / Building materials ──────────────────────────────────────────
+    "SHREECEM.NS", "KAJARIACER.NS", "ASTRAL.NS", "SUPREMEIND.NS",
+
+    # ── Realty ───────────────────────────────────────────────────────────────
+    "GODREJPROP.NS", "PRESTIGE.NS", "OBEROIRLTY.NS", "DLF.NS", "SOBHA.NS",
+
+    # ── Consumer Durables / Electronics ─────────────────────────────────────
+    "DIXON.NS", "VOLTAS.NS",
+    "SCHAEFFLER.NS", "SKFINDIA.NS",
+
+    # ── Paints ───────────────────────────────────────────────────────────────
+    "BERGEPAINT.NS", "KANSAINER.NS",
+
+    # ── Hospitality / Aviation / Logistics ───────────────────────────────────
+    "INDHOTEL.NS", "INTERGLOBE.NS", "BLUEDART.NS",
+
+    # ── Telecom / Media ──────────────────────────────────────────────────────
+    "PVRINOX.NS",
 ]
 
-NEWS_RSS_FEEDS = [
-    # Markets
-    "https://economictimes.indiatimes.com/markets/stocks/rss.cms",
-    "https://economictimes.indiatimes.com/markets/rss.cms",
-    "https://www.moneycontrol.com/rss/business.xml",
-    "https://www.livemint.com/rss/markets",
-    "https://feeds.feedburner.com/ndtvprofit-latest",
-    # National headlines
-    "https://economictimes.indiatimes.com/news/india/rss.cms",
-    "https://economictimes.indiatimes.com/news/politics-and-nation/rss.cms",
-    "https://www.ndtv.com/rss/india",
-    "https://www.livemint.com/rss/news",
-    # Global / business
-    "https://economictimes.indiatimes.com/news/international/rss.cms",
-    "https://feeds.feedburner.com/reuters/INtopNews",
-    # Sector-specific
-    "https://economictimes.indiatimes.com/industry/banking/finance/rss.cms",
-    "https://economictimes.indiatimes.com/industry/auto/rss.cms",
-    "https://economictimes.indiatimes.com/industry/tech/rss.cms",
-]
-
-# Extra RSS feeds for event-specific analysis
-EVENT_RSS_FEEDS = {
-    "government": [
-        "https://pib.gov.in/RssMain.aspx?ModId=6&Lang=1&Regid=3",    # PIB (Press Information Bureau)
-        "https://economictimes.indiatimes.com/news/politics-and-nation/rss.cms",
-        "https://www.ndtv.com/rss/india",
-    ],
-    "geopolitical": [
-        "https://economictimes.indiatimes.com/news/international/rss.cms",
-        "https://www.livemint.com/rss/news",
-        "https://feeds.feedburner.com/ndtvnews-top-stories",
-    ],
-}
+# News is now fetched via yfinance per-stock (see news_fetcher.py).
+# EVENT_RSS_FEEDS kept as empty dict for backward compatibility with event_analyzer imports.
+EVENT_RSS_FEEDS: dict = {}
 
 # Sector → stock mapping for event analysis
 SECTOR_STOCKS = {
@@ -85,26 +104,34 @@ SECTOR_STOCKS = {
     "Paints":               ["ASIANPAINT.NS", "BERGEPAINT.NS", "PIDILITIND.NS"],
     "Metals":               ["TATASTEEL.NS", "JSWSTEEL.NS", "HINDALCO.NS", "SAIL.NS", "NATIONALUM.NS"],
     "Ports_Logistics":      ["ADANIPORTS.NS", "CONCOR.NS"],
-    "Defense":              ["HAL.NS", "BEL.NS", "BHEL.NS"],
-    "Infrastructure":       ["LT.NS", "SIEMENS.NS", "ABB.NS", "CUMMINSIND.NS", "BHEL.NS", "POLYCAB.NS"],
+    "Defense":              ["HAL.NS", "BEL.NS", "BHEL.NS", "MAZAGON.NS", "COCHINSHIP.NS", "GRSE.NS"],
+    "Infrastructure":       ["LT.NS", "SIEMENS.NS", "ABB.NS", "CUMMINSIND.NS", "BHEL.NS",
+                             "POLYCAB.NS", "AIAENG.NS", "THERMAX.NS", "KEI.NS",
+                             "RVNL.NS", "IRFC.NS", "NHPC.NS", "SJVN.NS"],
     "IT":                   ["TCS.NS", "INFY.NS", "WIPRO.NS", "HCLTECH.NS", "TECHM.NS",
-                             "PERSISTENT.NS", "MPHASIS.NS", "LTIM.NS", "LTTS.NS", "OFSS.NS"],
+                             "PERSISTENT.NS", "MPHASIS.NS", "LTIM.NS", "LTTS.NS", "OFSS.NS",
+                             "COFORGE.NS", "KPITTECH.NS", "MASTEK.NS"],
     "Banks":                ["HDFCBANK.NS", "ICICIBANK.NS", "KOTAKBANK.NS", "SBIN.NS",
-                             "AXISBANK.NS", "BANKBARODA.NS", "IDFCFIRSTB.NS", "FEDERALBNK.NS", "INDUSINDBK.NS"],
+                             "AXISBANK.NS", "BANKBARODA.NS", "IDFCFIRSTB.NS", "FEDERALBNK.NS",
+                             "INDUSINDBK.NS", "AUBANK.NS", "BANDHANBNK.NS"],
     "NBFC":                 ["BAJFINANCE.NS", "BAJAJFINSV.NS", "CHOLAFIN.NS", "MUTHOOTFIN.NS"],
-    "Insurance":            ["SBILIFE.NS", "HDFCLIFE.NS"],
+    "Insurance":            ["SBILIFE.NS", "HDFCLIFE.NS", "ICICIGI.NS", "ICICIPRULI.NS", "HDFCAMC.NS"],
     "Pharma":               ["SUNPHARMA.NS", "CIPLA.NS", "DRREDDY.NS", "DIVISLAB.NS",
                              "TORNTPHARM.NS", "LUPIN.NS", "ZYDUSLIFE.NS", "MANKIND.NS",
-                             "LAURUSLABS.NS", "GLENMARK.NS", "ALKEM.NS", "BIOCON.NS", "AUROPHARMA.NS"],
+                             "LAURUSLABS.NS", "GLENMARK.NS", "ALKEM.NS", "BIOCON.NS",
+                             "AUROPHARMA.NS", "APLLTD.NS", "SYNGENE.NS", "IPCA.NS", "GRANULES.NS"],
     "FMCG":                 ["HINDUNILVR.NS", "ITC.NS", "NESTLEIND.NS", "BRITANNIA.NS",
-                             "DABUR.NS", "TATACONSUM.NS", "GODREJCP.NS"],
+                             "DABUR.NS", "TATACONSUM.NS", "GODREJCP.NS",
+                             "MARICO.NS", "COLPAL.NS", "EMAMILTD.NS", "RADICO.NS"],
     "Auto":                 ["MARUTI.NS", "TATAMOTORS.NS", "M&M.NS", "HEROMOTOCO.NS",
-                             "BAJAJ-AUTO.NS", "EICHERMOT.NS", "TVSMOTOR.NS", "MOTHERSON.NS", "BOSCHLTD.NS"],
+                             "BAJAJ-AUTO.NS", "EICHERMOT.NS", "TVSMOTOR.NS", "MOTHERSON.NS",
+                             "BOSCHLTD.NS", "ASHOKLEY.NS", "MRF.NS", "BALKRISIND.NS",
+                             "BHARATFORG.NS", "TIINDIA.NS"],
     "Cement":               ["ULTRACEMCO.NS", "SHREECEM.NS"],
-    "Realty":               ["GODREJPROP.NS", "PRESTIGE.NS", "OBEROIRLTY.NS"],
+    "Realty":               ["GODREJPROP.NS", "PRESTIGE.NS", "OBEROIRLTY.NS", "DLF.NS", "SOBHA.NS"],
     "Consumer_Durables":    ["TITAN.NS", "HAVELLS.NS", "VOLTAS.NS", "DIXON.NS", "POLYCAB.NS"],
     "Telecom":              ["BHARTIARTL.NS"],
-    "Travel_Tourism":       ["IRCTC.NS"],
+    "Travel_Tourism":       ["IRCTC.NS", "INDHOTEL.NS", "INTERGLOBE.NS"],
     "Agriculture":          ["ITC.NS", "DABUR.NS", "TATACONSUM.NS"],
     "Manufacturing_PLI":    ["DIXON.NS", "POLYCAB.NS", "HAVELLS.NS", "SIEMENS.NS", "ABB.NS"],
 }
