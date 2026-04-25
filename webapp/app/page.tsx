@@ -179,18 +179,45 @@ function Sidebar({
 }
 
 // ── Header bar ────────────────────────────────────────────────────────────────
-function TopBar({ section, hasData }: { section: string; hasData: boolean }) {
+function TopBar({
+  section, hasData, generatedAt, updateFlash,
+}: {
+  section: string; hasData: boolean;
+  generatedAt: string | null; updateFlash: boolean;
+}) {
+  const [ago, setAgo] = useState("");
+
+  useEffect(() => {
+    if (!generatedAt) return;
+    const calc = () => {
+      const diff = Math.floor((Date.now() - new Date(generatedAt).getTime()) / 60000);
+      setAgo(diff < 1 ? "just now" : diff < 60 ? `${diff}m ago` : `${Math.floor(diff / 60)}h ago`);
+    };
+    calc();
+    const id = setInterval(calc, 30000);
+    return () => clearInterval(id);
+  }, [generatedAt]);
+
   return (
     <div style={{
       height: 52, borderBottom: "1px solid #1a1a1a",
       display: "flex", alignItems: "center",
       padding: "0 32px", flexShrink: 0,
-      background: "#0a0a0a",
+      background: updateFlash ? "#0f0a00" : "#0a0a0a",
+      transition: "background 0.6s ease",
     }}>
       <span className="label" style={{ color: "#fff", letterSpacing: "0.18em", fontSize: "0.75rem" }}>
         {section}
       </span>
       <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 28 }}>
+        {generatedAt && (
+          <span className="label" style={{
+            color: updateFlash ? "#ff4500" : "#444",
+            transition: "color 0.6s ease",
+          }}>
+            {updateFlash ? "⚡ DATA UPDATED" : `DATA: ${ago}`}
+          </span>
+        )}
         <span className="label" style={{ color: "#444" }}>
           GLOBAL SESSION: <LiveClock />
         </span>
@@ -547,6 +574,7 @@ export default function Dashboard() {
   const [expandedRow, setExpandedRow] = useState<string | null>(null);
   const [chartWeeks, setChartWeeks]   = useState(12);
   const [startDate, setStartDate]     = useState<Date | null>(null);
+  const [updateFlash, setUpdateFlash] = useState(false);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -572,6 +600,25 @@ export default function Dashboard() {
     const saved = localStorage.getItem("portfolio_start_date");
     if (saved) setStartDate(new Date(saved));
   }, []);
+
+  // Auto-poll for new analysis data every 5 minutes
+  useEffect(() => {
+    if (!analysis) return;
+    const poll = setInterval(async () => {
+      try {
+        const r = await fetch("/data/analysis.json?t=" + Date.now());
+        if (!r.ok) return;
+        const d: Analysis = await r.json();
+        if (d.generated_at !== analysis.generated_at) {
+          setAnalysis(d);
+          setAlloc(prev => allocateCapital(prev?.total_capital ?? capital, d.top_picks));
+          setUpdateFlash(true);
+          setTimeout(() => setUpdateFlash(false), 4000);
+        }
+      } catch { /* silent — no connection change */ }
+    }, 5 * 60 * 1000);
+    return () => clearInterval(poll);
+  }, [analysis, capital]);
 
   const handleCapital = (v: number) => {
     setCapital(v);
@@ -653,7 +700,7 @@ export default function Dashboard() {
 
       {/* Main */}
       <div style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden" }}>
-        <TopBar section={navLabel} hasData={!!analysis} />
+        <TopBar section={navLabel} hasData={!!analysis} generatedAt={analysis?.generated_at ?? null} updateFlash={updateFlash} />
 
         <div style={{ flex: 1, overflowY: "auto", background: "#0a0a0a" }}>
 
