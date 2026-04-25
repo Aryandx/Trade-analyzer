@@ -546,6 +546,7 @@ export default function Dashboard() {
   const [error, setError]       = useState<string | null>(null);
   const [expandedRow, setExpandedRow] = useState<string | null>(null);
   const [chartWeeks, setChartWeeks]   = useState(12);
+  const [startDate, setStartDate]     = useState<Date | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -567,10 +568,36 @@ export default function Dashboard() {
 
   useEffect(() => { load(); }, [load]);
 
+  useEffect(() => {
+    const saved = localStorage.getItem("portfolio_start_date");
+    if (saved) setStartDate(new Date(saved));
+  }, []);
+
   const handleCapital = (v: number) => {
     setCapital(v);
     localStorage.setItem("portfolio_capital", v.toString());
     if (analysis) setAlloc(allocateCapital(v, analysis.top_picks));
+  };
+
+  const startCycle = () => {
+    const now = new Date();
+    localStorage.setItem("portfolio_start_date", now.toISOString());
+    setStartDate(now);
+  };
+
+  const resetCycle = () => {
+    localStorage.removeItem("portfolio_start_date");
+    setStartDate(null);
+  };
+
+  const currentWeek = startDate
+    ? Math.min(12, Math.floor((Date.now() - startDate.getTime()) / (7 * 24 * 60 * 60 * 1000)) + 1)
+    : null;
+
+  const cycleDate = (week: number) => {
+    if (!startDate) return null;
+    const d = new Date(startDate.getTime() + (week - 1) * 7 * 24 * 60 * 60 * 1000);
+    return d.toLocaleDateString("en-IN", { day: "numeric", month: "short" });
   };
 
   const navLabel = NAV_ITEMS.find(n => n.id === nav)?.label ?? "OVERVIEW";
@@ -824,46 +851,114 @@ export default function Dashboard() {
           {/* ── PERFORMANCE ── */}
           {nav === "performance" && (
             <div className="fade-up">
-              <div style={{ padding: "24px 32px 16px", borderBottom: "1px solid #1a1a1a" }}>
-                <div style={{ fontSize: "1.6rem", fontWeight: 700, marginBottom: 4 }}>
-                  PORTFOLIO{" "}
-                  <span className="serif" style={{ color: "#888", fontWeight: 400 }}>performance</span>
+              {/* Header */}
+              <div style={{ padding: "24px 32px 20px", borderBottom: "1px solid #1a1a1a", display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+                <div>
+                  <div style={{ fontSize: "1.6rem", fontWeight: 700, marginBottom: 4 }}>
+                    PORTFOLIO{" "}
+                    <span className="serif" style={{ color: "#888", fontWeight: 400 }}>performance</span>
+                  </div>
+                  <div className="label" style={{ color: "#444" }}>12-WEEK LIVE EXECUTION ROADMAP</div>
                 </div>
-                <div className="label" style={{ color: "#444" }}>12-WEEK EXECUTION ROADMAP</div>
+
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 10 }}>
+                  {startDate ? (
+                    <>
+                      <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                        <span className="label" style={{ color: "#444" }}>
+                          STARTED{" "}
+                          <span className="mono" style={{ color: "#777" }}>
+                            {startDate.toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}
+                          </span>
+                        </span>
+                        <div style={{
+                          background: "#ff4500", padding: "5px 14px",
+                          fontFamily: "'JetBrains Mono', monospace",
+                          fontSize: "0.72rem", fontWeight: 700, color: "#fff", letterSpacing: "0.1em",
+                        }}>
+                          WEEK {currentWeek} / 12
+                        </div>
+                      </div>
+                      <button onClick={resetCycle} className="label" style={{
+                        background: "none", border: "1px solid #2a2a2a",
+                        color: "#444", padding: "6px 14px", cursor: "pointer",
+                      }}>
+                        RESET CYCLE
+                      </button>
+                    </>
+                  ) : (
+                    <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 6 }}>
+                      <button onClick={startCycle} style={{
+                        background: "#ff4500", border: "none", color: "#fff",
+                        fontFamily: "'JetBrains Mono', monospace",
+                        fontSize: "0.72rem", fontWeight: 700,
+                        letterSpacing: "0.12em", padding: "12px 24px", cursor: "pointer",
+                      }}>
+                        START CYCLE — TODAY
+                      </button>
+                      <span className="label" style={{ color: "#333" }}>Locks in week numbers to real calendar dates</span>
+                    </div>
+                  )}
+                </div>
               </div>
+
+              {/* Timeline */}
               <div style={{ padding: "32px" }}>
                 {alloc.weekly_plan.map((event, i) => {
-                  const colors = { entry: "#ff4500", review: "#888", exit: "#ff4500", rebalance: "#444" };
-                  const c = colors[event.type];
+                  const isPast   = currentWeek !== null && event.week < currentWeek;
+                  const isActive = currentWeek !== null && event.week === currentWeek;
+                  const typeColors: Record<string, string> = { entry: "#ff4500", review: "#888", exit: "#ff4500", rebalance: "#555" };
+                  const baseColor = typeColors[event.type] ?? "#888";
+                  const dotBorder = isPast ? "#2a2a2a" : isActive ? "#ff4500" : "#333";
+                  const labelColor = isPast ? "#333" : isActive ? "#ff4500" : baseColor;
+                  const date = cycleDate(event.week);
+
                   return (
-                    <div key={i} style={{ display: "flex", gap: 24, marginBottom: 0 }}>
+                    <div key={i} style={{ display: "flex", gap: 24, opacity: isPast ? 0.45 : 1, transition: "opacity 0.3s" }}>
                       <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
                         <div style={{
-                          width: 28, height: 28, border: `1px solid ${c}`,
+                          width: 30, height: 30,
+                          border: `1px solid ${dotBorder}`,
+                          background: isActive ? "#ff4500" : "transparent",
                           display: "flex", alignItems: "center", justifyContent: "center",
                           flexShrink: 0,
                         }}>
-                          <span className="mono" style={{ fontSize: "0.6rem", color: c }}>
-                            W{event.week}
-                          </span>
+                          {isPast
+                            ? <span style={{ fontSize: "0.65rem", color: "#444" }}>✓</span>
+                            : <span className="mono" style={{ fontSize: "0.6rem", color: isActive ? "#fff" : dotBorder }}>W{event.week}</span>
+                          }
                         </div>
                         {i < alloc.weekly_plan.length - 1 && (
-                          <div style={{ width: 1, height: 48, background: "#1a1a1a" }} />
+                          <div style={{ width: 1, height: 52, background: "#1a1a1a" }} />
                         )}
                       </div>
-                      <div style={{ paddingBottom: i < alloc.weekly_plan.length - 1 ? 32 : 0 }}>
-                        <div style={{ display: "flex", gap: 12, alignItems: "center", marginBottom: 6 }}>
-                          <div className="label" style={{ color: c }}>
+
+                      <div style={{ paddingBottom: i < alloc.weekly_plan.length - 1 ? 32 : 0, flex: 1 }}>
+                        <div style={{ display: "flex", gap: 10, alignItems: "center", marginBottom: 6, flexWrap: "wrap" }}>
+                          <div className="label" style={{ color: labelColor, letterSpacing: "0.14em" }}>
                             {event.label}
                           </div>
-                          {event.stocks?.map(s => (
-                            <span key={s} className="badge mono"
-                              style={{ borderColor: "#2a2a2a", color: "#555", fontSize: "0.6rem" }}>
-                              {s}
+                          {isActive && (
+                            <span style={{
+                              background: "#ff4500", color: "#fff",
+                              fontSize: "0.55rem", fontWeight: 700, letterSpacing: "0.1em",
+                              padding: "2px 7px", fontFamily: "'JetBrains Mono', monospace",
+                            }}>NOW</span>
+                          )}
+                          {date && (
+                            <span className="mono" style={{ fontSize: "0.65rem", color: isPast ? "#2a2a2a" : "#444" }}>
+                              {date}
                             </span>
+                          )}
+                          {event.stocks?.map(s => (
+                            <span key={s} className="badge mono" style={{
+                              borderColor: isPast ? "#1a1a1a" : "#2a2a2a",
+                              color: isPast ? "#2a2a2a" : "#555",
+                              fontSize: "0.6rem",
+                            }}>{s}</span>
                           ))}
                         </div>
-                        <div style={{ fontSize: "0.78rem", color: "#555", lineHeight: 1.6, maxWidth: 560 }}>
+                        <div style={{ fontSize: "0.78rem", color: isPast ? "#2a2a2a" : "#555", lineHeight: 1.6, maxWidth: 560 }}>
                           {event.description}
                         </div>
                       </div>
@@ -879,13 +974,10 @@ export default function Dashboard() {
               }}>
                 {[
                   { l: "BEST CASE", v: `+${fmtINR(totalGain)}`, sub: `+${gainPct}%`, color: "#ff4500" },
-                  { l: "WORST CASE", v: `−${fmtINR(totalRisk)}`, sub: `-${((totalRisk/capital)*100).toFixed(1)}%`, color: "#444" },
+                  { l: "WORST CASE", v: `−${fmtINR(totalRisk)}`, sub: `-${((totalRisk/capital)*100).toFixed(1)}%`, color: "#555" },
                   { l: "REWARD : RISK", v: `${rr}×`, sub: "target 3×+", color: "#888" },
                 ].map((s, i) => (
-                  <div key={s.l} style={{
-                    padding: "20px 24px",
-                    borderRight: i < 2 ? "1px solid #1a1a1a" : "none",
-                  }}>
+                  <div key={s.l} style={{ padding: "20px 24px", borderRight: i < 2 ? "1px solid #1a1a1a" : "none" }}>
                     <div className="label" style={{ marginBottom: 8 }}>{s.l}</div>
                     <div className="mono" style={{ fontSize: "1.6rem", fontWeight: 600, color: s.color }}>{s.v}</div>
                     <div className="label" style={{ marginTop: 4, color: "#333" }}>{s.sub}</div>
