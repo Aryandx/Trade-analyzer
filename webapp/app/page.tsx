@@ -516,6 +516,8 @@ function SystemSetup({
 }: { capital: number; onChange: (v: number) => void; alloc: PortfolioAllocation }) {
   const isMobile = useIsMobile();
   const [raw, setRaw] = useState(capital.toString());
+  // Keep input in sync when capital changes from outside (localStorage load, preset buttons)
+  useEffect(() => { setRaw(capital.toString()); }, [capital]);
   const presets = [10000, 15000, 25000, 50000, 100000];
 
   const allPicks = [...alloc.breakout_picks, ...alloc.core_picks];
@@ -566,10 +568,15 @@ function SystemSetup({
         <span className="mono" style={{
           position: "absolute", left: 16, top: "50%", transform: "translateY(-50%)", color: "#555",
         }}>₹</span>
-        <input type="number" value={raw}
+        <input
+          type="text"
+          inputMode="numeric"
+          pattern="[0-9]*"
+          value={raw}
           onChange={e => {
-            setRaw(e.target.value);
-            const v = parseInt(e.target.value);
+            const digits = e.target.value.replace(/\D/g, "");
+            setRaw(digits);
+            const v = parseInt(digits, 10);
             if (!isNaN(v) && v >= 1000) onChange(v);
           }}
           style={{
