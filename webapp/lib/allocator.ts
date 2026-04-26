@@ -46,11 +46,16 @@ export function allocateCapital(capital: number, picks: StockPick[]): PortfolioA
   function allocate(p: StockPick, amount: number, type: "core" | "breakout", allPct: number): AllocatedPick {
     const shares   = Math.max(1, Math.floor(amount / p.price));
     const invested = Math.round(shares * p.price * 100) / 100;
+    // Recalculate gain/loss from actual allocated shares, not the Python-side fixed values
+    const maxGain  = Math.round(shares * p.price * (p.target_pct / 100));
+    const maxLoss  = Math.round(shares * p.price * (p.stop_pct  / 100));
     return {
       ...p,
       allocated_amount:  amount,
       allocated_shares:  shares,
       actual_invested:   invested,
+      max_gain:          maxGain,
+      max_loss:          maxLoss,
       allocation_type:   type,
       allocation_pct:    allPct,
       weekly_target_pct: weeklyTargetPct(p),
