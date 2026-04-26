@@ -113,6 +113,18 @@ export interface Analysis {
   top_picks: StockPick[];
   total_analyzed: number;
   investment_budget: number;
+  current_prices?: Record<string, number>;
+}
+
+export interface UserPosition {
+  symbol: string;
+  qty: number;
+  avgPrice: number;
+}
+
+export interface ProfitGoal {
+  targetAmount: number;
+  weeks: 4 | 12;
 }
 
 // ── Portfolio allocation types ────────────────────────────────────────────────

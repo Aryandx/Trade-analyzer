@@ -22,7 +22,7 @@ function weeklyTargetPct(p: StockPick): number {
   return Math.round((p.target_pct / 12) * 10) / 10;
 }
 
-export function allocateCapital(capital: number, picks: StockPick[]): PortfolioAllocation {
+export function allocateCapital(capital: number, picks: StockPick[], goalReturnPct?: number): PortfolioAllocation {
   if (!picks.length) {
     return {
       total_capital: capital, core_budget: 0, breakout_budget: 0, reserve: 0,
@@ -34,10 +34,20 @@ export function allocateCapital(capital: number, picks: StockPick[]): PortfolioA
   const breakoutCandidates = picks.filter(isBreakout).slice(0, 2);
   const coreCandidates     = picks.filter(p => !breakoutCandidates.includes(p)).slice(0, 3);
 
-  // Budget split
-  const breakoutRatio = breakoutCandidates.length > 0 ? 0.30 : 0;
-  const reserveRatio  = 0.10;
-  const coreRatio     = 1 - breakoutRatio - reserveRatio;
+  // Budget split — shifts toward breakouts when profit goal is aggressive
+  let breakoutRatio: number;
+  let reserveRatio: number;
+  if (goalReturnPct && goalReturnPct > 25) {
+    breakoutRatio = breakoutCandidates.length > 0 ? 0.45 : 0;
+    reserveRatio  = 0.05;
+  } else if (goalReturnPct && goalReturnPct > 15) {
+    breakoutRatio = breakoutCandidates.length > 0 ? 0.35 : 0;
+    reserveRatio  = 0.07;
+  } else {
+    breakoutRatio = breakoutCandidates.length > 0 ? 0.30 : 0;
+    reserveRatio  = 0.10;
+  }
+  const coreRatio = 1 - breakoutRatio - reserveRatio;
 
   const breakoutBudget = Math.round(capital * breakoutRatio);
   const reserve        = Math.round(capital * reserveRatio);

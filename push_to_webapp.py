@@ -39,6 +39,31 @@ def main():
                     pass
         data["sparklines"] = sparklines
 
+    # Inject current prices for all universe stocks (from cache)
+    current_prices: dict = {}
+    for pick in data.get("top_picks", []):
+        sym = pick["symbol"].replace(".NS", "")
+        current_prices[sym] = pick["price"]
+    if os.path.isdir(cache_dir):
+        try:
+            import pandas as pd
+            from config import STOCK_UNIVERSE
+            for sym in STOCK_UNIVERSE:
+                base = sym.replace(".NS", "")
+                if base in current_prices:
+                    continue
+                cache_path = os.path.join(cache_dir, f"{sym.replace('.', '_')}.parquet")
+                if os.path.exists(cache_path):
+                    try:
+                        df = pd.read_parquet(cache_path)
+                        if not df.empty:
+                            current_prices[base] = round(float(df["close"].iloc[-1]), 2)
+                    except Exception:
+                        pass
+        except ImportError:
+            pass
+    data["current_prices"] = current_prices
+
     with open(DST, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=2, default=str)
 
