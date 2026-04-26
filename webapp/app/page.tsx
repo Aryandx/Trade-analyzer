@@ -620,49 +620,155 @@ function PositionRow({ pick, rank, onExpand, expanded }: { pick: AllocatedPick; 
 }
 
 // ── Live Tracker Page ─────────────────────────────────────────────────────────
-function AddPositionForm({ onAdd, onCancel, isMobile }: {
+function AddPositionForm({ onAdd, onCancel, isMobile, currentPrices }: {
   onAdd: (p: UserPosition) => void; onCancel: () => void; isMobile: boolean;
+  currentPrices: Record<string, number>;
 }) {
-  const [sym, setSym]   = useState("");
-  const [qty, setQty]   = useState("");
-  const [price, setPrice] = useState("");
+  const [query, setQuery]     = useState("");
+  const [sym, setSym]         = useState("");   // confirmed symbol
+  const [qty, setQty]         = useState("");
+  const [avgPrice, setAvgPrice] = useState("");
+  const [open, setOpen]       = useState(false);
+
+  const allStocks = Object.keys(currentPrices).sort();
+  const q = query.toUpperCase().trim();
+
+  // starts-with first, then contains — max 10 items
+  const filtered = q.length > 0
+    ? [...allStocks.filter(s => s.startsWith(q)),
+       ...allStocks.filter(s => !s.startsWith(q) && s.includes(q))].slice(0, 10)
+    : [];
+
+  const livePrice = sym ? (currentPrices[sym] ?? null) : null;
+  const qtyNum    = parseInt(qty, 10);
+  const avgNum    = parseFloat(avgPrice);
+  const pnl       = livePrice != null && !isNaN(qtyNum) && qtyNum > 0 && !isNaN(avgNum) && avgNum > 0
+    ? (livePrice - avgNum) * qtyNum : null;
+  const pnlPct    = livePrice != null && !isNaN(avgNum) && avgNum > 0
+    ? ((livePrice - avgNum) / avgNum) * 100 : null;
+  const isValid   = !!sym && currentPrices[sym] != null && !isNaN(qtyNum) && qtyNum > 0 && !isNaN(avgNum) && avgNum > 0;
+
+  const select = (stock: string) => { setSym(stock); setQuery(stock); setOpen(false); };
+
+  const handleQueryChange = (val: string) => {
+    const up = val.toUpperCase();
+    setQuery(up);
+    setOpen(true);
+    // auto-confirm exact match
+    if (currentPrices[up]) setSym(up); else setSym("");
+  };
 
   const submit = () => {
-    const symbol = sym.toUpperCase().replace(".NS","").trim();
-    const q = parseInt(qty, 10);
-    const p = parseFloat(price);
-    if (!symbol || isNaN(q) || q <= 0 || isNaN(p) || p <= 0) return;
-    onAdd({ symbol, qty: q, avgPrice: p });
-    setSym(""); setQty(""); setPrice("");
+    if (!isValid) return;
+    onAdd({ symbol: sym, qty: qtyNum, avgPrice: avgNum });
+    setSym(""); setQuery(""); setQty(""); setAvgPrice("");
   };
 
-  const inputStyle: React.CSSProperties = {
+  const inp: React.CSSProperties = {
     width: "100%", background: "#111", border: "1px solid #2a2a2a",
     color: "#fff", fontFamily: "'JetBrains Mono', monospace",
-    fontSize: "0.85rem", padding: "10px 12px", outline: "none", boxSizing: "border-box",
+    fontSize: "0.82rem", padding: "9px 11px", outline: "none",
   };
-  const focus = (e: React.FocusEvent<HTMLInputElement>) => { e.currentTarget.style.borderColor = "#ff4500"; };
-  const blur  = (e: React.FocusEvent<HTMLInputElement>) => { e.currentTarget.style.borderColor = "#2a2a2a"; };
+
+  const pnlColor = pnl == null ? "#888" : pnl >= 0 ? "#22c55e" : "#ef4444";
 
   return (
     <div style={{ background: "#0d0d0d", border: "1px solid #1a1a1a", borderTop: "none", padding: isMobile ? "14px 16px" : "16px 24px", marginBottom: 2 }}>
-      <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr 1fr" : "1fr 80px 120px auto auto", gap: 8, alignItems: "end" }}>
-        <div>
+
+      {/* Row 1: input fields */}
+      <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "2fr 72px 130px 130px", gap: 8, marginBottom: 10 }}>
+
+        {/* Symbol autocomplete */}
+        <div style={{ position: "relative" }}>
           <div className="label" style={{ marginBottom: 4 }}>SYMBOL</div>
-          <input value={sym} onChange={e => setSym(e.target.value.toUpperCase())} placeholder="e.g. HDFCBANK" style={inputStyle} onFocus={focus} onBlur={blur} />
+          <input
+            value={query}
+            onChange={e => handleQueryChange(e.target.value)}
+            onFocus={() => { if (q.length > 0) setOpen(true); }}
+            onBlur={() => setTimeout(() => setOpen(false), 160)}
+            placeholder="Search NSE symbol…"
+            style={{ ...inp, borderColor: sym ? "#ff4500" : "#2a2a2a" }}
+          />
+          {open && q.length > 0 && (
+            <div style={{
+              position: "absolute", top: "100%", left: 0, right: 0, zIndex: 300,
+              background: "#111", border: "1px solid #2a2a2a", borderTop: "none",
+              maxHeight: 220, overflowY: "auto",
+            }}>
+              {filtered.length > 0 ? filtered.map(stock => (
+                <div
+                  key={stock}
+                  onMouseDown={() => select(stock)}
+                  style={{ padding: "8px 12px", cursor: "pointer", display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid #1a1a1a" }}
+                  onMouseEnter={e => (e.currentTarget.style.background = "#1a1a1a")}
+                  onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
+                >
+                  <span style={{ fontFamily: "'JetBrains Mono', monospace", fontWeight: 600, fontSize: "0.82rem" }}>{stock}</span>
+                  <span className="mono" style={{ fontSize: "0.74rem", color: "#888" }}>₹{currentPrices[stock].toFixed(2)}</span>
+                </div>
+              )) : (
+                <div style={{ padding: "10px 12px" }}>
+                  <span className="label" style={{ color: "#444" }}>No matching stocks in universe</span>
+                </div>
+              )}
+            </div>
+          )}
         </div>
+
+        {/* QTY */}
         <div>
           <div className="label" style={{ marginBottom: 4 }}>QTY</div>
-          <input type="text" inputMode="numeric" value={qty} onChange={e => setQty(e.target.value.replace(/\D/g,""))} placeholder="10" style={inputStyle} onFocus={focus} onBlur={blur} />
+          <input type="text" inputMode="numeric" value={qty}
+            onChange={e => setQty(e.target.value.replace(/\D/g, ""))}
+            placeholder="10" style={inp}
+            onFocus={e => (e.currentTarget.style.borderColor = "#ff4500")}
+            onBlur={e => (e.currentTarget.style.borderColor = "#2a2a2a")} />
         </div>
-        <div style={isMobile ? { gridColumn: "1 / -1" } : {}}>
-          <div className="label" style={{ marginBottom: 4 }}>AVG BUY PRICE (₹)</div>
-          <input type="text" inputMode="decimal" value={price} onChange={e => setPrice(e.target.value.replace(/[^0-9.]/g,""))} placeholder="1600.00" style={inputStyle} onFocus={focus} onBlur={blur} />
+
+        {/* Avg buy price */}
+        <div>
+          <div className="label" style={{ marginBottom: 4 }}>AVG BUY PRICE</div>
+          <input type="text" inputMode="decimal" value={avgPrice}
+            onChange={e => setAvgPrice(e.target.value.replace(/[^0-9.]/g, ""))}
+            placeholder="1600.00" style={inp}
+            onFocus={e => (e.currentTarget.style.borderColor = "#ff4500")}
+            onBlur={e => (e.currentTarget.style.borderColor = "#2a2a2a")} />
         </div>
-        <button onClick={submit} style={{ background: "#ff4500", border: "none", color: "#fff", fontFamily: "'JetBrains Mono', monospace", fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.1em", padding: "10px 18px", cursor: "pointer", whiteSpace: "nowrap" }}>
-          ADD
+
+        {/* Live price — readonly auto-fill */}
+        <div>
+          <div className="label" style={{ marginBottom: 4 }}>LIVE PRICE</div>
+          <div style={{ ...inp, color: livePrice != null ? "#fff" : "#333", borderColor: "#1a1a1a", display: "flex", alignItems: "center" }}>
+            {livePrice != null ? `₹${livePrice.toFixed(2)}` : "—"}
+          </div>
+        </div>
+      </div>
+
+      {/* Row 2: P&L preview + action buttons */}
+      <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
+        <div style={{ flex: 1, background: "#111", border: "1px solid #1a1a1a", padding: "9px 14px", display: "flex", alignItems: "center", gap: 14, minWidth: 180, minHeight: 36 }}>
+          {pnl != null ? (
+            <>
+              <span className="mono" style={{ fontSize: "0.82rem", fontWeight: 700, color: pnlColor }}>
+                {pnl >= 0 ? "+" : "−"}₹{Math.abs(pnl).toFixed(0)}
+              </span>
+              <span className="mono" style={{ fontSize: "0.78rem", color: pnlColor }}>
+                ({pnlPct! >= 0 ? "+" : ""}{pnlPct!.toFixed(2)}%)
+              </span>
+              <span className="label" style={{ color: "#444", fontSize: "0.58rem" }}>ESTIMATED P&L</span>
+            </>
+          ) : livePrice != null ? (
+            <span className="label" style={{ color: "#444" }}>enter qty & avg price to preview P&L</span>
+          ) : (
+            <span className="label" style={{ color: "#2a2a2a" }}>search and select a symbol above</span>
+          )}
+        </div>
+        <button onClick={submit} disabled={!isValid}
+          style={{ background: isValid ? "#ff4500" : "#161616", border: `1px solid ${isValid ? "#ff4500" : "#2a2a2a"}`, color: isValid ? "#fff" : "#444", fontFamily: "'JetBrains Mono', monospace", fontSize: "0.68rem", fontWeight: 700, letterSpacing: "0.1em", padding: "9px 20px", cursor: isValid ? "pointer" : "not-allowed", whiteSpace: "nowrap" }}>
+          ADD POSITION
         </button>
-        <button onClick={onCancel} className="label" style={{ background: "none", border: "1px solid #2a2a2a", color: "#444", padding: "10px 14px", cursor: "pointer" }}>
+        <button onClick={onCancel}
+          style={{ background: "none", border: "1px solid #2a2a2a", color: "#555", fontFamily: "'JetBrains Mono', monospace", fontSize: "0.65rem", padding: "9px 14px", cursor: "pointer" }}>
           CANCEL
         </button>
       </div>
@@ -763,7 +869,7 @@ function TrackerPage({
           </button>
         </div>
 
-        {showForm && <AddPositionForm onAdd={addPosition} onCancel={() => setShowForm(false)} isMobile={isMobile} />}
+        {showForm && <AddPositionForm onAdd={addPosition} onCancel={() => setShowForm(false)} isMobile={isMobile} currentPrices={currentPrices} />}
 
         {/* Table header (desktop) */}
         {!isMobile && userPositions.length > 0 && (
