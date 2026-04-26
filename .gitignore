@@ -8,6 +8,9 @@ venv/
 # Analysis cache (large binary files)
 results/cache/
 
+# Vercel
+.vercel/
+
 # OS
 .DS_Store
 Thumbs.db
