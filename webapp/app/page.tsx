@@ -11,6 +11,18 @@ const fmtDec = (n: number) =>
   new Intl.NumberFormat("en-IN", { maximumFractionDigits: 2 }).format(n);
 const sign = (n: number) => (n >= 0 ? "+" : "−");
 
+// ── Mobile breakpoint hook ────────────────────────────────────────────────────
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+  return isMobile;
+}
+
 // ── Live clock ────────────────────────────────────────────────────────────────
 function LiveClock() {
   const [t, setT] = useState("");
@@ -35,11 +47,10 @@ function TrajectoryChart({
   const cW = W - PAD.l - PAD.r;
   const cH = H - PAD.t - PAD.b;
 
-  // Build weekly projected values — S-curve toward blended target
   const base = alloc.total_capital;
   const allPicks = [...alloc.breakout_picks, ...alloc.core_picks];
   const maxReturn = allPicks.reduce((s, p) => s + p.max_gain, 0);
-  const conservativeReturn = maxReturn * 0.65; // realistic 65% of targets hit
+  const conservativeReturn = maxReturn * 0.65;
 
   const points: number[] = Array.from({ length: weeks + 1 }, (_, w) => {
     const t = w / weeks;
@@ -78,8 +89,6 @@ function TrajectoryChart({
           <stop offset="100%" stopColor="#ff4500" stopOpacity="1" />
         </linearGradient>
       </defs>
-
-      {/* Grid lines */}
       {yLabels.map(({ v, y }) => (
         <g key={v}>
           <line x1={PAD.l} y1={y} x2={W - PAD.r} y2={y}
@@ -90,20 +99,12 @@ function TrajectoryChart({
           </text>
         </g>
       ))}
-
-      {/* Area fill */}
       <polygon points={areaPts} fill="url(#orange-grad)" />
-
-      {/* Line */}
       <polyline points={linePts} fill="none"
         stroke="url(#line-grad)" strokeWidth="2" strokeLinejoin="round" />
-
-      {/* End dot */}
       <circle cx={px(weeks)} cy={py(points[weeks])} r="5"
         fill="#0a0a0a" stroke="#ff4500" strokeWidth="2" />
       <circle cx={px(weeks)} cy={py(points[weeks])} r="2.5" fill="#ff4500" />
-
-      {/* X axis labels */}
       {xLabels.map(({ w, x, label }) => (
         <text key={w} x={x} y={H - 6} textAnchor="middle"
           fill="#444" fontSize="10" fontFamily="'JetBrains Mono', monospace">
@@ -114,7 +115,7 @@ function TrajectoryChart({
   );
 }
 
-// ── Sidebar ───────────────────────────────────────────────────────────────────
+// ── Nav items ─────────────────────────────────────────────────────────────────
 const NAV_ITEMS = [
   { id: "overview",    label: "OVERVIEW",     icon: "▦" },
   { id: "positions",   label: "POSITIONS",    icon: "≡" },
@@ -125,17 +126,19 @@ const NAV_ITEMS = [
 ] as const;
 type NavId = typeof NAV_ITEMS[number]["id"];
 
+// ── Sidebar (desktop only) ────────────────────────────────────────────────────
 function Sidebar({
   active, setActive,
 }: { active: NavId; setActive: (id: NavId) => void }) {
+  const isMobile = useIsMobile();
+  if (isMobile) return null;
   return (
     <div style={{
       width: 240, background: "#0a0a0a",
       borderRight: "1px solid #1a1a1a",
       display: "flex", flexDirection: "column",
-      height: "100vh", flexShrink: 0,
+      height: "100dvh", flexShrink: 0,
     }}>
-      {/* Logo */}
       <div style={{ padding: "28px 24px 32px", borderBottom: "1px solid #1a1a1a" }}>
         <div className="label" style={{ color: "#ff4500", marginBottom: 2, letterSpacing: "0.18em" }}>
           PORTF.OS
@@ -144,8 +147,6 @@ function Sidebar({
           / INTELLIGENCE
         </div>
       </div>
-
-      {/* Nav */}
       <nav style={{ flex: 1, padding: "20px 16px", display: "flex", flexDirection: "column", gap: 4 }}>
         {NAV_ITEMS.map(item => (
           <button key={item.id} onClick={() => setActive(item.id)}
@@ -168,12 +169,45 @@ function Sidebar({
           </button>
         ))}
       </nav>
-
-      {/* Bottom */}
       <div style={{ padding: "20px 24px", borderTop: "1px solid #1a1a1a" }}>
         <div className="label" style={{ color: "#2a2a2a", marginBottom: 6 }}>VERSION</div>
         <div className="mono" style={{ fontSize: "0.72rem", color: "#333" }}>v2.1 — NSE FEED</div>
       </div>
+    </div>
+  );
+}
+
+// ── Mobile Tab Bar (fixed bottom) ─────────────────────────────────────────────
+function MobileTabBar({
+  active, setActive,
+}: { active: NavId; setActive: (id: NavId) => void }) {
+  return (
+    <div style={{
+      position: "fixed", bottom: 0, left: 0, right: 0,
+      background: "#0a0a0a", borderTop: "1px solid #1a1a1a",
+      display: "flex", zIndex: 100, height: 58,
+    }}>
+      {NAV_ITEMS.map(item => (
+        <button key={item.id} onClick={() => setActive(item.id)}
+          style={{
+            flex: 1, background: "none", border: "none",
+            display: "flex", flexDirection: "column",
+            alignItems: "center", justifyContent: "center",
+            gap: 3, cursor: "pointer",
+            borderTop: active === item.id ? "2px solid #ff4500" : "2px solid transparent",
+            color: active === item.id ? "#ff4500" : "#444",
+            padding: "6px 0",
+          }}
+        >
+          <span style={{ fontSize: "1rem", lineHeight: 1 }}>{item.icon}</span>
+          <span style={{
+            fontSize: "0.48rem", letterSpacing: "0.06em",
+            fontFamily: "'JetBrains Mono', monospace", lineHeight: 1,
+          }}>
+            {item.label.split(" ")[0]}
+          </span>
+        </button>
+      ))}
     </div>
   );
 }
@@ -185,6 +219,7 @@ function TopBar({
   section: string; hasData: boolean;
   generatedAt: string | null; updateFlash: boolean;
 }) {
+  const isMobile = useIsMobile();
   const [ago, setAgo] = useState("");
 
   useEffect(() => {
@@ -197,6 +232,29 @@ function TopBar({
     const id = setInterval(calc, 30000);
     return () => clearInterval(id);
   }, [generatedAt]);
+
+  if (isMobile) return (
+    <div style={{
+      height: 44, borderBottom: "1px solid #1a1a1a",
+      display: "flex", alignItems: "center",
+      padding: "0 16px", flexShrink: 0,
+      background: updateFlash ? "#0f0a00" : "#0a0a0a",
+      transition: "background 0.6s ease",
+    }}>
+      <span className="label" style={{ color: "#fff", letterSpacing: "0.16em", fontSize: "0.7rem" }}>
+        {section}
+      </span>
+      <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 10 }}>
+        {updateFlash && (
+          <span className="label" style={{ color: "#ff4500", fontSize: "0.6rem" }}>⚡ UPDATED</span>
+        )}
+        <span className="label" style={{ color: hasData ? "#22c55e" : "#ff4500", fontSize: "0.65rem" }}>
+          {hasData ? "LIVE" : "OFFLINE"}
+        </span>
+        <span className={`status-dot ${hasData ? "status-dot-green" : ""}`} />
+      </div>
+    </div>
+  );
 
   return (
     <div style={{
@@ -242,29 +300,29 @@ function StatCard({
 }) {
   return (
     <div className={inverted ? "stat-card-inverted" : "stat-card"} style={{ flex: 1 }}>
-      <div className="label" style={{ marginBottom: 12, color: inverted ? "#888" : "#555" }}>
+      <div className="label" style={{ marginBottom: 10, color: inverted ? "#888" : "#555" }}>
         {label}
       </div>
       <div className="mono" style={{
-        fontSize: "2.1rem", fontWeight: 600, lineHeight: 1,
+        fontSize: "clamp(1.3rem, 4vw, 2.1rem)", fontWeight: 600, lineHeight: 1,
         color: inverted ? "#0a0a0a" : "#fff",
         letterSpacing: "-0.02em",
       }}>
         {value}
       </div>
       {(sub || delta) && (
-        <div style={{ marginTop: 10, display: "flex", alignItems: "center", gap: 8 }}>
+        <div style={{ marginTop: 8, display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
           {delta && (
             <span style={{
               background: inverted ? "#0a0a0a" : "#1e1e1e",
               color: delta.positive ? "#ff4500" : "#888",
-              padding: "2px 8px", fontSize: "0.7rem",
+              padding: "2px 6px", fontSize: "0.65rem",
               fontFamily: "'JetBrains Mono', monospace", fontWeight: 500,
             }}>
               ↗ {delta.value}
             </span>
           )}
-          {sub && <span className="label" style={{ color: inverted ? "#999" : "#444" }}>{sub}</span>}
+          {sub && <span className="label" style={{ color: inverted ? "#999" : "#444", fontSize: "0.6rem" }}>{sub}</span>}
         </div>
       )}
     </div>
@@ -274,9 +332,78 @@ function StatCard({
 // ── Position Row ──────────────────────────────────────────────────────────────
 function PositionRow({ pick, rank, onExpand, expanded }:
   { pick: AllocatedPick; rank: number; onExpand: () => void; expanded: boolean }) {
+  const isMobile = useIsMobile();
   const sym = pick.symbol.replace(".NS", "");
   const isBreak = pick.allocation_type === "breakout";
   const f = pick.fundamentals;
+
+  if (isMobile) return (
+    <>
+      <div className="row-hover" onClick={onExpand} style={{
+        padding: "12px 16px", cursor: "pointer",
+        borderBottom: "1px solid #111",
+      }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 5 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+            <span className="mono" style={{ color: "#333", fontSize: "0.62rem" }}>#{rank}</span>
+            {isBreak && <span style={{ color: "#ff4500", fontSize: "0.62rem" }}>⚡</span>}
+            <span style={{ fontWeight: 600, fontSize: "0.9rem" }}>{sym}</span>
+          </div>
+          <span className="mono" style={{ color: "#ff4500", fontSize: "0.82rem", fontWeight: 600 }}>
+            +{pick.target_pct}%
+          </span>
+        </div>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <div style={{ display: "flex", gap: 10 }}>
+            <span className="mono" style={{ color: "#888", fontSize: "0.72rem" }}>{fmtINR(pick.price)}</span>
+            <span className="mono" style={{ color: "#ef4444", fontSize: "0.72rem" }}>SL {fmtINR(pick.stop_loss)}</span>
+          </div>
+          <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+            <span className="mono" style={{ color: "#22c55e", fontSize: "0.72rem" }}>+{fmtINR(pick.max_gain)}</span>
+            <span className="mono" style={{
+              fontSize: "0.62rem",
+              color: pick.total_score >= 100 ? "#ff4500" : "#555",
+            }}>{pick.total_score}/150</span>
+          </div>
+        </div>
+        <div style={{ marginTop: 5 }}>
+          <span className="mono" style={{ color: "#666", fontSize: "0.68rem" }}>
+            Deploy: <span style={{ color: "#fff" }}>{fmtINR(pick.actual_invested)}</span>
+          </span>
+        </div>
+      </div>
+
+      {expanded && (
+        <div style={{ background: "#0d0d0d", borderBottom: "1px solid #1a1a1a", padding: "16px" }}>
+          <div className="label" style={{ marginBottom: 8, color: "#555" }}>ENTRY PLAN</div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 6, marginBottom: 16 }}>
+            {[
+              { l: "Shares", v: `${pick.allocated_shares} × ${fmtINR(pick.price)}` },
+              { l: "Deploy", v: fmtINR(pick.actual_invested) },
+              { l: "Stop Loss", v: `${fmtINR(pick.stop_loss)} (−${pick.stop_pct.toFixed(1)}%)` },
+              { l: "Target", v: `${fmtINR(pick.target)} (+${pick.target_pct}%)` },
+              { l: "Max Gain", v: fmtINR(pick.max_gain) },
+              { l: "Max Loss", v: fmtINR(pick.max_loss) },
+            ].map(r => (
+              <div key={r.l} style={{ display: "flex", justifyContent: "space-between" }}>
+                <span className="label">{r.l}</span>
+                <span className="mono" style={{ fontSize: "0.75rem", color: "#ccc" }}>{r.v}</span>
+              </div>
+            ))}
+          </div>
+          <div className="label" style={{ marginBottom: 8, color: "#555" }}>SIGNAL RATIONALE</div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+            {pick.rationale.slice(0, 4).map((r, i) => (
+              <div key={i} style={{ display: "flex", gap: 6, alignItems: "flex-start" }}>
+                <span style={{ color: "#ff4500", fontSize: "0.6rem", marginTop: 2 }}>▸</span>
+                <span style={{ fontSize: "0.7rem", color: "#666", lineHeight: 1.5 }}>{r}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </>
+  );
 
   return (
     <>
@@ -323,14 +450,12 @@ function PositionRow({ pick, rank, onExpand, expanded }:
         </div>
       </div>
 
-      {/* Expanded row */}
       {expanded && (
         <div style={{
           background: "#0d0d0d", borderBottom: "1px solid #1a1a1a",
           padding: "20px 24px",
         }}>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 24 }}>
-            {/* Entry plan */}
             <div>
               <div className="label" style={{ marginBottom: 12 }}>ENTRY PLAN</div>
               <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
@@ -349,8 +474,6 @@ function PositionRow({ pick, rank, onExpand, expanded }:
                 ))}
               </div>
             </div>
-
-            {/* Fundamentals */}
             <div>
               <div className="label" style={{ marginBottom: 12 }}>FUNDAMENTALS</div>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "6px 16px" }}>
@@ -369,8 +492,6 @@ function PositionRow({ pick, rank, onExpand, expanded }:
                 ))}
               </div>
             </div>
-
-            {/* Rationale */}
             <div>
               <div className="label" style={{ marginBottom: 12 }}>SIGNAL RATIONALE</div>
               <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
@@ -389,10 +510,11 @@ function PositionRow({ pick, rank, onExpand, expanded }:
   );
 }
 
-// ── System Setup (capital input) ──────────────────────────────────────────────
+// ── System Setup ──────────────────────────────────────────────────────────────
 function SystemSetup({
   capital, onChange, alloc,
 }: { capital: number; onChange: (v: number) => void; alloc: PortfolioAllocation }) {
+  const isMobile = useIsMobile();
   const [raw, setRaw] = useState(capital.toString());
   const presets = [10000, 15000, 25000, 50000, 100000];
 
@@ -400,10 +522,9 @@ function SystemSetup({
   const totalGain = allPicks.reduce((s, p) => s + p.max_gain, 0);
   const totalRisk = allPicks.reduce((s, p) => s + p.max_loss, 0);
 
-  // 3-month hold → annualise ×4
   const ANNUAL_FACTOR = 4;
-  const worst     = -totalRisk;
-  const realistic = totalGain * 0.65 - totalRisk * 0.35;
+  const worst      = -totalRisk;
+  const realistic  = totalGain * 0.65 - totalRisk * 0.35;
   const optimistic = totalGain;
 
   const worstPct      = (worst / capital) * 100;
@@ -412,48 +533,36 @@ function SystemSetup({
 
   const scenarios = [
     {
-      label: "WORST CASE",
-      tag: "All stops triggered, 0 targets hit",
-      amount: worst,
-      pct: worstPct,
-      annualPct: worstPct * ANNUAL_FACTOR,
-      color: "#ef4444",
-      barColor: "#ef4444",
+      label: "WORST CASE", tag: "All stops triggered, 0 targets hit",
+      amount: worst, pct: worstPct, annualPct: worstPct * ANNUAL_FACTOR, color: "#ef4444",
     },
     {
-      label: "REALISTIC CASE",
-      tag: "65% win rate — system historical avg",
-      amount: realistic,
-      pct: realisticPct,
-      annualPct: realisticPct * ANNUAL_FACTOR,
-      color: "#ff4500",
-      barColor: "#ff4500",
+      label: "REALISTIC CASE", tag: "65% win rate — system historical avg",
+      amount: realistic, pct: realisticPct, annualPct: realisticPct * ANNUAL_FACTOR, color: "#ff4500",
     },
     {
-      label: "OPTIMISTIC CASE",
-      tag: "All targets hit, zero stops triggered",
-      amount: optimistic,
-      pct: optimisticPct,
-      annualPct: optimisticPct * ANNUAL_FACTOR,
-      color: "#22c55e",
-      barColor: "#22c55e",
+      label: "OPTIMISTIC CASE", tag: "All targets hit, zero stops triggered",
+      amount: optimistic, pct: optimisticPct, annualPct: optimisticPct * ANNUAL_FACTOR, color: "#22c55e",
     },
   ];
 
+  const pad = isMobile ? "20px 16px" : "32px";
+  const maxW = isMobile ? "100%" : 680;
+
   return (
-    <div style={{ padding: "32px", maxWidth: 680 }}>
+    <div style={{ padding: pad, maxWidth: maxW }}>
       <div className="label" style={{ marginBottom: 8, color: "#555", letterSpacing: "0.18em" }}>
         SYSTEM SETUP
       </div>
-      <div style={{ fontSize: "1.8rem", fontWeight: 700, marginBottom: 4 }}>
+      <div style={{ fontSize: isMobile ? "1.4rem" : "1.8rem", fontWeight: 700, marginBottom: 4 }}>
         Portfolio Configuration
       </div>
-      <div className="label" style={{ color: "#ff4500", marginBottom: 32, letterSpacing: "0.12em" }}>
+      <div className="label" style={{ color: "#ff4500", marginBottom: 28, letterSpacing: "0.12em", fontSize: isMobile ? "0.6rem" : "0.7rem" }}>
         LIVE CAPITAL DEPLOYMENT — REAL MONEY TRADING ENGINE
       </div>
 
       <div className="label" style={{ marginBottom: 10 }}>INVESTMENT CAPITAL</div>
-      <div style={{ position: "relative", marginBottom: 16 }}>
+      <div style={{ position: "relative", marginBottom: 14 }}>
         <span className="mono" style={{
           position: "absolute", left: 16, top: "50%", transform: "translateY(-50%)", color: "#555",
         }}>₹</span>
@@ -466,14 +575,14 @@ function SystemSetup({
           style={{
             width: "100%", background: "#111", border: "1px solid #2a2a2a",
             color: "#fff", fontFamily: "'JetBrains Mono', monospace",
-            fontSize: "1.2rem", padding: "14px 16px 14px 32px",
-            outline: "none",
+            fontSize: "1.1rem", padding: "12px 16px 12px 32px",
+            outline: "none", boxSizing: "border-box",
           }}
           onFocus={e => { (e.currentTarget as HTMLInputElement).style.borderColor = "#ff4500"; }}
           onBlur={e => { (e.currentTarget as HTMLInputElement).style.borderColor = "#2a2a2a"; }}
         />
       </div>
-      <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 40 }}>
+      <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 36 }}>
         {presets.map(p => (
           <button key={p} onClick={() => { setRaw(p.toString()); onChange(p); }}
             className="label mono"
@@ -481,58 +590,47 @@ function SystemSetup({
               background: capital === p ? "#ff4500" : "#111",
               border: `1px solid ${capital === p ? "#ff4500" : "#2a2a2a"}`,
               color: capital === p ? "#fff" : "#555",
-              padding: "8px 14px", cursor: "pointer",
+              padding: isMobile ? "7px 10px" : "8px 14px", cursor: "pointer",
               fontFamily: "'JetBrains Mono', monospace",
+              fontSize: isMobile ? "0.65rem" : "0.7rem",
             }}>
             ₹{p.toLocaleString("en-IN")}
           </button>
         ))}
       </div>
 
-      {/* Return scenarios */}
-      <div className="label" style={{ marginBottom: 16, color: "#555" }}>RETURN SCENARIOS — 3-MONTH CYCLE</div>
-      <div style={{ display: "flex", flexDirection: "column", gap: 2, marginBottom: 40 }}>
+      <div className="label" style={{ marginBottom: 14, color: "#555" }}>RETURN SCENARIOS — 3-MONTH CYCLE</div>
+      <div style={{ display: "flex", flexDirection: "column", gap: 2, marginBottom: 36 }}>
         {scenarios.map(s => {
           const absPct = Math.abs(s.pct);
           const maxPct = Math.abs(optimisticPct);
           const barW = maxPct > 0 ? (absPct / maxPct) * 100 : 0;
           return (
-            <div key={s.label} style={{
-              border: "1px solid #1a1a1a", padding: "20px 24px",
-              background: "#0d0d0d",
-            }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 14 }}>
+            <div key={s.label} style={{ border: "1px solid #1a1a1a", padding: isMobile ? "14px 16px" : "20px 24px", background: "#0d0d0d" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 12 }}>
                 <div>
-                  <div className="label" style={{ color: s.color, marginBottom: 4, letterSpacing: "0.14em" }}>
+                  <div className="label" style={{ color: s.color, marginBottom: 4, letterSpacing: "0.12em", fontSize: isMobile ? "0.62rem" : "0.7rem" }}>
                     {s.label}
                   </div>
-                  <div className="label" style={{ color: "#444" }}>{s.tag}</div>
+                  <div className="label" style={{ color: "#444", fontSize: isMobile ? "0.58rem" : "0.65rem" }}>{s.tag}</div>
                 </div>
                 <div style={{ textAlign: "right" }}>
-                  <div className="mono" style={{ fontSize: "1.5rem", fontWeight: 700, color: s.color, lineHeight: 1 }}>
+                  <div className="mono" style={{ fontSize: isMobile ? "1.1rem" : "1.5rem", fontWeight: 700, color: s.color, lineHeight: 1 }}>
                     {s.amount >= 0 ? "+" : "−"}{fmtINR(Math.abs(s.amount))}
                   </div>
-                  <div className="mono" style={{ fontSize: "0.8rem", color: "#555", marginTop: 4 }}>
+                  <div className="mono" style={{ fontSize: "0.75rem", color: "#555", marginTop: 3 }}>
                     {s.pct >= 0 ? "+" : ""}{s.pct.toFixed(1)}% this cycle
                   </div>
                 </div>
               </div>
-
-              {/* Bar */}
-              <div style={{ background: "#111", height: 2, marginBottom: 14 }}>
-                <div style={{
-                  width: `${barW}%`, height: "100%",
-                  background: s.barColor, transition: "width 1s ease",
-                }} />
+              <div style={{ background: "#111", height: 2, marginBottom: 12 }}>
+                <div style={{ width: `${barW}%`, height: "100%", background: s.color, transition: "width 1s ease" }} />
               </div>
-
-              {/* Annual row */}
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <span className="label" style={{ color: "#333" }}>ANNUALISED RETURN (4 CYCLES / YR)</span>
-                <span className="mono" style={{
-                  fontSize: "0.9rem", fontWeight: 600,
-                  color: s.annualPct >= 0 ? s.color : "#ef4444",
-                }}>
+                <span className="label" style={{ color: "#333", fontSize: isMobile ? "0.55rem" : "0.65rem" }}>
+                  ANNUALISED (4 CYCLES / YR)
+                </span>
+                <span className="mono" style={{ fontSize: "0.88rem", fontWeight: 600, color: s.annualPct >= 0 ? s.color : "#ef4444" }}>
                   {s.annualPct >= 0 ? "+" : ""}{s.annualPct.toFixed(1)}% p.a.
                 </span>
               </div>
@@ -541,8 +639,7 @@ function SystemSetup({
         })}
       </div>
 
-      {/* Allocation strategy */}
-      <div className="label" style={{ marginBottom: 16, color: "#555" }}>ALLOCATION STRATEGY</div>
+      <div className="label" style={{ marginBottom: 14, color: "#555" }}>ALLOCATION STRATEGY</div>
       {[
         { l: "Core Long-Term", v: "60%", desc: "High-conviction, 2–4 month holds" },
         { l: "Breakout Reserve", v: "30%", desc: "Deployed on squeeze/pattern triggers" },
@@ -565,6 +662,7 @@ function SystemSetup({
 
 // ── Main Page ─────────────────────────────────────────────────────────────────
 export default function Dashboard() {
+  const isMobile = useIsMobile();
   const [nav, setNav]           = useState<NavId>("overview");
   const [capital, setCapital]   = useState(15000);
   const [analysis, setAnalysis] = useState<Analysis | null>(null);
@@ -601,7 +699,6 @@ export default function Dashboard() {
     if (saved) setStartDate(new Date(saved));
   }, []);
 
-  // Auto-poll for new analysis data every 5 minutes
   useEffect(() => {
     if (!analysis) return;
     const poll = setInterval(async () => {
@@ -615,7 +712,7 @@ export default function Dashboard() {
           setUpdateFlash(true);
           setTimeout(() => setUpdateFlash(false), 4000);
         }
-      } catch { /* silent — no connection change */ }
+      } catch { }
     }, 5 * 60 * 1000);
     return () => clearInterval(poll);
   }, [analysis, capital]);
@@ -650,10 +747,10 @@ export default function Dashboard() {
   const navLabel = NAV_ITEMS.find(n => n.id === nav)?.label ?? "OVERVIEW";
   const allPicks = alloc ? [...alloc.breakout_picks, ...alloc.core_picks] : [];
 
-  // ── Loading ────────────────────────────────────────────────────────────────
+  // ── Loading ──────────────────────────────────────────────────────────────────
   if (loading) return (
     <div style={{
-      height: "100vh", display: "flex", alignItems: "center", justifyContent: "center",
+      height: "100dvh", display: "flex", alignItems: "center", justifyContent: "center",
       background: "#0a0a0a", flexDirection: "column", gap: 16,
     }}>
       <div style={{
@@ -666,16 +763,16 @@ export default function Dashboard() {
     </div>
   );
 
-  // ── No data ────────────────────────────────────────────────────────────────
+  // ── No data ──────────────────────────────────────────────────────────────────
   if (error || !analysis || !alloc) return (
     <div style={{
-      height: "100vh", display: "flex", alignItems: "center", justifyContent: "center",
-      background: "#0a0a0a", flexDirection: "column", gap: 20,
+      height: "100dvh", display: "flex", alignItems: "center", justifyContent: "center",
+      background: "#0a0a0a", flexDirection: "column", gap: 20, padding: "0 24px",
     }}>
       <div className="label" style={{ color: "#ff4500", fontSize: "0.9rem" }}>⚠ NO DATA FEED</div>
       <div className="mono" style={{
         background: "#111", border: "1px solid #1e1e1e", padding: 20,
-        color: "#555", fontSize: "0.78rem", lineHeight: 1.8,
+        color: "#555", fontSize: "0.78rem", lineHeight: 1.8, maxWidth: "100%",
       }}>
         <span style={{ color: "#ff4500" }}>$</span> python main.py<br />
         <span style={{ color: "#ff4500" }}>$</span> python push_to_webapp.py
@@ -694,67 +791,94 @@ export default function Dashboard() {
   const gainPct   = ((totalGain / capital) * 100).toFixed(1);
   const rr        = (totalGain / Math.max(totalRisk, 1)).toFixed(2);
 
+  // Column header row for desktop position tables
+  const DesktopTableHeader = () => (
+    <div style={{
+      display: "grid",
+      gridTemplateColumns: "32px 100px 90px 80px 80px 80px 80px 80px 60px",
+      gap: 0, padding: "10px 24px", borderBottom: "1px solid #1a1a1a",
+    }}>
+      {["#", "SYMBOL", "PRICE", "TARGET", "STOP", "DEPLOY", "MAX GAIN", "SIGNALS", "SCORE"].map(h => (
+        <div key={h} className="label" style={{ fontSize: "0.6rem" }}>{h}</div>
+      ))}
+    </div>
+  );
+
   return (
-    <div style={{ display: "flex", height: "100vh", background: "#0a0a0a", overflow: "hidden" }}>
+    <div style={{ display: "flex", height: "100dvh", background: "#0a0a0a", overflow: "hidden" }}>
       <Sidebar active={nav} setActive={setNav} />
 
-      {/* Main */}
-      <div style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden" }}>
+      {/* Main content */}
+      <div style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden", minWidth: 0 }}>
         <TopBar section={navLabel} hasData={!!analysis} generatedAt={analysis?.generated_at ?? null} updateFlash={updateFlash} />
 
-        <div style={{ flex: 1, overflowY: "auto", background: "#0a0a0a" }}>
+        <div style={{ flex: 1, overflowY: "auto", background: "#0a0a0a", paddingBottom: isMobile ? 58 : 0 }}>
 
           {/* ── OVERVIEW ── */}
           {nav === "overview" && (
             <div className="fade-up">
-              {/* Stats row */}
-              <div style={{ display: "flex", borderBottom: "1px solid #1a1a1a" }}>
-                <StatCard
-                  label="TOTAL CAPITAL"
-                  value={fmtINR(capital)}
-                  sub={`${allPicks.length} positions`}
-                  delta={{ value: `${alloc.breakout_picks.length} breakouts`, positive: alloc.breakout_picks.length > 0 }}
-                />
-                <div style={{ width: 1, background: "#1a1a1a" }} />
-                <StatCard
-                  label="DEPLOYED"
-                  value={fmtINR(alloc.deployed)}
-                  sub={`${Math.round((alloc.deployed / capital) * 100)}% allocated`}
-                  delta={{ value: `${fmtINR(alloc.cash)} reserve`, positive: true }}
-                />
-                <div style={{ width: 1, background: "#1a1a1a" }} />
-                <StatCard
-                  label="GAIN POTENTIAL / EDGE"
-                  value={`${gainPct}%`}
-                  sub={`R:R = ${rr}x`}
-                  inverted
-                  delta={{ value: `+${fmtINR(totalGain)}`, positive: true }}
-                />
-                <div style={{ width: 1, background: "#1a1a1a" }} />
-                <StatCard
-                  label="MARKET REGIME"
-                  value={regime.regime.replace("_", " ")}
-                  sub={`${regime.confidence_pct}% confidence`}
-                  delta={{ value: `ADX ${regime.adx?.toFixed(1)}`, positive: regime.regime.includes("BULL") }}
-                />
+              {/* Stats — 2×2 on mobile, 4-col on desktop */}
+              <div style={{
+                display: "grid",
+                gridTemplateColumns: isMobile ? "1fr 1fr" : "1fr 1fr 1fr 1fr",
+                borderBottom: "1px solid #1a1a1a",
+              }}>
+                <div style={{ borderRight: "1px solid #1a1a1a", borderBottom: isMobile ? "1px solid #1a1a1a" : "none" }}>
+                  <StatCard
+                    label="TOTAL CAPITAL"
+                    value={fmtINR(capital)}
+                    sub={`${allPicks.length} positions`}
+                    delta={{ value: `${alloc.breakout_picks.length} breakouts`, positive: alloc.breakout_picks.length > 0 }}
+                  />
+                </div>
+                <div style={{ borderBottom: isMobile ? "1px solid #1a1a1a" : "none" }}>
+                  <StatCard
+                    label="DEPLOYED"
+                    value={fmtINR(alloc.deployed)}
+                    sub={`${Math.round((alloc.deployed / capital) * 100)}% alloc`}
+                    delta={{ value: `${fmtINR(alloc.cash)} reserve`, positive: true }}
+                  />
+                </div>
+                <div style={{ borderRight: "1px solid #1a1a1a" }}>
+                  <StatCard
+                    label="EDGE / GAIN"
+                    value={`${gainPct}%`}
+                    sub={`R:R = ${rr}x`}
+                    inverted
+                    delta={{ value: `+${fmtINR(totalGain)}`, positive: true }}
+                  />
+                </div>
+                <div>
+                  <StatCard
+                    label="REGIME"
+                    value={regime.regime.replace("_", " ")}
+                    sub={`${regime.confidence_pct}% conf`}
+                    delta={{ value: `ADX ${regime.adx?.toFixed(1)}`, positive: regime.regime.includes("BULL") }}
+                  />
+                </div>
               </div>
 
               {/* Chart section */}
-              <div style={{ padding: "36px 32px 24px", borderBottom: "1px solid #1a1a1a" }}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 28 }}>
+              <div style={{ padding: isMobile ? "20px 16px 16px" : "36px 32px 24px", borderBottom: "1px solid #1a1a1a" }}>
+                <div style={{
+                  display: "flex", flexDirection: isMobile ? "column" : "row",
+                  justifyContent: "space-between", alignItems: "flex-start",
+                  marginBottom: isMobile ? 16 : 28, gap: isMobile ? 12 : 0,
+                }}>
                   <div>
-                    <div style={{ fontSize: "2.4rem", fontWeight: 700, lineHeight: 1, letterSpacing: "-0.02em" }}>
+                    <div style={{
+                      fontSize: isMobile ? "1.5rem" : "2.4rem",
+                      fontWeight: 700, lineHeight: 1, letterSpacing: "-0.02em",
+                    }}>
                       PORTFOLIO{" "}
-                      <span className="serif" style={{ fontSize: "2.2rem", fontWeight: 400, color: "#888" }}>
+                      <span className="serif" style={{ fontSize: isMobile ? "1.3rem" : "2.2rem", fontWeight: 400, color: "#888" }}>
                         trajectory
                       </span>
                     </div>
-                    <div className="label" style={{ marginTop: 8, color: "#444" }}>
-                      12-WEEK CUMULATIVE CAPITAL PROJECTION — {analysis.total_analyzed} STOCKS ANALYZED
+                    <div className="label" style={{ marginTop: 6, color: "#444", fontSize: isMobile ? "0.58rem" : "0.65rem" }}>
+                      12-WEEK PROJECTION — {analysis.total_analyzed} STOCKS ANALYZED
                     </div>
                   </div>
-
-                  {/* Time selector */}
                   <div style={{ display: "flex", gap: 0 }}>
                     {[4, 8, 12].map(w => (
                       <button key={w} onClick={() => setChartWeeks(w)}
@@ -764,23 +888,30 @@ export default function Dashboard() {
                           border: "1px solid #1e1e1e",
                           borderLeft: w === 4 ? "1px solid #1e1e1e" : "none",
                           color: chartWeeks === w ? "#fff" : "#444",
-                          padding: "8px 16px", cursor: "pointer",
+                          padding: isMobile ? "6px 12px" : "8px 16px",
+                          cursor: "pointer",
                           fontFamily: "'JetBrains Mono', monospace",
+                          fontSize: isMobile ? "0.65rem" : "0.7rem",
                         }}>
                         {w}W
                       </button>
                     ))}
                   </div>
                 </div>
-
-                {/* Chart */}
-                <div style={{ height: 260 }}>
+                <div style={{ height: isMobile ? 180 : 260 }}>
                   <TrajectoryChart alloc={alloc} weeks={chartWeeks} />
                 </div>
               </div>
 
-              {/* FII / Regime strip */}
-              <div style={{ display: "flex", padding: "16px 32px", gap: 40, borderBottom: "1px solid #1a1a1a" }}>
+              {/* FII / Regime strip — scrollable on mobile */}
+              <div style={{
+                display: "flex",
+                padding: isMobile ? "12px 16px" : "16px 32px",
+                gap: isMobile ? 20 : 40,
+                borderBottom: "1px solid #1a1a1a",
+                overflowX: "auto",
+                WebkitOverflowScrolling: "touch" as any,
+              }}>
                 {[
                   { l: "NIFTY 50", v: regime.nifty_close?.toFixed(0) ?? "—", ok: true },
                   { l: "INDIA VIX", v: regime.india_vix?.toFixed(1) ?? "—", ok: (regime.india_vix ?? 99) < 20 },
@@ -790,28 +921,19 @@ export default function Dashboard() {
                   { l: "NIFTY RSI", v: regime.rsi?.toFixed(1) ?? "—", ok: regime.rsi < 70 },
                   { l: "MACD", v: regime.macd_bullish ? "BULLISH" : "BEARISH", ok: regime.macd_bullish },
                 ].map(s => (
-                  <div key={s.l}>
-                    <div className="label" style={{ marginBottom: 4 }}>{s.l}</div>
+                  <div key={s.l} style={{ flexShrink: 0 }}>
+                    <div className="label" style={{ marginBottom: 3, fontSize: isMobile ? "0.58rem" : "0.65rem" }}>{s.l}</div>
                     <div className="mono" style={{
-                      fontSize: "0.82rem", fontWeight: 600,
+                      fontSize: isMobile ? "0.75rem" : "0.82rem", fontWeight: 600,
                       color: s.ok ? "#fff" : "#666",
                     }}>{s.v}</div>
                   </div>
                 ))}
               </div>
 
-              {/* Positions preview table */}
+              {/* Positions preview */}
               <div>
-                <div style={{
-                  display: "grid",
-                  gridTemplateColumns: "32px 100px 90px 80px 80px 80px 80px 80px 60px",
-                  gap: 0, padding: "10px 24px",
-                  borderBottom: "1px solid #1a1a1a",
-                }}>
-                  {["#", "SYMBOL", "PRICE", "TARGET", "STOP", "DEPLOY", "MAX GAIN", "SIGNALS", "SCORE"].map(h => (
-                    <div key={h} className="label" style={{ fontSize: "0.6rem" }}>{h}</div>
-                  ))}
-                </div>
+                {!isMobile && <DesktopTableHeader />}
                 {allPicks.slice(0, 5).map((pick, i) => (
                   <PositionRow key={pick.symbol} pick={pick} rank={i + 1}
                     onExpand={() => setExpandedRow(expandedRow === pick.symbol ? null : pick.symbol)}
@@ -824,8 +946,8 @@ export default function Dashboard() {
           {/* ── POSITIONS ── */}
           {nav === "positions" && (
             <div className="fade-up">
-              <div style={{ padding: "24px 32px 16px", borderBottom: "1px solid #1a1a1a" }}>
-                <div style={{ fontSize: "1.6rem", fontWeight: 700, marginBottom: 4 }}>
+              <div style={{ padding: isMobile ? "16px 16px 12px" : "24px 32px 16px", borderBottom: "1px solid #1a1a1a" }}>
+                <div style={{ fontSize: isMobile ? "1.3rem" : "1.6rem", fontWeight: 700, marginBottom: 4 }}>
                   CORE{" "}
                   <span className="serif" style={{ color: "#888", fontWeight: 400 }}>positions</span>
                 </div>
@@ -833,15 +955,7 @@ export default function Dashboard() {
                   {fmtINR(alloc.core_budget)} ALLOCATED — LONG-TERM HOLD 2–4 MONTHS
                 </div>
               </div>
-              <div style={{
-                display: "grid",
-                gridTemplateColumns: "32px 100px 90px 80px 80px 80px 80px 80px 60px",
-                gap: 0, padding: "10px 24px", borderBottom: "1px solid #1a1a1a",
-              }}>
-                {["#", "SYMBOL", "PRICE", "TARGET", "STOP", "DEPLOY", "MAX GAIN", "SIGNALS", "SCORE"].map(h => (
-                  <div key={h} className="label" style={{ fontSize: "0.6rem" }}>{h}</div>
-                ))}
-              </div>
+              {!isMobile && <DesktopTableHeader />}
               {alloc.core_picks.map((pick, i) => (
                 <PositionRow key={pick.symbol} pick={pick} rank={i + 1}
                   onExpand={() => setExpandedRow(expandedRow === pick.symbol ? null : pick.symbol)}
@@ -853,29 +967,20 @@ export default function Dashboard() {
           {/* ── BREAKOUTS ── */}
           {nav === "breakouts" && (
             <div className="fade-up">
-              <div style={{ padding: "24px 32px 16px", borderBottom: "1px solid #1a1a1a" }}>
-                <div style={{ fontSize: "1.6rem", fontWeight: 700, marginBottom: 4 }}>
+              <div style={{ padding: isMobile ? "16px 16px 12px" : "24px 32px 16px", borderBottom: "1px solid #1a1a1a" }}>
+                <div style={{ fontSize: isMobile ? "1.3rem" : "1.6rem", fontWeight: 700, marginBottom: 4 }}>
                   BREAKOUT{" "}
                   <span className="serif" style={{ color: "#ff4500", fontWeight: 400 }}>alerts</span>
                 </div>
-                <div className="label" style={{ color: "#444" }}>
+                <div className="label" style={{ color: "#444", fontSize: isMobile ? "0.6rem" : "0.65rem" }}>
                   {alloc.breakout_picks.length > 0
-                    ? `⚡ ${fmtINR(alloc.breakout_budget)} RESERVED — TIME-SENSITIVE, ENTER WITHIN 2 SESSIONS`
+                    ? `⚡ ${fmtINR(alloc.breakout_budget)} RESERVED — ENTER WITHIN 2 SESSIONS`
                     : "NO ACTIVE BREAKOUT SETUPS — MARKET IN CONSOLIDATION"}
                 </div>
               </div>
-
               {alloc.breakout_picks.length > 0 ? (
                 <>
-                  <div style={{
-                    display: "grid",
-                    gridTemplateColumns: "32px 100px 90px 80px 80px 80px 80px 80px 60px",
-                    gap: 0, padding: "10px 24px", borderBottom: "1px solid #1a1a1a",
-                  }}>
-                    {["#", "SYMBOL", "PRICE", "TARGET", "STOP", "DEPLOY", "MAX GAIN", "SIGNALS", "SCORE"].map(h => (
-                      <div key={h} className="label" style={{ fontSize: "0.6rem" }}>{h}</div>
-                    ))}
-                  </div>
+                  {!isMobile && <DesktopTableHeader />}
                   {alloc.breakout_picks.map((pick, i) => (
                     <PositionRow key={pick.symbol} pick={pick} rank={i + 1}
                       onExpand={() => setExpandedRow(expandedRow === pick.symbol ? null : pick.symbol)}
@@ -883,7 +988,7 @@ export default function Dashboard() {
                   ))}
                 </>
               ) : (
-                <div style={{ padding: "80px 32px", textAlign: "center" }}>
+                <div style={{ padding: isMobile ? "48px 16px" : "80px 32px", textAlign: "center" }}>
                   <div className="label" style={{ color: "#333", fontSize: "0.8rem", marginBottom: 8 }}>
                     NO BREAKOUT TRIGGERS DETECTED
                   </div>
@@ -898,20 +1003,27 @@ export default function Dashboard() {
           {/* ── PERFORMANCE ── */}
           {nav === "performance" && (
             <div className="fade-up">
-              {/* Header */}
-              <div style={{ padding: "24px 32px 20px", borderBottom: "1px solid #1a1a1a", display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+              <div style={{
+                padding: isMobile ? "16px" : "24px 32px 20px",
+                borderBottom: "1px solid #1a1a1a",
+                display: "flex",
+                flexDirection: isMobile ? "column" : "row",
+                justifyContent: "space-between",
+                alignItems: isMobile ? "flex-start" : "flex-start",
+                gap: isMobile ? 16 : 0,
+              }}>
                 <div>
-                  <div style={{ fontSize: "1.6rem", fontWeight: 700, marginBottom: 4 }}>
+                  <div style={{ fontSize: isMobile ? "1.3rem" : "1.6rem", fontWeight: 700, marginBottom: 4 }}>
                     PORTFOLIO{" "}
                     <span className="serif" style={{ color: "#888", fontWeight: 400 }}>performance</span>
                   </div>
                   <div className="label" style={{ color: "#444" }}>12-WEEK LIVE EXECUTION ROADMAP</div>
                 </div>
 
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 10 }}>
+                <div style={{ display: "flex", flexDirection: "column", alignItems: isMobile ? "flex-start" : "flex-end", gap: 10 }}>
                   {startDate ? (
                     <>
-                      <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
                         <span className="label" style={{ color: "#444" }}>
                           STARTED{" "}
                           <span className="mono" style={{ color: "#777" }}>
@@ -919,7 +1031,7 @@ export default function Dashboard() {
                           </span>
                         </span>
                         <div style={{
-                          background: "#ff4500", padding: "5px 14px",
+                          background: "#ff4500", padding: "5px 12px",
                           fontFamily: "'JetBrains Mono', monospace",
                           fontSize: "0.72rem", fontWeight: 700, color: "#fff", letterSpacing: "0.1em",
                         }}>
@@ -934,7 +1046,7 @@ export default function Dashboard() {
                       </button>
                     </>
                   ) : (
-                    <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 6 }}>
+                    <div style={{ display: "flex", flexDirection: "column", alignItems: isMobile ? "flex-start" : "flex-end", gap: 6 }}>
                       <button onClick={startCycle} style={{
                         background: "#ff4500", border: "none", color: "#fff",
                         fontFamily: "'JetBrains Mono', monospace",
@@ -950,21 +1062,21 @@ export default function Dashboard() {
               </div>
 
               {/* Timeline */}
-              <div style={{ padding: "32px" }}>
+              <div style={{ padding: isMobile ? "20px 16px" : "32px" }}>
                 {alloc.weekly_plan.map((event, i) => {
                   const isPast   = currentWeek !== null && event.week < currentWeek;
                   const isActive = currentWeek !== null && event.week === currentWeek;
                   const typeColors: Record<string, string> = { entry: "#ff4500", review: "#888", exit: "#ff4500", rebalance: "#555" };
-                  const baseColor = typeColors[event.type] ?? "#888";
-                  const dotBorder = isPast ? "#2a2a2a" : isActive ? "#ff4500" : "#333";
+                  const baseColor  = typeColors[event.type] ?? "#888";
+                  const dotBorder  = isPast ? "#2a2a2a" : isActive ? "#ff4500" : "#333";
                   const labelColor = isPast ? "#333" : isActive ? "#ff4500" : baseColor;
                   const date = cycleDate(event.week);
 
                   return (
-                    <div key={i} style={{ display: "flex", gap: 24, opacity: isPast ? 0.45 : 1, transition: "opacity 0.3s" }}>
+                    <div key={i} style={{ display: "flex", gap: isMobile ? 16 : 24, opacity: isPast ? 0.45 : 1, transition: "opacity 0.3s" }}>
                       <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
                         <div style={{
-                          width: 30, height: 30,
+                          width: 28, height: 28,
                           border: `1px solid ${dotBorder}`,
                           background: isActive ? "#ff4500" : "transparent",
                           display: "flex", alignItems: "center", justifyContent: "center",
@@ -976,13 +1088,13 @@ export default function Dashboard() {
                           }
                         </div>
                         {i < alloc.weekly_plan.length - 1 && (
-                          <div style={{ width: 1, height: 52, background: "#1a1a1a" }} />
+                          <div style={{ width: 1, height: 48, background: "#1a1a1a" }} />
                         )}
                       </div>
 
-                      <div style={{ paddingBottom: i < alloc.weekly_plan.length - 1 ? 32 : 0, flex: 1 }}>
-                        <div style={{ display: "flex", gap: 10, alignItems: "center", marginBottom: 6, flexWrap: "wrap" }}>
-                          <div className="label" style={{ color: labelColor, letterSpacing: "0.14em" }}>
+                      <div style={{ paddingBottom: i < alloc.weekly_plan.length - 1 ? 28 : 0, flex: 1, minWidth: 0 }}>
+                        <div style={{ display: "flex", gap: 8, alignItems: "center", marginBottom: 4, flexWrap: "wrap" }}>
+                          <div className="label" style={{ color: labelColor, letterSpacing: "0.12em" }}>
                             {event.label}
                           </div>
                           {isActive && (
@@ -993,11 +1105,11 @@ export default function Dashboard() {
                             }}>NOW</span>
                           )}
                           {date && (
-                            <span className="mono" style={{ fontSize: "0.65rem", color: isPast ? "#2a2a2a" : "#444" }}>
+                            <span className="mono" style={{ fontSize: "0.62rem", color: isPast ? "#2a2a2a" : "#444" }}>
                               {date}
                             </span>
                           )}
-                          {event.stocks?.map(s => (
+                          {!isMobile && event.stocks?.map(s => (
                             <span key={s} className="badge mono" style={{
                               borderColor: isPast ? "#1a1a1a" : "#2a2a2a",
                               color: isPast ? "#2a2a2a" : "#555",
@@ -1005,7 +1117,7 @@ export default function Dashboard() {
                             }}>{s}</span>
                           ))}
                         </div>
-                        <div style={{ fontSize: "0.78rem", color: isPast ? "#2a2a2a" : "#555", lineHeight: 1.6, maxWidth: 560 }}>
+                        <div style={{ fontSize: "0.75rem", color: isPast ? "#2a2a2a" : "#555", lineHeight: 1.6 }}>
                           {event.description}
                         </div>
                       </div>
@@ -1016,17 +1128,23 @@ export default function Dashboard() {
 
               {/* R:R summary */}
               <div style={{
-                margin: "0 32px 32px", display: "grid", gridTemplateColumns: "1fr 1fr 1fr",
+                margin: isMobile ? "0 16px 24px" : "0 32px 32px",
+                display: "grid",
+                gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr 1fr",
                 border: "1px solid #1a1a1a",
               }}>
                 {[
                   { l: "BEST CASE", v: `+${fmtINR(totalGain)}`, sub: `+${gainPct}%`, color: "#ff4500" },
-                  { l: "WORST CASE", v: `−${fmtINR(totalRisk)}`, sub: `-${((totalRisk/capital)*100).toFixed(1)}%`, color: "#555" },
+                  { l: "WORST CASE", v: `−${fmtINR(totalRisk)}`, sub: `-${((totalRisk / capital) * 100).toFixed(1)}%`, color: "#555" },
                   { l: "REWARD : RISK", v: `${rr}×`, sub: "target 3×+", color: "#888" },
                 ].map((s, i) => (
-                  <div key={s.l} style={{ padding: "20px 24px", borderRight: i < 2 ? "1px solid #1a1a1a" : "none" }}>
-                    <div className="label" style={{ marginBottom: 8 }}>{s.l}</div>
-                    <div className="mono" style={{ fontSize: "1.6rem", fontWeight: 600, color: s.color }}>{s.v}</div>
+                  <div key={s.l} style={{
+                    padding: isMobile ? "16px" : "20px 24px",
+                    borderRight: !isMobile && i < 2 ? "1px solid #1a1a1a" : "none",
+                    borderBottom: isMobile && i < 2 ? "1px solid #1a1a1a" : "none",
+                  }}>
+                    <div className="label" style={{ marginBottom: 6 }}>{s.l}</div>
+                    <div className="mono" style={{ fontSize: isMobile ? "1.3rem" : "1.6rem", fontWeight: 600, color: s.color }}>{s.v}</div>
                     <div className="label" style={{ marginTop: 4, color: "#333" }}>{s.sub}</div>
                   </div>
                 ))}
@@ -1037,8 +1155,8 @@ export default function Dashboard() {
           {/* ── ANALYTICS ── */}
           {nav === "analytics" && (
             <div className="fade-up">
-              <div style={{ padding: "24px 32px 16px", borderBottom: "1px solid #1a1a1a" }}>
-                <div style={{ fontSize: "1.6rem", fontWeight: 700, marginBottom: 4 }}>
+              <div style={{ padding: isMobile ? "16px 16px 12px" : "24px 32px 16px", borderBottom: "1px solid #1a1a1a" }}>
+                <div style={{ fontSize: isMobile ? "1.3rem" : "1.6rem", fontWeight: 700, marginBottom: 4 }}>
                   MARKET{" "}
                   <span className="serif" style={{ color: "#888", fontWeight: 400 }}>analytics</span>
                 </div>
@@ -1046,10 +1164,15 @@ export default function Dashboard() {
                   REGIME ANALYSIS — {analysis.total_analyzed} UNIVERSE STOCKS
                 </div>
               </div>
-              <div style={{ padding: "32px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
-                {/* Regime */}
-                <div style={{ border: "1px solid #1a1a1a", padding: 24 }}>
-                  <div className="label" style={{ marginBottom: 16 }}>REGIME SIGNALS</div>
+              <div style={{
+                padding: isMobile ? "16px" : "32px",
+                display: "grid",
+                gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
+                gap: 16,
+              }}>
+                {/* Regime signals */}
+                <div style={{ border: "1px solid #1a1a1a", padding: isMobile ? 16 : 24 }}>
+                  <div className="label" style={{ marginBottom: 14 }}>REGIME SIGNALS</div>
                   {[
                     { l: "Regime", v: regime.regime.replace("_", " "), ok: regime.regime.includes("BULL") },
                     { l: "Confidence", v: `${regime.confidence_pct}%`, ok: regime.confidence_pct >= 65 },
@@ -1061,29 +1184,25 @@ export default function Dashboard() {
                   ].map(s => (
                     <div key={s.l} style={{
                       display: "flex", justifyContent: "space-between",
-                      padding: "10px 0", borderBottom: "1px solid #111",
+                      padding: "9px 0", borderBottom: "1px solid #111",
                     }}>
                       <span className="label">{s.l}</span>
-                      <span className="mono" style={{
-                        fontSize: "0.8rem", fontWeight: 600,
-                        color: s.ok ? "#fff" : "#555",
-                      }}>{s.v}</span>
+                      <span className="mono" style={{ fontSize: "0.8rem", fontWeight: 600, color: s.ok ? "#fff" : "#555" }}>
+                        {s.v}
+                      </span>
                     </div>
                   ))}
                 </div>
 
                 {/* Score distribution */}
-                <div style={{ border: "1px solid #1a1a1a", padding: 24 }}>
-                  <div className="label" style={{ marginBottom: 16 }}>TOP PICKS — SCORE DISTRIBUTION</div>
+                <div style={{ border: "1px solid #1a1a1a", padding: isMobile ? 16 : 24 }}>
+                  <div className="label" style={{ marginBottom: 14 }}>TOP PICKS — SCORE DISTRIBUTION</div>
                   {analysis.top_picks.slice(0, 10).map(p => {
                     const sym = p.symbol.replace(".NS", "");
                     const pct = (p.total_score / 150) * 100;
                     return (
-                      <div key={sym} style={{
-                        display: "flex", alignItems: "center", gap: 12,
-                        marginBottom: 10,
-                      }}>
-                        <span className="mono" style={{ width: 80, fontSize: "0.72rem", color: "#888" }}>{sym}</span>
+                      <div key={sym} style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
+                        <span className="mono" style={{ width: 70, fontSize: "0.72rem", color: "#888", flexShrink: 0 }}>{sym}</span>
                         <div style={{ flex: 1, background: "#111", height: 2 }}>
                           <div style={{
                             width: `${pct}%`, height: "100%",
@@ -1091,7 +1210,7 @@ export default function Dashboard() {
                             transition: "width 1s ease",
                           }} />
                         </div>
-                        <span className="mono" style={{ fontSize: "0.72rem", color: "#444", width: 50 }}>
+                        <span className="mono" style={{ fontSize: "0.68rem", color: "#444", width: 46, flexShrink: 0 }}>
                           {p.total_score}/150
                         </span>
                       </div>
@@ -1108,8 +1227,12 @@ export default function Dashboard() {
               <SystemSetup capital={capital} onChange={handleCapital} alloc={alloc} />
             </div>
           )}
+
         </div>
       </div>
+
+      {/* Mobile bottom nav */}
+      {isMobile && <MobileTabBar active={nav} setActive={setNav} />}
     </div>
   );
 }
