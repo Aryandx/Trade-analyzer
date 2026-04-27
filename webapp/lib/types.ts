@@ -20,6 +20,7 @@ export interface Signals {
   squeeze_fired: boolean;
   momentum_up: boolean;
   breakout: boolean;
+  breakout_type?: "CONSOLIDATION" | "52W_HIGH" | "RESISTANCE" | "EMA_CROSS" | "VCP" | null;
   vol_surge: boolean;
   consol_range_pct: number;
   candle_pattern: string | null;

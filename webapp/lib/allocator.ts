@@ -12,7 +12,12 @@ function isBreakout(p: StockPick): boolean {
 }
 
 function urgency(p: StockPick): "high" | "medium" | "low" {
+  const btype = p.signals.breakout_type;
+  // Highest urgency: explosive or time-sensitive setups
+  if (btype === "52W_HIGH" || btype === "VCP" || btype === "RESISTANCE") return "high";
   if (p.signals.breakout || (p.signals.squeeze_fired && p.signals.momentum_up)) return "high";
+  // Medium urgency: momentum shift signals
+  if (btype === "EMA_CROSS" || btype === "CONSOLIDATION") return "medium";
   if (p.signals.rsi_bull_div || p.signals.macd_bull_div) return "medium";
   return "low";
 }

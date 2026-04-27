@@ -93,8 +93,16 @@ def score_stock(
             sig_score += 3
             sig_reasons.append("TTM Squeeze active — coiling for a move")
         if sigs["breakout"]:
+            btype = sigs.get("breakout_type") or "CONSOLIDATION"
+            _btype_labels = {
+                "CONSOLIDATION": f"Breakout from {sigs['consol_range_pct']:.1f}% consolidation with volume",
+                "52W_HIGH":      "52-week high breakout — price at all-time momentum peak",
+                "RESISTANCE":    "Resistance level broken with volume confirmation",
+                "EMA_CROSS":     "20 EMA crossed above 50 EMA — bullish momentum shift",
+                "VCP":           "Volatility Contraction Pattern — 3 squeeze stages, ready to launch",
+            }
             sig_score += 7
-            sig_reasons.append(f"Breakout from {sigs['consol_range_pct']:.1f}% consolidation with volume")
+            sig_reasons.append(_btype_labels.get(btype, f"Breakout ({btype}) with volume confirmation"))
         if sigs["candle_pattern"] and sigs["candle_bullish"]:
             sig_score += 4
             sig_reasons.append(f"{sigs['candle_pattern']} — bullish reversal candle")

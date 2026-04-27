@@ -93,31 +93,74 @@ def detect_ttm_squeeze(df: pd.DataFrame) -> dict:
 
 def detect_breakout(df: pd.DataFrame, lookback: int = 25) -> dict:
     """
-    Breakout above a tight consolidation range with volume confirmation.
+    Multi-type breakout detector. Returns breakout_type string identifying the trigger:
+      CONSOLIDATION — tight range (<10%) broken with volume
+      52W_HIGH      — price at or above 52-week high with volume
+      RESISTANCE    — pivot resistance level breached with volume
+      EMA_CROSS     — 20 EMA just crossed above 50 EMA with volume
+      VCP           — Volatility Contraction Pattern (3 successive contractions)
     """
     if len(df) < lookback + 5:
-        return {"breakout": False, "vol_surge": False, "consol_range_pct": 0}
+        return {"breakout": False, "vol_surge": False, "consol_range_pct": 0, "breakout_type": None}
 
-    consol = df.iloc[-(lookback + 5): -5]
-    last5  = df.iloc[-5:]
+    current    = float(df["close"].values[-1])
+    avg_vol_20 = float(df["volume"].iloc[-20:].mean())
+    recent_vol = float(df["volume"].iloc[-5:].mean())
+    vol_surge  = bool(recent_vol > avg_vol_20 * 1.25)
 
-    consol_high = consol["close"].max()
-    consol_low  = consol["close"].min()
-    range_pct   = (consol_high - consol_low) / consol_low
+    consol      = df.iloc[-(lookback + 5): -5]
+    consol_high = float(consol["close"].max())
+    consol_low  = float(consol["close"].min())
+    range_pct   = (consol_high - consol_low) / consol_low if consol_low > 0 else 0
 
-    avg_vol    = consol["volume"].mean()
-    recent_vol = last5["volume"].mean()
-    vol_surge  = bool(recent_vol > avg_vol * 1.25)
+    base = {"vol_surge": vol_surge, "consol_range_pct": round(range_pct * 100, 2)}
 
-    current = df["close"].values[-1]
-    tight   = range_pct < 0.10
-    broke   = current > consol_high * 1.003
+    # 1. Classic consolidation breakout
+    if range_pct < 0.10 and current > consol_high * 1.003 and vol_surge:
+        return {"breakout": True, "breakout_type": "CONSOLIDATION", **base}
 
-    return {
-        "breakout":        bool(tight and broke and vol_surge),
-        "vol_surge":       vol_surge,
-        "consol_range_pct": round(range_pct * 100, 2),
-    }
+    # 2. 52-week high breakout
+    if len(df) >= 252:
+        high52 = float(df["high"].iloc[-252:].max())
+        if current >= high52 * 0.995 and vol_surge:
+            return {"breakout": True, "breakout_type": "52W_HIGH", **base}
+
+    # 3. Resistance level breakout (pivot resistance just breached)
+    if len(df) >= 4:
+        sr = find_support_resistance(df)
+        prev_close = float(df["close"].values[-4])
+        for res in sr.get("resistance", []):
+            if prev_close < res * 0.998 and current > res * 1.005 and vol_surge:
+                return {"breakout": True, "breakout_type": "RESISTANCE", **base}
+
+    # 4. EMA crossover breakout (20 EMA crossed above 50 EMA in last 5 bars)
+    if "ema20" in df.columns and "ema50" in df.columns and len(df) >= 6:
+        ema20 = df["ema20"].values
+        ema50 = df["ema50"].values
+        for i in range(-5, -1):
+            if ema20[i - 1] <= ema50[i - 1] and ema20[i] > ema50[i] and vol_surge:
+                return {"breakout": True, "breakout_type": "EMA_CROSS", **base}
+
+    # 5. VCP — 3 successive price contractions with shrinking range and volume
+    if len(df) >= 65:
+        h = df["high"].values
+        lo = df["low"].values
+        v = df["volume"].values
+        c = df["close"].values
+
+        def seg_range(a, b):
+            mid = (c[a] + c[b - 1]) / 2
+            return (h[a:b].max() - lo[a:b].min()) / mid if mid > 0 else 0
+
+        r1, r2, r3 = seg_range(-65, -45), seg_range(-45, -25), seg_range(-25, -5)
+        v1 = float(v[-65:-45].mean())
+        v2 = float(v[-45:-25].mean())
+        v3 = float(v[-25:-5].mean())
+        last_seg_high = float(h[-25:-5].max())
+        if r1 > r2 > r3 and v1 > v2 and current >= last_seg_high * 0.995 and vol_surge:
+            return {"breakout": True, "breakout_type": "VCP", **base}
+
+    return {"breakout": False, "breakout_type": None, **base}
 
 
 def find_support_resistance(df: pd.DataFrame, lookback: int = 80) -> dict:

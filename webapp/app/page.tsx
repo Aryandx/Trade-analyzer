@@ -485,6 +485,28 @@ function DesktopTableHeader() {
   );
 }
 
+// ── Breakout Type Badge ───────────────────────────────────────────────────────
+const BREAKOUT_META: Record<string, { label: string; color: string; desc: string }> = {
+  CONSOLIDATION: { label: "CONSOL",   color: "#f59e0b", desc: "Tight base breakout with volume surge" },
+  "52W_HIGH":    { label: "52W HIGH", color: "#ff4500", desc: "Breaking to 52-week momentum peak" },
+  RESISTANCE:    { label: "RES BREAK",color: "#a78bfa", desc: "Pivot resistance level breached on volume" },
+  EMA_CROSS:     { label: "EMA CROSS",color: "#38bdf8", desc: "20 EMA crossed above 50 EMA — trend shift" },
+  VCP:           { label: "VCP",      color: "#22c55e", desc: "Volatility Contraction Pattern — 3-stage squeeze" },
+};
+
+function BreakoutBadge({ type }: { type?: string | null }) {
+  if (!type) return null;
+  const m = BREAKOUT_META[type];
+  if (!m) return null;
+  return (
+    <span style={{
+      fontFamily: "'JetBrains Mono', monospace", fontSize: "0.55rem", fontWeight: 700,
+      color: m.color, border: `1px solid ${m.color}44`, borderRadius: 2,
+      padding: "1px 5px", letterSpacing: "0.08em", whiteSpace: "nowrap",
+    }}>{m.label}</span>
+  );
+}
+
 // ── ML Confidence Badge ───────────────────────────────────────────────────────
 function MlBadge({ prob }: { prob?: number }) {
   if (prob == null) return null;
@@ -518,6 +540,7 @@ function PositionRow({ pick, rank, onExpand, expanded }: { pick: AllocatedPick; 
             <span className="mono" style={{ color: "#333", fontSize: "0.62rem" }}>#{rank}</span>
             {isBreak && <span style={{ color: "#ff4500", fontSize: "0.62rem" }}>⚡</span>}
             <span style={{ fontWeight: 600, fontSize: "0.9rem" }}>{sym}</span>
+            <BreakoutBadge type={pick.signals.breakout_type} />
           </div>
           <span className="mono" style={{ color: "#ff4500", fontSize: "0.82rem", fontWeight: 600 }}>+{pick.target_pct}%</span>
         </div>
@@ -569,9 +592,12 @@ function PositionRow({ pick, rank, onExpand, expanded }: { pick: AllocatedPick; 
     <>
       <div className="row-hover" onClick={onExpand} style={{ display: "grid", gridTemplateColumns: "32px 100px 90px 80px 80px 80px 80px 80px 60px", gap: 0, padding: "14px 24px", cursor: "pointer", borderBottom: "1px solid #111", alignItems: "center" }}>
         <div className="mono" style={{ color: "#333", fontSize: "0.72rem" }}>#{rank}</div>
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          {isBreak && <span style={{ color: "#ff4500", fontSize: "0.6rem" }}>⚡</span>}
-          <span style={{ fontWeight: 600, fontSize: "0.88rem" }}>{sym}</span>
+        <div>
+          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+            {isBreak && <span style={{ color: "#ff4500", fontSize: "0.6rem" }}>⚡</span>}
+            <span style={{ fontWeight: 600, fontSize: "0.88rem" }}>{sym}</span>
+          </div>
+          <BreakoutBadge type={pick.signals.breakout_type} />
         </div>
         <div className="mono" style={{ fontSize: "0.8rem", color: "#888" }}>{fmtINR(pick.price)}</div>
         <div className="mono" style={{ color: "#ff4500", fontSize: "0.8rem" }}>+{pick.target_pct}%</div>
@@ -1410,23 +1436,52 @@ export default function Dashboard() {
                 <div style={{ fontSize: isMobile ? "1.3rem" : "1.6rem", fontWeight: 700, marginBottom: 4 }}>
                   BREAKOUT <span className="serif" style={{ color: "#ff4500", fontWeight: 400 }}>alerts</span>
                 </div>
-                <div className="label" style={{ color: "#444", fontSize: isMobile ? "0.6rem" : "0.65rem" }}>
+                <div className="label" style={{ color: "#444", fontSize: isMobile ? "0.6rem" : "0.65rem", marginBottom: 12 }}>
                   {alloc.breakout_picks.length > 0 ? `⚡ ${fmtINR(alloc.breakout_budget)} RESERVED — ENTER WITHIN 2 SESSIONS` : "NO ACTIVE BREAKOUT SETUPS — MARKET IN CONSOLIDATION"}
+                </div>
+                {/* Legend */}
+                <div style={{ display: "flex", flexWrap: "wrap", gap: isMobile ? 6 : 10 }}>
+                  {Object.entries(BREAKOUT_META).map(([key, m]) => (
+                    <div key={key} style={{ display: "flex", alignItems: "center", gap: 5 }}>
+                      <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "0.55rem", color: m.color, border: `1px solid ${m.color}44`, borderRadius: 2, padding: "1px 5px", fontWeight: 700 }}>{m.label}</span>
+                      <span className="label" style={{ color: "#333", fontSize: "0.56rem" }}>{m.desc}</span>
+                    </div>
+                  ))}
                 </div>
               </div>
               {alloc.breakout_picks.length > 0 ? (
                 <>
                   {!isMobile && <DesktopTableHeader />}
-                  {alloc.breakout_picks.map((pick, i) => (
-                    <PositionRow key={pick.symbol} pick={pick} rank={i+1}
-                      onExpand={() => setExpandedRow(expandedRow === pick.symbol ? null : pick.symbol)}
-                      expanded={expandedRow === pick.symbol} />
-                  ))}
+                  {alloc.breakout_picks.map((pick, i) => {
+                    const btype = pick.signals.breakout_type;
+                    const bmeta = btype ? BREAKOUT_META[btype] : null;
+                    return (
+                      <div key={pick.symbol}>
+                        {bmeta && (
+                          <div style={{ padding: isMobile ? "6px 16px" : "6px 24px", background: "#0a0a0a", borderBottom: "1px solid #111", display: "flex", alignItems: "center", gap: 8 }}>
+                            <BreakoutBadge type={btype} />
+                            <span className="label" style={{ color: "#333", fontSize: "0.58rem" }}>{bmeta.desc}</span>
+                          </div>
+                        )}
+                        <PositionRow pick={pick} rank={i + 1}
+                          onExpand={() => setExpandedRow(expandedRow === pick.symbol ? null : pick.symbol)}
+                          expanded={expandedRow === pick.symbol} />
+                      </div>
+                    );
+                  })}
                 </>
               ) : (
                 <div style={{ padding: isMobile ? "48px 16px" : "80px 32px", textAlign: "center" }}>
                   <div className="label" style={{ color: "#333", fontSize: "0.8rem", marginBottom: 8 }}>NO BREAKOUT TRIGGERS DETECTED</div>
                   <div className="mono" style={{ color: "#222", fontSize: "0.72rem" }}>Focus capital on core long-term positions</div>
+                  <div style={{ marginTop: 20, display: "flex", flexWrap: "wrap", gap: 10, justifyContent: "center" }}>
+                    {Object.entries(BREAKOUT_META).map(([key, m]) => (
+                      <div key={key} style={{ display: "flex", alignItems: "center", gap: 5, opacity: 0.4 }}>
+                        <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "0.55rem", color: m.color, border: `1px solid ${m.color}44`, borderRadius: 2, padding: "1px 5px", fontWeight: 700 }}>{m.label}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="label" style={{ color: "#222", fontSize: "0.6rem", marginTop: 8 }}>Watching for: CONSOLIDATION · 52W HIGH · RESISTANCE · EMA CROSS · VCP</div>
                 </div>
               )}
             </div>
