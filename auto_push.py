@@ -121,6 +121,23 @@ def _market_open() -> bool:
     return (9, 0) <= (h, m) <= (15, 35)
 
 
+def _run_eod_retrain() -> None:
+    """Refresh daily cache + retrain ML model. Runs once after market close."""
+    try:
+        print(f"\n  [EOD] Refreshing data cache + retraining model...")
+        result = subprocess.run(
+            ["python", "main.py", "--refresh-only"],
+            capture_output=True, text=True, cwd=BASE_DIR, timeout=600
+        )
+        if result.returncode != 0:
+            # main.py may not support --refresh-only; fall back to ml_retrainer directly
+            subprocess.run(["python", "ml_retrainer.py"], cwd=BASE_DIR,
+                           capture_output=True, timeout=300)
+        print(f"  [EOD] Retrain complete.")
+    except Exception as e:
+        print(f"  [EOD] Retrain error: {e}")
+
+
 def _next_run_msg(interval: int) -> str:
     mins = interval // 60
     return f"next refresh in {mins} min"
@@ -143,12 +160,20 @@ def main():
     print(f"  Ctrl+C to stop\n")
 
     last_push_syms: list[str] = []
+    eod_done_date: str = ""   # tracks which date EOD retrain already ran
 
     while True:
         now_str = datetime.now().strftime("%H:%M:%S")
+        today   = date.today().isoformat()
 
         if not _market_open():
-            h = datetime.now().hour
+            h, m = datetime.now().hour, datetime.now().minute
+            # Trigger EOD retrain once per day, between 15:40–16:30, weekdays
+            if (h == 15 and m >= 40) or (h == 16 and m <= 30):
+                if datetime.now().weekday() < 5 and eod_done_date != today:
+                    eod_done_date = today
+                    _run_eod_retrain()
+
             if h >= 15 or h < 9:
                 print(f"\r  [{now_str}] Market closed. Waiting for 9:00 AM...        ", end="", flush=True)
             else:
