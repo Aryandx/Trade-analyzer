@@ -47,6 +47,9 @@ console = Console()
 
 WEEKLY_LOG_PATH  = os.path.join(RESULTS_DIR, "weekly_pnl.json")
 SAVED_PICKS_PATH = os.path.join(RESULTS_DIR, "morning_picks.json")
+
+_WEBAPP_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "webapp", "public", "data")
+WEBAPP_PICKS_PATH = os.path.join(_WEBAPP_DIR, "morning_picks.json")
 WEEKLY_GOAL      = 4_000
 
 BREAKOUT_SCORE = {
@@ -443,6 +446,17 @@ def log_pnl(amount: int) -> None:
     total = sum(e["pnl"] for e in log["entries"])
     console.print(f"[green]Logged ₹{amount:+,} for {today}[/green]")
     console.print(f"[bold]Week total: ₹{total:+,} / ₹{log['goal']:,} goal[/bold]")
+    # Sync updated P&L to webapp if picks file exists
+    if os.path.exists(WEBAPP_PICKS_PATH):
+        try:
+            with open(WEBAPP_PICKS_PATH) as f:
+                payload = json.load(f)
+            payload["week_banked"]  = total
+            payload["week_entries"] = log["entries"]
+            with open(WEBAPP_PICKS_PATH, "w") as f:
+                json.dump(payload, f, indent=2)
+        except Exception:
+            pass
 
 
 def show_progress() -> None:
@@ -549,10 +563,25 @@ def run_morning_scan(capital: int = 32_000) -> list:
         ))
         return []
 
-    # Save picks for --live check later
+    # Save picks for --live check + webapp
+    log   = _load_log()
+    done  = sum(e["pnl"] for e in log.get("entries", []))
+    webapp_payload = {
+        "date":         date.today().isoformat(),
+        "generated_at": datetime.now().isoformat(timespec="minutes"),
+        "capital":      capital,
+        "weekly_goal":  WEEKLY_GOAL,
+        "week_banked":  done,
+        "week_entries": log.get("entries", []),
+        "picks":        top3,
+    }
     os.makedirs(RESULTS_DIR, exist_ok=True)
     with open(SAVED_PICKS_PATH, "w") as f:
         json.dump(top3, f, indent=2)
+    os.makedirs(_WEBAPP_DIR, exist_ok=True)
+    with open(WEBAPP_PICKS_PATH, "w") as f:
+        json.dump(webapp_payload, f, indent=2)
+    console.print(f"[dim]✓ Picks synced to webapp[/dim]")
 
     # ── Print daily picks ──────────────────────────────────────────────────
     console.print()

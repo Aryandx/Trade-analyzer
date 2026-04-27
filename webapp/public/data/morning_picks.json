@@ -1,0 +1,79 @@
+{
+  "date": "2026-04-27",
+  "generated_at": "2026-04-27T18:03",
+  "capital": 32000,
+  "weekly_goal": 4000,
+  "week_banked": 0,
+  "week_entries": [],
+  "picks": [
+    {
+      "symbol": "TIINDIA.NS",
+      "price": 2985.2,
+      "score": 96,
+      "entry_low": 2976.24,
+      "entry_high": 2994.16,
+      "day_target": 3104.61,
+      "day_target_pct": 4.0,
+      "rsi": 65.97,
+      "adx": 22.43,
+      "shares": 10,
+      "profit_at_tgt": 1194.1,
+      "breakout_type": "VCP",
+      "sector": "Auto",
+      "sector_mom": 1.56,
+      "reasons": [
+        "ADX 22 \u2014 moderate trend building",
+        "Price > EMA20 > EMA50 \u2014 clean bullish structure",
+        "VCP \u2014 3-stage volatility squeeze about to release",
+        "Volume surge \u2014 institutional participation today",
+        "MACD bullish and accelerating"
+      ]
+    },
+    {
+      "symbol": "NESTLEIND.NS",
+      "price": 1433.0,
+      "score": 83,
+      "entry_low": 1428.7,
+      "entry_high": 1437.3,
+      "day_target": 1481.46,
+      "day_target_pct": 3.38,
+      "rsi": 80.2,
+      "adx": 38.7,
+      "shares": 22,
+      "profit_at_tgt": 1066.12,
+      "breakout_type": "52W_HIGH",
+      "sector": "FMCG",
+      "sector_mom": 0.55,
+      "reasons": [
+        "ADX 39 \u2014 strong trend, not noise",
+        "Price > EMA20 > EMA50 \u2014 clean bullish structure",
+        "52-week HIGH breakout \u2014 max momentum, path clear",
+        "Volume surge \u2014 institutional participation today",
+        "MACD bullish and accelerating"
+      ]
+    },
+    {
+      "symbol": "DRREDDY.NS",
+      "price": 1326.0,
+      "score": 80,
+      "entry_low": 1322.02,
+      "entry_high": 1329.98,
+      "day_target": 1379.04,
+      "day_target_pct": 4.0,
+      "rsi": 63.16,
+      "adx": 27.14,
+      "shares": 24,
+      "profit_at_tgt": 1272.96,
+      "breakout_type": null,
+      "sector": "Pharma",
+      "sector_mom": 2.62,
+      "reasons": [
+        "ADX 27 \u2014 moderate trend building",
+        "Price > EMA20 > EMA50 \u2014 clean bullish structure",
+        "Volume surge \u2014 institutional participation today",
+        "MACD bullish and accelerating",
+        "Pharma sector +2.6% \u2014 strong tailwind"
+      ]
+    }
+  ]
+}

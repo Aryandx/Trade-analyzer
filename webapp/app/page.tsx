@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import type {
   Analysis, AllocatedPick, PortfolioAllocation, StockPick, WeeklyEvent,
   UserPosition, ProfitGoal,
@@ -334,9 +334,10 @@ function TrajectoryChart({
 // ── Nav items ─────────────────────────────────────────────────────────────────
 const NAV_ITEMS = [
   { id: "overview",    label: "OVERVIEW",     icon: "▦" },
+  { id: "intraday",   label: "INTRADAY",     icon: "⚡" },
   { id: "positions",   label: "POSITIONS",    icon: "≡" },
-  { id: "breakouts",   label: "BREAKOUTS",    icon: "⚡" },
-  { id: "tracker",     label: "TRACKER",      icon: "◈" },
+  { id: "breakouts",   label: "BREAKOUTS",    icon: "◈" },
+  { id: "tracker",     label: "TRACKER",      icon: "◇" },
   { id: "performance", label: "PERFORMANCE",  icon: "∿" },
   { id: "analytics",   label: "ANALYTICS",    icon: "◎" },
   { id: "system",      label: "SYSTEM SETUP", icon: "⚙" },
@@ -1662,10 +1663,420 @@ export default function Dashboard() {
             </div>
           )}
 
+          {nav === "intraday" && (
+            <div className="fade-up">
+              <IntradayPage isMobile={isMobile} />
+            </div>
+          )}
+
         </div>
       </div>
 
       {isMobile && <MobileTabBar active={nav} setActive={setNav} />}
+    </div>
+  );
+}
+
+// ── Intraday Page ─────────────────────────────────────────────────────────────
+
+interface MorningPick {
+  symbol: string; price: number; score: number;
+  entry_low: number; entry_high: number;
+  day_target: number; day_target_pct: number;
+  rsi: number; adx: number; shares: number;
+  profit_at_tgt: number; breakout_type: string | null;
+  sector: string; sector_mom: number; reasons: string[];
+}
+interface MorningData {
+  date: string; generated_at: string; capital: number;
+  weekly_goal: number; week_banked: number;
+  week_entries: { date: string; pnl: number }[];
+  picks: MorningPick[];
+}
+interface Bar { time: number; open: number; high: number; low: number; close: number; volume: number }
+interface LiveAnalysis {
+  signal: "ENTER" | "WAIT" | "SKIP" | "NO_DATA" | "LOADING";
+  currentPrice: number; vwap: number; orHigh: number; orLow: number;
+  orComplete: boolean; aboveVwap: boolean; orBroken: boolean;
+  trendUp: boolean; volSurge: boolean; gapPct: number;
+  openPrice: number; ema9: number; ema20: number; candles: number;
+  safeEntry: number; orStop: number; intradayTgt: number;
+  tgtPct: number; shares: number; profitAtTgt: number; maxLoss: number;
+  headline: string; detail: string;
+}
+
+function computeVwap(bars: Bar[]): number[] {
+  let cumTP = 0, cumVol = 0;
+  return bars.map(b => {
+    const tp = (b.high + b.low + b.close) / 3;
+    cumTP += tp * b.volume; cumVol += b.volume;
+    return cumVol > 0 ? cumTP / cumVol : b.close;
+  });
+}
+function computeEma(vals: number[], span: number): number[] {
+  const k = 2 / (span + 1);
+  return vals.reduce((acc, v) => {
+    acc.push(acc.length ? acc[acc.length - 1] + k * (v - acc[acc.length - 1]) : v);
+    return acc;
+  }, [] as number[]);
+}
+
+function analyze(bars: Bar[], prevClose: number, capital: number, shares: number): LiveAnalysis {
+  const now = new Date();
+  if (!bars.length) return {
+    signal: "NO_DATA", headline: "No 5-min data yet", detail: "Market may not be open",
+    currentPrice: 0, vwap: 0, orHigh: 0, orLow: 0, orComplete: false,
+    aboveVwap: false, orBroken: false, trendUp: false, volSurge: false,
+    gapPct: 0, openPrice: 0, ema9: 0, ema20: 0, candles: 0,
+    safeEntry: 0, orStop: 0, intradayTgt: 0, tgtPct: 0,
+    shares, profitAtTgt: 0, maxLoss: 0,
+  };
+
+  const closes  = bars.map(b => b.close);
+  const vwaps   = computeVwap(bars);
+  const ema9s   = computeEma(closes, 9);
+  const ema20s  = computeEma(closes, 20);
+  const cur     = bars[bars.length - 1];
+  const curVwap = vwaps[vwaps.length - 1];
+  const curEma9 = ema9s[ema9s.length - 1];
+  const curEma20= ema20s[ema20s.length - 1];
+
+  const openPrice  = bars[0].open;
+  const gapPct     = prevClose > 0 ? (openPrice - prevClose) / prevClose * 100 : 0;
+  const orBars     = bars.slice(0, 3);
+  const orHigh     = Math.max(...orBars.map(b => b.high));
+  const orLow      = Math.min(...orBars.map(b => b.low));
+  const orComplete = bars.length >= 3;
+  const orRange    = orLow > 0 ? (orHigh - orLow) / orLow * 100 : 0;
+  const currentPrice = cur.close;
+  const aboveVwap  = currentPrice > curVwap;
+  const orBroken   = currentPrice > orHigh * 1.002;
+  const trendUp    = curEma9 > curEma20;
+  const avgVol     = bars.reduce((s, b) => s + b.volume, 0) / bars.length;
+  const volSurge   = cur.volume > avgVol * 1.3;
+
+  const safeEntry   = Math.round(orHigh * 1.002 * 100) / 100;
+  const orStop      = Math.round(orLow  * 0.998 * 100) / 100;
+  const riskPerSh   = safeEntry - orStop;
+  const intradayTgt = Math.round((safeEntry + riskPerSh * 2) * 100) / 100;
+  const tgtPct      = safeEntry > 0 ? Math.round((intradayTgt - safeEntry) / safeEntry * 10000) / 100 : 0;
+  const sh          = Math.max(1, Math.floor(capital / safeEntry));
+  const profitAtTgt = Math.round(sh * (intradayTgt - safeEntry));
+  const maxLoss     = Math.round(sh * riskPerSh);
+
+  let signal: LiveAnalysis["signal"], headline: string, detail: string;
+
+  if (Math.abs(gapPct) > 3) {
+    signal = "SKIP"; headline = `Gapped ${gapPct > 0 ? "up" : "down"} ${Math.abs(gapPct).toFixed(1)}% — don't chase`;
+    detail = "Gap >3% means the move is mostly done. Find another stock.";
+  } else if (gapPct < -2) {
+    signal = "SKIP"; headline = `Gapped down ${gapPct.toFixed(1)}% — thesis broken`;
+    detail = "Daily breakout setup invalidated. Sit out today.";
+  } else if (!orComplete) {
+    signal = "WAIT"; headline = `Opening range building (${bars.length}/3 candles)`;
+    detail = `Wait until 9:30 AM. OR so far: ₹${orLow.toFixed(0)}–₹${orHigh.toFixed(0)}. Refresh in a moment.`;
+  } else if (orBroken && aboveVwap && trendUp) {
+    signal = "ENTER"; headline = `OR BREAKOUT CONFIRMED — Enter now`;
+    detail = `Price broke opening range high with VWAP + 5-min trend aligned. Highest probability setup.`;
+  } else if (orBroken && aboveVwap && !trendUp) {
+    signal = "WAIT"; headline = "OR broken but 5-min EMA not aligned yet";
+    detail = `Wait for EMA9 to cross above EMA20 on 5-min. EMA9 ₹${curEma9.toFixed(0)}, EMA20 ₹${curEma20.toFixed(0)}.`;
+  } else if (aboveVwap && !orBroken) {
+    signal = "WAIT"; headline = `Above VWAP — waiting for OR high ₹${orHigh.toFixed(0)} to break`;
+    detail = `Set alert at ₹${safeEntry.toFixed(0)}. Only enter on confirmed OR breakout with volume.`;
+  } else if (!aboveVwap) {
+    signal = "SKIP"; headline = `Below VWAP ₹${curVwap.toFixed(0)} — sellers in control`;
+    detail = "Do not enter a long when price is under VWAP. Skip or wait for strong reclaim.";
+  } else {
+    signal = "WAIT"; headline = "Mixed signals — watch for OR breakout";
+    detail = "Check again in 15 min.";
+  }
+
+  return {
+    signal, headline, detail, currentPrice, vwap: curVwap, orHigh, orLow,
+    orComplete, aboveVwap, orBroken, trendUp, volSurge, gapPct,
+    openPrice, ema9: curEma9, ema20: curEma20, candles: bars.length,
+    safeEntry, orStop, intradayTgt, tgtPct, shares: sh, profitAtTgt, maxLoss,
+  };
+}
+
+async function fetchBars(symbol: string): Promise<Bar[]> {
+  try {
+    const r = await fetch(`/api/fivemin?symbol=${symbol}`);
+    const json = await r.json();
+    const result = json?.chart?.result?.[0];
+    if (!result) return [];
+    const ts     = result.timestamp as number[];
+    const q      = result.indicators.quote[0];
+    const now    = Date.now() / 1000;
+    const todayStart = new Date(); todayStart.setHours(0,0,0,0);
+    const startTs = todayStart.getTime() / 1000;
+    return ts.map((t: number, i: number) => ({
+      time: t, open: q.open[i], high: q.high[i], low: q.low[i],
+      close: q.close[i], volume: q.volume[i],
+    })).filter((b: Bar) =>
+      b.time >= startTs && b.close != null && b.open != null
+    );
+  } catch { return []; }
+}
+
+const SIGNAL_COLORS = { ENTER: "#22c55e", WAIT: "#f59e0b", SKIP: "#ef4444", NO_DATA: "#444", LOADING: "#333" };
+const BREAKOUT_COLORS2: Record<string, string> = {
+  "52W_HIGH": "#ff4500", "VCP": "#22c55e", "RESISTANCE": "#a78bfa",
+  "CONSOLIDATION": "#f59e0b", "EMA_CROSS": "#38bdf8",
+};
+
+function IntradayPage({ isMobile }: { isMobile: boolean }) {
+  const [data, setData]         = useState<MorningData | null>(null);
+  const [live, setLive]         = useState<Record<string, LiveAnalysis>>({});
+  const [countdown, setCountdown] = useState(300);
+  const [lastRefresh, setLastRefresh] = useState<Date | null>(null);
+  const [loading, setLoading]   = useState(false);
+  const timerRef                = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  // Load morning picks JSON
+  useEffect(() => {
+    fetch("/data/morning_picks.json")
+      .then(r => r.json())
+      .then(setData)
+      .catch(() => {});
+  }, []);
+
+  const refreshLive = useCallback(async () => {
+    if (!data?.picks?.length) return;
+    setLoading(true);
+    const results: Record<string, LiveAnalysis> = {};
+    for (const pick of data.picks) {
+      const bars = await fetchBars(pick.symbol);
+      results[pick.symbol] = analyze(bars, pick.price, data.capital, pick.shares);
+    }
+    setLive(results);
+    setLastRefresh(new Date());
+    setCountdown(300);
+    setLoading(false);
+  }, [data]);
+
+  // Auto-refresh every 5 min
+  useEffect(() => {
+    if (!data) return;
+    refreshLive();
+    timerRef.current = setInterval(refreshLive, 300_000);
+    return () => { if (timerRef.current) clearInterval(timerRef.current); };
+  }, [data, refreshLive]);
+
+  // Countdown tick
+  useEffect(() => {
+    const t = setInterval(() => setCountdown(c => Math.max(0, c - 1)), 1000);
+    return () => clearInterval(t);
+  }, []);
+
+  const fmtINR2 = (n: number) => n >= 1000 ? `₹${n.toLocaleString("en-IN", { maximumFractionDigits: 0 })}` : `₹${n.toFixed(2)}`;
+  const mins    = Math.floor(countdown / 60), secs = countdown % 60;
+
+  if (!data) return (
+    <div style={{ padding: "80px 32px", textAlign: "center", color: "#333" }}>
+      <div className="label" style={{ fontSize: "0.8rem", marginBottom: 8 }}>LOADING INTRADAY DATA</div>
+      <div className="mono" style={{ fontSize: "0.7rem" }}>Run: python morning_scanner.py</div>
+    </div>
+  );
+
+  const goal    = data.weekly_goal;
+  const banked  = data.week_banked;
+  const need    = Math.max(0, goal - banked);
+  const goalPct = Math.min(100, goal > 0 ? (banked / goal) * 100 : 0);
+
+  return (
+    <div>
+      {/* Header */}
+      <div style={{ padding: isMobile ? "16px" : "24px 32px 16px", borderBottom: "1px solid #1a1a1a" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 12 }}>
+          <div>
+            <div style={{ fontSize: isMobile ? "1.3rem" : "1.6rem", fontWeight: 700, marginBottom: 4 }}>
+              INTRADAY <span className="serif" style={{ color: "#ff4500", fontWeight: 400 }}>picks</span>
+            </div>
+            <div className="label" style={{ color: "#444" }}>
+              {data.date} · Generated {data.generated_at.split("T")[1]} · Capital ₹{data.capital.toLocaleString("en-IN")}
+            </div>
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            {lastRefresh && (
+              <span className="mono" style={{ fontSize: "0.6rem", color: "#333" }}>
+                LIVE {lastRefresh.toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit", second: "2-digit" })}
+              </span>
+            )}
+            <div className="mono" style={{ fontSize: "0.65rem", color: "#444" }}>
+              ↻ {mins}:{secs.toString().padStart(2, "0")}
+            </div>
+            <button
+              onClick={refreshLive}
+              disabled={loading}
+              style={{
+                background: "#ff4500", border: "none", color: "#fff",
+                fontFamily: "'JetBrains Mono', monospace", fontSize: "0.65rem",
+                fontWeight: 700, padding: "6px 14px", cursor: loading ? "not-allowed" : "pointer",
+                opacity: loading ? 0.6 : 1, letterSpacing: "0.1em",
+              }}
+            >
+              {loading ? "REFRESHING..." : "REFRESH NOW"}
+            </button>
+          </div>
+        </div>
+
+        {/* Weekly goal bar */}
+        <div style={{ marginTop: 16, padding: isMobile ? "12px" : "14px 16px", background: "#0a0a0a", border: "1px solid #1a1a1a" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}>
+            <span className="label" style={{ color: "#555" }}>WEEK GOAL — ₹{goal.toLocaleString("en-IN")}</span>
+            <span className="mono" style={{ fontSize: "0.7rem", color: goalPct >= 100 ? "#22c55e" : "#ff4500" }}>
+              ₹{banked.toLocaleString("en-IN")} banked · ₹{need.toLocaleString("en-IN")} left
+            </span>
+          </div>
+          <div style={{ height: 6, background: "#111", borderRadius: 3, overflow: "hidden" }}>
+            <div style={{ height: "100%", width: `${goalPct}%`, background: goalPct >= 100 ? "#22c55e" : "#ff4500", borderRadius: 3, transition: "width 0.5s" }} />
+          </div>
+          {data.week_entries?.length > 0 && (
+            <div style={{ marginTop: 8, display: "flex", gap: 12, flexWrap: "wrap" }}>
+              {data.week_entries.map((e, i) => (
+                <span key={i} className="mono" style={{ fontSize: "0.6rem", color: e.pnl >= 0 ? "#22c55e" : "#ef4444" }}>
+                  {e.date.slice(5)} {e.pnl >= 0 ? "+" : ""}₹{e.pnl.toLocaleString("en-IN")}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Picks */}
+      <div style={{ padding: isMobile ? "12px" : "24px 32px", display: "flex", flexDirection: "column", gap: 20 }}>
+        {data.picks.map((pick, idx) => {
+          const sym  = pick.symbol.replace(".NS", "");
+          const la   = live[pick.symbol];
+          const sc   = la?.signal ?? "LOADING";
+          const scColor = SIGNAL_COLORS[sc] ?? "#444";
+          const btColor = pick.breakout_type ? BREAKOUT_COLORS2[pick.breakout_type] ?? "#888" : "#333";
+
+          return (
+            <div key={pick.symbol} style={{ border: `1px solid ${sc === "ENTER" ? "#22c55e33" : sc === "SKIP" ? "#ef444433" : "#1a1a1a"}`, background: "#0a0a0a" }}>
+              {/* Pick header */}
+              <div style={{ padding: isMobile ? "12px" : "16px 20px", borderBottom: "1px solid #111", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                  <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "0.6rem", color: "#333" }}>#{idx + 1}</span>
+                  <span style={{ fontWeight: 700, fontSize: isMobile ? "1rem" : "1.2rem" }}>{sym}</span>
+                  {pick.breakout_type && (
+                    <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "0.55rem", color: btColor, border: `1px solid ${btColor}44`, padding: "2px 6px", fontWeight: 700 }}>
+                      {pick.breakout_type.replace("_", " ")}
+                    </span>
+                  )}
+                  <span className="mono" style={{ fontSize: "0.7rem", color: "#555" }}>Score {pick.score}/100</span>
+                </div>
+                <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+                  <span className="mono" style={{ fontSize: "0.8rem", color: "#888" }}>₹{pick.price.toLocaleString("en-IN")}</span>
+                  <span className="mono" style={{ fontSize: "0.72rem", color: "#555" }}>ADX {pick.adx} · RSI {pick.rsi}</span>
+                  {pick.sector && <span className="label" style={{ color: "#333", fontSize: "0.58rem" }}>{pick.sector} {pick.sector_mom > 0 ? `+${pick.sector_mom}%` : `${pick.sector_mom}%`}</span>}
+                </div>
+              </div>
+
+              {/* Daily plan row */}
+              <div style={{ padding: isMobile ? "10px 12px" : "12px 20px", borderBottom: "1px solid #111", display: "grid", gridTemplateColumns: isMobile ? "1fr 1fr" : "repeat(4,1fr)", gap: 12 }}>
+                {[
+                  { l: "ENTRY ZONE", v: `₹${pick.entry_low.toFixed(0)} – ₹${pick.entry_high.toFixed(0)}`, c: "#fff" },
+                  { l: "DAY TARGET", v: `₹${pick.day_target.toFixed(0)} (+${pick.day_target_pct}%)`, c: "#22c55e" },
+                  { l: "SHARES", v: `${pick.shares} × ₹${pick.price.toFixed(0)}`, c: "#888" },
+                  { l: "PROFIT IF HIT", v: `+₹${pick.profit_at_tgt.toLocaleString("en-IN")}`, c: "#ff4500" },
+                ].map(r => (
+                  <div key={r.l}>
+                    <div className="label" style={{ color: "#333", marginBottom: 3 }}>{r.l}</div>
+                    <div className="mono" style={{ fontSize: "0.78rem", color: r.c }}>{r.v}</div>
+                  </div>
+                ))}
+              </div>
+
+              {/* 5-min live check */}
+              <div style={{ padding: isMobile ? "12px" : "16px 20px" }}>
+                {!la || sc === "LOADING" ? (
+                  <div className="label" style={{ color: "#333" }}>Fetching 5-min data...</div>
+                ) : (
+                  <>
+                    {/* Signal badge */}
+                    <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
+                      <div style={{ background: scColor, padding: "4px 14px", fontFamily: "'JetBrains Mono', monospace", fontSize: "0.72rem", fontWeight: 700, color: "#000", letterSpacing: "0.12em" }}>{sc}</div>
+                      <span style={{ fontSize: "0.78rem", color: scColor, fontWeight: 600 }}>{la.headline}</span>
+                    </div>
+                    <div style={{ fontSize: "0.7rem", color: "#444", marginBottom: 14, lineHeight: 1.5 }}>{la.detail}</div>
+
+                    {/* 5-min metrics grid */}
+                    {la.signal !== "NO_DATA" && (
+                      <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr 1fr" : "repeat(5,1fr)", gap: 10, marginBottom: 14 }}>
+                        {[
+                          { l: "CURRENT PRICE", v: `₹${la.currentPrice.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`, c: "#fff" },
+                          { l: "VWAP", v: `₹${la.vwap.toFixed(0)}`, c: la.aboveVwap ? "#22c55e" : "#ef4444", sub: la.aboveVwap ? "↑ Above" : "↓ Below" },
+                          { l: "OPENING RANGE", v: `₹${la.orLow.toFixed(0)}–₹${la.orHigh.toFixed(0)}`, c: la.orComplete ? "#888" : "#f59e0b", sub: la.orComplete ? "Complete" : "Building..." },
+                          { l: "5-MIN TREND", v: la.trendUp ? "BULLISH" : "BEARISH", c: la.trendUp ? "#22c55e" : "#ef4444", sub: `EMA9 ${la.ema9.toFixed(0)} / 20 ${la.ema20.toFixed(0)}` },
+                          { l: "GAP AT OPEN", v: `${la.gapPct > 0 ? "+" : ""}${la.gapPct.toFixed(2)}%`, c: Math.abs(la.gapPct) < 1.5 ? "#22c55e" : "#ef4444", sub: `Open ₹${la.openPrice.toFixed(0)}` },
+                        ].map(m => (
+                          <div key={m.l} style={{ background: "#0d0d0d", padding: "8px 10px", border: "1px solid #111" }}>
+                            <div className="label" style={{ color: "#333", marginBottom: 3 }}>{m.l}</div>
+                            <div className="mono" style={{ fontSize: "0.75rem", color: m.c, fontWeight: 600 }}>{m.v}</div>
+                            {m.sub && <div className="label" style={{ color: "#444", marginTop: 2 }}>{m.sub}</div>}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Safe entry plan — only when ENTER or WAIT with complete OR */}
+                    {(la.signal === "ENTER" || (la.signal === "WAIT" && la.orComplete)) && la.safeEntry > 0 && (
+                      <div style={{ background: "#0d0d0d", border: `1px solid ${scColor}33`, padding: isMobile ? "10px 12px" : "12px 16px" }}>
+                        <div className="label" style={{ color: "#555", marginBottom: 10 }}>SAFE ENTRY PLAN (Opening Range Breakout)</div>
+                        <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr 1fr" : "repeat(6,1fr)", gap: 10 }}>
+                          {[
+                            { l: "BUY ABOVE",   v: `₹${la.safeEntry.toFixed(0)}`, c: "#22c55e" },
+                            { l: "STOP LOSS",   v: `₹${la.orStop.toFixed(0)}`,    c: "#ef4444" },
+                            { l: "TARGET",      v: `₹${la.intradayTgt.toFixed(0)} (+${la.tgtPct}%)`, c: "#ff4500" },
+                            { l: "SHARES",      v: `${la.shares}`,                c: "#888" },
+                            { l: "MAX GAIN",    v: `+₹${la.profitAtTgt.toLocaleString("en-IN")}`, c: "#22c55e" },
+                            { l: "MAX LOSS",    v: `-₹${la.maxLoss.toLocaleString("en-IN")}`, c: "#ef4444" },
+                          ].map(m => (
+                            <div key={m.l}>
+                              <div className="label" style={{ color: "#333", marginBottom: 3 }}>{m.l}</div>
+                              <div className="mono" style={{ fontSize: "0.78rem", color: m.c, fontWeight: 600 }}>{m.v}</div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
+
+              {/* Why row */}
+              <div style={{ padding: isMobile ? "8px 12px 12px" : "8px 20px 16px", display: "flex", flexWrap: "wrap", gap: 8 }}>
+                {pick.reasons.map((r, i) => (
+                  <span key={i} style={{ fontSize: "0.62rem", color: "#333", background: "#111", padding: "3px 8px", borderRadius: 2 }}>▸ {r}</span>
+                ))}
+              </div>
+            </div>
+          );
+        })}
+
+        {/* Footer note */}
+        <div style={{ padding: "16px", border: "1px solid #111", background: "#050505" }}>
+          <div className="label" style={{ color: "#333", marginBottom: 8 }}>HOW TO USE</div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
+            {[
+              "9:00 AM — Run: python morning_scanner.py (picks today's stocks, updates this page)",
+              "9:30 AM — This page auto-fetches live 5-min data. Wait for ENTER signal.",
+              "ENTER — Only when: OR high broken + above VWAP + 5-min trend up",
+              "WAIT — Set price alert at 'BUY ABOVE' level. Do not guess.",
+              "SKIP — Do not trade that stock today regardless of how it looks.",
+              "After close — python morning_scanner.py --log +820 (logs P&L here automatically)",
+            ].map((line, i) => (
+              <div key={i} style={{ display: "flex", gap: 8 }}>
+                <span style={{ color: "#ff4500", fontSize: "0.6rem", marginTop: 1 }}>▸</span>
+                <span style={{ fontSize: "0.68rem", color: "#444", lineHeight: 1.5 }}>{line}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
