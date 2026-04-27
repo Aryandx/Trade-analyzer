@@ -156,6 +156,222 @@
       "resolved_date": null,
       "resolved_price": null,
       "return_pct": null
+    },
+    {
+      "date": "2026-04-27",
+      "symbol": "ASIANPAINT.NS",
+      "entry_price": 2508.9,
+      "target": 2914.5,
+      "stop_loss": 2344.6,
+      "total_score": 123,
+      "rule_score": 122,
+      "ml_prob": 0.5269,
+      "ml_features": [],
+      "patterns": [
+        "Hammer",
+        "Double Bottom"
+      ],
+      "status": "pending",
+      "resolved_date": null,
+      "resolved_price": null,
+      "return_pct": null
+    },
+    {
+      "date": "2026-04-27",
+      "symbol": "OBEROIRLTY.NS",
+      "entry_price": 1717.9,
+      "target": 2096.53,
+      "stop_loss": 1591.69,
+      "total_score": 122,
+      "rule_score": 120,
+      "ml_prob": 0.5591,
+      "ml_features": [],
+      "patterns": [
+        "Trend:LH/LL",
+        "MACD Divergence"
+      ],
+      "status": "pending",
+      "resolved_date": null,
+      "resolved_price": null,
+      "return_pct": null
+    },
+    {
+      "date": "2026-04-27",
+      "symbol": "HDFCAMC.NS",
+      "entry_price": 2749.0,
+      "target": 3400.99,
+      "stop_loss": 2531.67,
+      "total_score": 121,
+      "rule_score": 120,
+      "ml_prob": 0.5452,
+      "ml_features": [],
+      "patterns": [],
+      "status": "pending",
+      "resolved_date": null,
+      "resolved_price": null,
+      "return_pct": null
+    },
+    {
+      "date": "2026-04-27",
+      "symbol": "HINDUNILVR.NS",
+      "entry_price": 2338.0,
+      "target": 2788.21,
+      "stop_loss": 2187.93,
+      "total_score": 118,
+      "rule_score": 119,
+      "ml_prob": 0.4794,
+      "ml_features": [],
+      "patterns": [
+        "Trend:LH/LL",
+        "Falling Wedge",
+        "Double Bottom"
+      ],
+      "status": "pending",
+      "resolved_date": null,
+      "resolved_price": null,
+      "return_pct": null
+    },
+    {
+      "date": "2026-04-27",
+      "symbol": "NATIONALUM.NS",
+      "entry_price": 442.0,
+      "target": 549.46,
+      "stop_loss": 406.18,
+      "total_score": 118,
+      "rule_score": 117,
+      "ml_prob": 0.5304,
+      "ml_features": [],
+      "patterns": [
+        "Trend:HH/HL"
+      ],
+      "status": "pending",
+      "resolved_date": null,
+      "resolved_price": null,
+      "return_pct": null
+    },
+    {
+      "date": "2026-04-27",
+      "symbol": "THERMAX.NS",
+      "entry_price": 4046.7,
+      "target": 5149.62,
+      "stop_loss": 3679.06,
+      "total_score": 117,
+      "rule_score": 117,
+      "ml_prob": 0.5148,
+      "ml_features": [],
+      "patterns": [
+        "Trend:HH/HL"
+      ],
+      "status": "pending",
+      "resolved_date": null,
+      "resolved_price": null,
+      "return_pct": null
+    },
+    {
+      "date": "2026-04-27",
+      "symbol": "ADANIPORTS.NS",
+      "entry_price": 1620.7,
+      "target": 1965.61,
+      "stop_loss": 1505.73,
+      "total_score": 116,
+      "rule_score": 115,
+      "ml_prob": 0.5328,
+      "ml_features": [],
+      "patterns": [],
+      "status": "pending",
+      "resolved_date": null,
+      "resolved_price": null,
+      "return_pct": null
+    },
+    {
+      "date": "2026-04-27",
+      "symbol": "GLENMARK.NS",
+      "entry_price": 2324.0,
+      "target": 2831.3,
+      "stop_loss": 2154.9,
+      "total_score": 116,
+      "rule_score": 115,
+      "ml_prob": 0.5311,
+      "ml_features": [],
+      "patterns": [
+        "Trendline Break"
+      ],
+      "status": "pending",
+      "resolved_date": null,
+      "resolved_price": null,
+      "return_pct": null
+    },
+    {
+      "date": "2026-04-27",
+      "symbol": "MARICO.NS",
+      "entry_price": 786.3,
+      "target": 908.01,
+      "stop_loss": 745.73,
+      "total_score": 116,
+      "rule_score": 119,
+      "ml_prob": 0.4443,
+      "ml_features": [],
+      "patterns": [
+        "Bullish Engulfing",
+        "Trendline Break",
+        "Symmetrical Triangle"
+      ],
+      "status": "pending",
+      "resolved_date": null,
+      "resolved_price": null,
+      "return_pct": null
+    },
+    {
+      "date": "2026-04-27",
+      "symbol": "RADICO.NS",
+      "entry_price": 3256.8,
+      "target": 4160.76,
+      "stop_loss": 2955.48,
+      "total_score": 116,
+      "rule_score": 117,
+      "ml_prob": 0.4997,
+      "ml_features": [],
+      "patterns": [
+        "Trend:HH/HL"
+      ],
+      "status": "pending",
+      "resolved_date": null,
+      "resolved_price": null,
+      "return_pct": null
+    },
+    {
+      "date": "2026-04-27",
+      "symbol": "NESTLEIND.NS",
+      "entry_price": 1433.0,
+      "target": 1675.31,
+      "stop_loss": 1352.23,
+      "total_score": 122,
+      "rule_score": 124,
+      "ml_prob": 0.468,
+      "ml_features": [],
+      "patterns": [
+        "Breakout"
+      ],
+      "status": "pending",
+      "resolved_date": null,
+      "resolved_price": null,
+      "return_pct": null
+    },
+    {
+      "date": "2026-04-27",
+      "symbol": "LAURUSLABS.NS",
+      "entry_price": 1130.3,
+      "target": 1363.94,
+      "stop_loss": 1052.42,
+      "total_score": 118,
+      "rule_score": 119,
+      "ml_prob": 0.4807,
+      "ml_features": [],
+      "patterns": [],
+      "status": "pending",
+      "resolved_date": null,
+      "resolved_price": null,
+      "return_pct": null
     }
   ],
   "daily_accuracy": {},

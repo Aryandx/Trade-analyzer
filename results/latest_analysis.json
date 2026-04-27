@@ -1,19 +1,19 @@
 {
-  "generated_at": "2026-04-25T13:37",
+  "generated_at": "2026-04-27T10:41",
   "regime": {
     "regime": "SIDEWAYS",
     "description": "Consolidation \u2014 Buy near support, tight stop",
     "confidence_pct": 57,
-    "nifty_close": 23897.95,
-    "ema20": 23937.15,
-    "ema50": 24212.84,
-    "ema200": 24794.43,
-    "adx": 19.97,
-    "rsi": 49.19,
+    "nifty_close": 24012.4,
+    "ema20": 23944.32,
+    "ema50": 24204.98,
+    "ema200": 24786.75,
+    "adx": 19.38,
+    "rsi": 50.86,
     "macd_bullish": true,
-    "ret_1m_pct": 3.39,
-    "ret_3m_pct": -6.6,
-    "india_vix": 19.71
+    "ret_1m_pct": 6.66,
+    "ret_3m_pct": -4.84,
+    "india_vix": 19.23
   },
   "market_data": {
     "fii_dii": {
@@ -22,41 +22,309 @@
       "date": "24-Apr-2026",
       "source": "NSE"
     },
-    "nifty_1d_pct": -1.138,
+    "nifty_1d_pct": 0.499,
     "global_factors": {
-      "Brent Crude": 0.247,
-      "Gold": 0.366,
-      "USD/INR": 0.114,
+      "Brent Crude": -4.415,
+      "Gold": 0.371,
+      "USD/INR": 0.093,
       "S&P 500": 0.797,
       "US 10Y Yield": -0.301,
-      "Hang Seng": 0.243
+      "Hang Seng": 0.147
     }
   },
   "top_picks": [
     {
-      "symbol": "NESTLEIND.NS",
-      "price": 1421.3,
-      "shares": 3,
-      "invested": 4263.9,
-      "stop_loss": 1336.62,
-      "stop_pct": 5.96,
-      "target": 1675.34,
-      "target_pct": 17.87,
-      "max_loss": 254.04,
-      "max_gain": 762.12,
-      "total_score": 126,
+      "symbol": "OBEROIRLTY.NS",
+      "price": 1717.9,
+      "shares": 2,
+      "invested": 3435.8,
+      "stop_loss": 1591.69,
+      "stop_pct": 7.35,
+      "target": 2096.53,
+      "target_pct": 22.04,
+      "max_loss": 252.42,
+      "max_gain": 757.26,
+      "total_score": 125,
+      "rule_score": 123,
+      "ml_prob": 0.5591,
       "position_size_pct": 100,
       "score_breakdown": {
-        "technical": 47,
-        "signals": 0,
+        "technical": 37,
+        "signals": 5,
+        "chart_patterns": -2,
+        "fundamental": 18,
+        "rel_strength": 20,
+        "stability": 7,
+        "entry_quality": 12,
+        "momentum": 15,
+        "regime_bonus": 5,
+        "market_boost": 6
+      },
+      "signals": {
+        "rsi_bull_div": false,
+        "rsi_bear_div": false,
+        "macd_bull_div": true,
+        "macd_bear_div": false,
+        "squeeze_active": false,
+        "squeeze_fired": false,
+        "momentum_up": false,
+        "breakout": false,
+        "breakout_type": null,
+        "vol_surge": false,
+        "consol_range_pct": 21.19,
+        "candle_pattern": null,
+        "candle_bullish": null,
+        "sr": {
+          "resistance": [
+            1754.36
+          ],
+          "support": [
+            1626.9,
+            1427.25,
+            1393.35
+          ]
+        },
+        "patterns": {
+          "patterns": [],
+          "bullish_patterns": [],
+          "bearish_patterns": [],
+          "neutral_patterns": [],
+          "pattern_score": -2,
+          "pattern_bias": "bearish",
+          "trend_structure": {
+            "structure": "LH/LL",
+            "bias": "bearish",
+            "confidence": 90,
+            "last_high": 1516.8,
+            "last_low": 1391.2
+          },
+          "trendline": {
+            "bullish_break": false,
+            "bearish_break": false,
+            "bias": "neutral",
+            "confidence": 0,
+            "trendline_level": null
+          }
+        }
+      },
+      "fundamentals": {
+        "roe_pct": null,
+        "debt_to_equity": 0.18,
+        "profit_margin_pct": 41.36,
+        "revenue_growth_pct": 5.8,
+        "earnings_growth_pct": 0.6,
+        "pe_ratio": 27.98,
+        "promoter_pct": 67.7,
+        "fcf_margin_pct": null,
+        "cash_conversion_pct": null,
+        "interest_coverage": 12.44,
+        "current_ratio": null
+      },
+      "sector_rs": {
+        "rs_score": 20,
+        "sector": "Realty",
+        "sector_rank": 1,
+        "sector_peers": 5,
+        "own_ret_50d_pct": 9.82,
+        "sector_avg_50d_pct": -8.0,
+        "own_ret_20d_pct": 18.98
+      },
+      "market_context": "Realty: Nifty Realty outperforming Nifty by +1.1%: sector inflow confirmed",
+      "manip_resistance": {
+        "spike_freq": 0.1352,
+        "vol_cv": 1.2404,
+        "avg_daily_turnover_cr": 116.9,
+        "gap_freq": 0.0463,
+        "manip_resistance_score": 31
+      },
+      "stats_52w": {
+        "high52": 1997.65,
+        "low52": 1391.2,
+        "pct_from_high": -14.0,
+        "pct_from_low": 23.48
+      },
+      "rsi": 65.98,
+      "adx": 23.54,
+      "ema_aligned": false,
+      "macd_bullish": true,
+      "rationale": [
+        "MACD bullish and accelerating",
+        "\u20b9117 Cr avg daily turnover \u2014 highly liquid",
+        "OBV rising \u2014 institutional accumulation",
+        "MACD histogram divergence \u2014 momentum reversal signal",
+        "D/E 0.18 \u2014 near debt-free",
+        "Net margin 41.4% \u2014 high-quality business",
+        "Interest coverage 12.4x \u2014 very safe debt service",
+        "Promoter 67.7% \u2014 aligned incentives",
+        "Sector rank #1/5 \u2014 top quartile in Realty"
+      ]
+    },
+    {
+      "symbol": "ASIANPAINT.NS",
+      "price": 2508.9,
+      "shares": 1,
+      "invested": 2508.9,
+      "stop_loss": 2344.6,
+      "stop_pct": 6.55,
+      "target": 2914.5,
+      "target_pct": 16.17,
+      "max_loss": 164.3,
+      "max_gain": 405.6,
+      "total_score": 123,
+      "rule_score": 122,
+      "ml_prob": 0.5269,
+      "position_size_pct": 100,
+      "score_breakdown": {
+        "technical": 41,
+        "signals": 4,
+        "chart_patterns": 2,
+        "fundamental": 11,
+        "rel_strength": 20,
+        "stability": 11,
+        "entry_quality": 4,
+        "momentum": 15,
+        "regime_bonus": 5,
+        "market_boost": 9
+      },
+      "signals": {
+        "rsi_bull_div": false,
+        "rsi_bear_div": false,
+        "macd_bull_div": false,
+        "macd_bear_div": false,
+        "squeeze_active": false,
+        "squeeze_fired": false,
+        "momentum_up": false,
+        "breakout": false,
+        "breakout_type": null,
+        "vol_surge": false,
+        "consol_range_pct": 18.64,
+        "candle_pattern": "Hammer",
+        "candle_bullish": true,
+        "sr": {
+          "resistance": [
+            2582.0,
+            2914.5
+          ],
+          "support": [
+            2364.4,
+            2168.85,
+            2128.7
+          ]
+        },
+        "patterns": {
+          "patterns": [
+            {
+              "detected": true,
+              "pattern": "Double Bottom",
+              "bias": "bullish",
+              "confidence": 47,
+              "neckline": 2270.2,
+              "trough_level": 2128.7
+            }
+          ],
+          "bullish_patterns": [
+            "Double Bottom"
+          ],
+          "bearish_patterns": [],
+          "neutral_patterns": [],
+          "pattern_score": 2,
+          "pattern_bias": "bullish",
+          "trend_structure": {
+            "structure": "contracting",
+            "bias": "neutral",
+            "confidence": 55,
+            "last_high": 2289.7,
+            "last_low": 2142.4
+          },
+          "trendline": {
+            "bullish_break": false,
+            "bearish_break": false,
+            "bias": "neutral",
+            "confidence": 0,
+            "trendline_level": null
+          }
+        }
+      },
+      "fundamentals": {
+        "roe_pct": null,
+        "debt_to_equity": 0.18,
+        "profit_margin_pct": 11.1,
+        "revenue_growth_pct": 3.7,
+        "earnings_growth_pct": -4.6,
+        "pe_ratio": 62.69,
+        "promoter_pct": 52.92,
+        "fcf_margin_pct": null,
+        "cash_conversion_pct": null,
+        "interest_coverage": 20.56,
+        "current_ratio": null
+      },
+      "sector_rs": {
+        "rs_score": 20,
+        "sector": "Paints",
+        "sector_rank": 1,
+        "sector_peers": 3,
+        "own_ret_50d_pct": 3.79,
+        "sector_avg_50d_pct": -3.57,
+        "own_ret_20d_pct": 13.15
+      },
+      "market_context": "Paints: Crude -4%+: Raw material cost tailwind for paint cos",
+      "manip_resistance": {
+        "spike_freq": 0.05,
+        "vol_cv": 0.6983,
+        "avg_daily_turnover_cr": 352.7,
+        "gap_freq": 0.0426,
+        "manip_resistance_score": 45
+      },
+      "stats_52w": {
+        "high52": 2985.7,
+        "low52": 2115.0,
+        "pct_from_high": -15.97,
+        "pct_from_low": 18.62
+      },
+      "rsi": 62.75,
+      "adx": 32.44,
+      "ema_aligned": false,
+      "macd_bullish": true,
+      "rationale": [
+        "MACD bullish and accelerating",
+        "ADX 32 \u2014 trending market, not noise",
+        "\u20b9353 Cr avg daily turnover \u2014 highly liquid",
+        "OBV rising \u2014 institutional accumulation",
+        "Hammer \u2014 bullish reversal candle",
+        "D/E 0.18 \u2014 near debt-free",
+        "Earnings declining -4.6% YoY",
+        "Interest coverage 20.6x \u2014 very safe debt service",
+        "Promoter 52.9% \u2014 aligned incentives",
+        "Sector rank #1/3 \u2014 top quartile in Paints",
+        "Double Bottom pattern active \u2014 structural bullish setup"
+      ]
+    },
+    {
+      "symbol": "NESTLEIND.NS",
+      "price": 1433.0,
+      "shares": 3,
+      "invested": 4299.0,
+      "stop_loss": 1352.23,
+      "stop_pct": 5.64,
+      "target": 1675.31,
+      "target_pct": 16.91,
+      "max_loss": 242.31,
+      "max_gain": 726.93,
+      "total_score": 122,
+      "rule_score": 124,
+      "ml_prob": 0.468,
+      "position_size_pct": 100,
+      "score_breakdown": {
+        "technical": 43,
+        "signals": 7,
         "chart_patterns": 0,
         "fundamental": 27,
-        "rel_strength": 20,
+        "rel_strength": 18,
         "stability": 17,
         "entry_quality": 0,
         "momentum": 7,
         "regime_bonus": 5,
-        "market_boost": 3
+        "market_boost": 0
       },
       "signals": {
         "rsi_bull_div": false,
@@ -66,9 +334,10 @@
         "squeeze_active": false,
         "squeeze_fired": false,
         "momentum_up": true,
-        "breakout": false,
+        "breakout": true,
+        "breakout_type": "52W_HIGH",
         "vol_surge": true,
-        "consol_range_pct": 10.18,
+        "consol_range_pct": 10.25,
         "candle_pattern": null,
         "candle_bullish": null,
         "sr": {
@@ -107,7 +376,7 @@
         "profit_margin_pct": 15.11,
         "revenue_growth_pct": 23.8,
         "earnings_growth_pct": 27.4,
-        "pe_ratio": 78.14,
+        "pe_ratio": 78.64,
         "promoter_pct": 62.92,
         "fcf_margin_pct": 16.63,
         "cash_conversion_pct": 21.8,
@@ -115,38 +384,39 @@
         "current_ratio": 0.96
       },
       "sector_rs": {
-        "rs_score": 20,
+        "rs_score": 18,
         "sector": "FMCG",
-        "sector_rank": 1,
-        "sector_peers": 7,
-        "own_ret_50d_pct": 9.05,
-        "sector_avg_50d_pct": -5.37,
-        "own_ret_20d_pct": 21.81
+        "sector_rank": 2,
+        "sector_peers": 11,
+        "own_ret_50d_pct": 10.61,
+        "sector_avg_50d_pct": -1.76,
+        "own_ret_20d_pct": 21.11
       },
-      "market_context": "FMCG: Nifty FMCG mild outperformance vs Nifty",
+      "market_context": "",
       "manip_resistance": {
-        "spike_freq": 0.0277,
-        "vol_cv": 0.8558,
-        "avg_daily_turnover_cr": 305.9,
-        "gap_freq": 0.0129,
+        "spike_freq": 0.0278,
+        "vol_cv": 0.8566,
+        "avg_daily_turnover_cr": 301.1,
+        "gap_freq": 0.013,
         "manip_resistance_score": 68
       },
       "stats_52w": {
-        "high52": 1430.9,
+        "high52": 1433.3,
         "low52": 1078.87,
-        "pct_from_high": -0.67,
-        "pct_from_low": 31.74
+        "pct_from_high": -0.02,
+        "pct_from_low": 32.82
       },
-      "rsi": 79.25,
-      "adx": 36.46,
+      "rsi": 80.2,
+      "adx": 38.7,
       "ema_aligned": true,
       "macd_bullish": true,
       "rationale": [
         "Full EMA alignment \u2014 clean bullish structure",
         "MACD bullish and accelerating",
-        "ADX 36 \u2014 trending market, not noise",
-        "\u20b9306 Cr avg daily turnover \u2014 highly liquid",
+        "ADX 39 \u2014 trending market, not noise",
+        "\u20b9301 Cr avg daily turnover \u2014 highly liquid",
         "OBV rising \u2014 institutional accumulation",
+        "52-week high breakout \u2014 price at all-time momentum peak",
         "ROE 76.3% \u2014 strong capital returns",
         "D/E 8.61 \u2014 elevated leverage",
         "Revenue +23.8% YoY",
@@ -155,557 +425,26 @@
         "FCF margin 16.6% \u2014 strong cash generation",
         "Interest coverage 149.3x \u2014 very safe debt service",
         "Promoter 62.9% \u2014 aligned incentives",
-        "Sector rank #1/7 \u2014 top quartile in FMCG"
-      ]
-    },
-    {
-      "symbol": "SBIN.NS",
-      "price": 1101.1,
-      "shares": 4,
-      "invested": 4404.4,
-      "stop_loss": 1029.62,
-      "stop_pct": 6.49,
-      "target": 1234.7,
-      "target_pct": 12.13,
-      "max_loss": 285.92,
-      "max_gain": 534.4,
-      "total_score": 125,
-      "position_size_pct": 100,
-      "score_breakdown": {
-        "technical": 47,
-        "signals": 9,
-        "chart_patterns": 4,
-        "fundamental": 11,
-        "rel_strength": 16,
-        "stability": 15,
-        "entry_quality": 6,
-        "momentum": 15,
-        "regime_bonus": 5,
-        "market_boost": -3
-      },
-      "signals": {
-        "rsi_bull_div": false,
-        "rsi_bear_div": false,
-        "macd_bull_div": true,
-        "macd_bear_div": false,
-        "squeeze_active": false,
-        "squeeze_fired": false,
-        "momentum_up": false,
-        "breakout": false,
-        "vol_surge": false,
-        "consol_range_pct": 13.56,
-        "candle_pattern": "Bullish Engulfing",
-        "candle_bullish": true,
-        "sr": {
-          "resistance": [
-            1120.95,
-            1234.7
-          ],
-          "support": [
-            1029.05,
-            994.0,
-            982.9
-          ]
-        },
-        "patterns": {
-          "patterns": [
-            {
-              "detected": true,
-              "pattern": "Double Bottom",
-              "bias": "bullish",
-              "confidence": 43,
-              "neckline": 1227.8,
-              "trough_level": 982.9
-            },
-            {
-              "detected": true,
-              "pattern": "Falling Wedge",
-              "bias": "bullish",
-              "confidence": 74
-            }
-          ],
-          "bullish_patterns": [
-            "Double Bottom",
-            "Falling Wedge"
-          ],
-          "bearish_patterns": [],
-          "neutral_patterns": [],
-          "pattern_score": 4,
-          "pattern_bias": "bullish",
-          "trend_structure": {
-            "structure": "LH/LL",
-            "bias": "bearish",
-            "confidence": 90,
-            "last_high": 1085.0,
-            "last_low": 975.8
-          },
-          "trendline": {
-            "bullish_break": false,
-            "bearish_break": false,
-            "bias": "neutral",
-            "confidence": 0,
-            "trendline_level": null
-          }
-        }
-      },
-      "fundamentals": {
-        "roe_pct": null,
-        "debt_to_equity": null,
-        "profit_margin_pct": 22.5,
-        "revenue_growth_pct": 14.5,
-        "earnings_growth_pct": 9.3,
-        "pe_ratio": 11.99,
-        "promoter_pct": 56.92,
-        "fcf_margin_pct": null,
-        "cash_conversion_pct": null,
-        "interest_coverage": null,
-        "current_ratio": null
-      },
-      "sector_rs": {
-        "rs_score": 16,
-        "sector": "Banks",
-        "sector_rank": 1,
-        "sector_peers": 9,
-        "own_ret_50d_pct": 3.25,
-        "sector_avg_50d_pct": -7.86,
-        "own_ret_20d_pct": 6.71
-      },
-      "market_context": "Banks: S&P positive: mild global risk appetite",
-      "manip_resistance": {
-        "spike_freq": 0.0498,
-        "vol_cv": 0.6503,
-        "avg_daily_turnover_cr": 2087.8,
-        "gap_freq": 0.0314,
-        "manip_resistance_score": 61
-      },
-      "stats_52w": {
-        "high52": 1234.7,
-        "low52": 740.63,
-        "pct_from_high": -10.82,
-        "pct_from_low": 48.67
-      },
-      "rsi": 56.02,
-      "adx": 23.05,
-      "ema_aligned": true,
-      "macd_bullish": true,
-      "rationale": [
-        "Full EMA alignment \u2014 clean bullish structure",
-        "RSI 56 \u2014 ideal momentum zone, not overbought",
-        "MACD bullish and accelerating",
-        "\u20b92088 Cr avg daily turnover \u2014 highly liquid",
-        "OBV rising \u2014 institutional accumulation",
-        "MACD histogram divergence \u2014 momentum reversal signal",
-        "Bullish Engulfing \u2014 bullish reversal candle",
-        "Revenue +14.5% YoY",
-        "Net margin 22.5% \u2014 high-quality business",
-        "Promoter 56.9% \u2014 aligned incentives",
-        "Sector rank #1/9 \u2014 top quartile in Banks",
-        "Double Bottom pattern active \u2014 structural bullish setup",
-        "Falling Wedge pattern active \u2014 structural bullish setup"
-      ]
-    },
-    {
-      "symbol": "AXISBANK.NS",
-      "price": 1365.9,
-      "shares": 3,
-      "invested": 4097.7,
-      "stop_loss": 1281.75,
-      "stop_pct": 6.16,
-      "target": 1618.35,
-      "target_pct": 18.48,
-      "max_loss": 252.45,
-      "max_gain": 757.35,
-      "total_score": 123,
-      "position_size_pct": 100,
-      "score_breakdown": {
-        "technical": 47,
-        "signals": 13,
-        "chart_patterns": -2,
-        "fundamental": 10,
-        "rel_strength": 17,
-        "stability": 15,
-        "entry_quality": 6,
-        "momentum": 15,
-        "regime_bonus": 5,
-        "market_boost": -3
-      },
-      "signals": {
-        "rsi_bull_div": true,
-        "rsi_bear_div": false,
-        "macd_bull_div": true,
-        "macd_bear_div": false,
-        "squeeze_active": false,
-        "squeeze_fired": false,
-        "momentum_up": false,
-        "breakout": false,
-        "vol_surge": false,
-        "consol_range_pct": 17.03,
-        "candle_pattern": null,
-        "candle_bullish": null,
-        "sr": {
-          "resistance": [
-            1384.5,
-            1412.0
-          ],
-          "support": [
-            1316.1,
-            1250.75,
-            1180.1,
-            1150.3
-          ]
-        },
-        "patterns": {
-          "patterns": [],
-          "bullish_patterns": [],
-          "bearish_patterns": [],
-          "neutral_patterns": [],
-          "pattern_score": -2,
-          "pattern_bias": "bearish",
-          "trend_structure": {
-            "structure": "LH/LL",
-            "bias": "bearish",
-            "confidence": 90,
-            "last_high": 1405.7,
-            "last_low": 1150.3
-          },
-          "trendline": {
-            "bullish_break": false,
-            "bearish_break": false,
-            "bias": "neutral",
-            "confidence": 0,
-            "trendline_level": null
-          }
-        }
-      },
-      "fundamentals": {
-        "roe_pct": 13.63,
-        "debt_to_equity": null,
-        "profit_margin_pct": 34.17,
-        "revenue_growth_pct": 5.7,
-        "earnings_growth_pct": 3.8,
-        "pe_ratio": 16.21,
-        "promoter_pct": 2.63,
-        "fcf_margin_pct": null,
-        "cash_conversion_pct": null,
-        "interest_coverage": null,
-        "current_ratio": null
-      },
-      "sector_rs": {
-        "rs_score": 17,
-        "sector": "Banks",
-        "sector_rank": 3,
-        "sector_peers": 9,
-        "own_ret_50d_pct": 1.81,
-        "sector_avg_50d_pct": -7.68,
-        "own_ret_20d_pct": 16.68
-      },
-      "market_context": "Banks: S&P positive: mild global risk appetite",
-      "manip_resistance": {
-        "spike_freq": 0.0572,
-        "vol_cv": 0.6168,
-        "avg_daily_turnover_cr": 984.3,
-        "gap_freq": 0.0351,
-        "manip_resistance_score": 61
-      },
-      "stats_52w": {
-        "high52": 1418.3,
-        "low52": 1042.5,
-        "pct_from_high": -3.69,
-        "pct_from_low": 31.02
-      },
-      "rsi": 61.51,
-      "adx": 23.13,
-      "ema_aligned": true,
-      "macd_bullish": true,
-      "rationale": [
-        "Full EMA alignment \u2014 clean bullish structure",
-        "RSI 62 \u2014 ideal momentum zone, not overbought",
-        "MACD bullish and accelerating",
-        "\u20b9984 Cr avg daily turnover \u2014 highly liquid",
-        "OBV rising \u2014 institutional accumulation",
-        "RSI bullish divergence \u2014 price/momentum decoupling",
-        "MACD histogram divergence \u2014 momentum reversal signal",
-        "Net margin 34.2% \u2014 high-quality business"
-      ]
-    },
-    {
-      "symbol": "MUTHOOTFIN.NS",
-      "price": 3493.5,
-      "shares": 1,
-      "invested": 3493.5,
-      "stop_loss": 3199.38,
-      "stop_pct": 8.42,
-      "target": 4375.86,
-      "target_pct": 25.26,
-      "max_loss": 294.12,
-      "max_gain": 882.36,
-      "total_score": 121,
-      "position_size_pct": 100,
-      "score_breakdown": {
-        "technical": 41,
-        "signals": 5,
-        "chart_patterns": 0,
-        "fundamental": 23,
-        "rel_strength": 16,
-        "stability": 6,
-        "entry_quality": 10,
-        "momentum": 12,
-        "regime_bonus": 5,
-        "market_boost": 3
-      },
-      "signals": {
-        "rsi_bull_div": false,
-        "rsi_bear_div": false,
-        "macd_bull_div": true,
-        "macd_bear_div": false,
-        "squeeze_active": false,
-        "squeeze_fired": false,
-        "momentum_up": false,
-        "breakout": false,
-        "vol_surge": false,
-        "consol_range_pct": 15.6,
-        "candle_pattern": null,
-        "candle_bullish": null,
-        "sr": {
-          "resistance": [
-            3647.66,
-            3978.01,
-            4048.67,
-            4114.71
-          ],
-          "support": [
-            3359.35,
-            3035.58
-          ]
-        },
-        "patterns": {
-          "patterns": [],
-          "bullish_patterns": [],
-          "bearish_patterns": [],
-          "neutral_patterns": [],
-          "pattern_score": 0,
-          "pattern_bias": "neutral",
-          "trend_structure": {
-            "structure": "expanding",
-            "bias": "neutral",
-            "confidence": 48,
-            "last_high": 3647.66,
-            "last_low": 3016.59
-          },
-          "trendline": {
-            "bullish_break": false,
-            "bearish_break": false,
-            "bias": "neutral",
-            "confidence": 0,
-            "trendline_level": null
-          }
-        }
-      },
-      "fundamentals": {
-        "roe_pct": 26.69,
-        "debt_to_equity": 3.85,
-        "profit_margin_pct": 51.14,
-        "revenue_growth_pct": 76.5,
-        "earnings_growth_pct": 97.5,
-        "pe_ratio": 16.08,
-        "promoter_pct": 73.35,
-        "fcf_margin_pct": null,
-        "cash_conversion_pct": null,
-        "interest_coverage": null,
-        "current_ratio": 153.36
-      },
-      "sector_rs": {
-        "rs_score": 16,
-        "sector": "NBFC",
-        "sector_rank": 1,
-        "sector_peers": 4,
-        "own_ret_50d_pct": -4.89,
-        "sector_avg_50d_pct": -9.55,
-        "own_ret_20d_pct": 13.08
-      },
-      "market_context": "NBFC: Nifty Bank mild outperformance vs Nifty",
-      "manip_resistance": {
-        "spike_freq": 0.107,
-        "vol_cv": 1.145,
-        "avg_daily_turnover_cr": 328.4,
-        "gap_freq": 0.059,
-        "manip_resistance_score": 25
-      },
-      "stats_52w": {
-        "high52": 4114.71,
-        "low52": 2010.0,
-        "pct_from_high": -15.1,
-        "pct_from_low": 73.81
-      },
-      "rsi": 52.92,
-      "adx": 17.4,
-      "ema_aligned": true,
-      "macd_bullish": true,
-      "rationale": [
-        "Full EMA alignment \u2014 clean bullish structure",
-        "RSI 53 \u2014 ideal momentum zone, not overbought",
-        "MACD bullish and accelerating",
-        "\u20b9328 Cr avg daily turnover \u2014 highly liquid",
-        "MACD histogram divergence \u2014 momentum reversal signal",
-        "ROE 26.7% \u2014 strong capital returns",
-        "D/E 3.85 \u2014 elevated leverage",
-        "Revenue +76.5% YoY",
-        "Earnings +97.5% YoY",
-        "Net margin 51.1% \u2014 high-quality business",
-        "Promoter 73.3% \u2014 aligned incentives",
-        "Sector rank #1/4 \u2014 top quartile in NBFC"
-      ]
-    },
-    {
-      "symbol": "JSWSTEEL.NS",
-      "price": 1255.7,
-      "shares": 3,
-      "invested": 3767.1,
-      "stop_loss": 1175.06,
-      "stop_pct": 6.42,
-      "target": 1497.62,
-      "target_pct": 19.27,
-      "max_loss": 241.92,
-      "max_gain": 725.76,
-      "total_score": 119,
-      "position_size_pct": 100,
-      "score_breakdown": {
-        "technical": 47,
-        "signals": 13,
-        "chart_patterns": 4,
-        "fundamental": 13,
-        "rel_strength": 5,
-        "stability": 10,
-        "entry_quality": 4,
-        "momentum": 15,
-        "regime_bonus": 5,
-        "market_boost": 3
-      },
-      "signals": {
-        "rsi_bull_div": true,
-        "rsi_bear_div": false,
-        "macd_bull_div": true,
-        "macd_bear_div": false,
-        "squeeze_active": false,
-        "squeeze_fired": false,
-        "momentum_up": false,
-        "breakout": false,
-        "vol_surge": true,
-        "consol_range_pct": 11.78,
-        "candle_pattern": null,
-        "candle_bullish": null,
-        "sr": {
-          "resistance": [
-            1284.7
-          ],
-          "support": [
-            1222.6,
-            1174.0,
-            1151.45,
-            1108.13
-          ]
-        },
-        "patterns": {
-          "patterns": [
-            {
-              "detected": true,
-              "pattern": "Falling Wedge",
-              "bias": "bullish",
-              "confidence": 75
-            }
-          ],
-          "bullish_patterns": [
-            "Falling Wedge"
-          ],
-          "bearish_patterns": [],
-          "neutral_patterns": [],
-          "pattern_score": 4,
-          "pattern_bias": "bullish",
-          "trend_structure": {
-            "structure": "contracting",
-            "bias": "neutral",
-            "confidence": 55,
-            "last_high": 1186.5,
-            "last_low": 1106.4
-          },
-          "trendline": {
-            "bullish_break": false,
-            "bearish_break": false,
-            "bias": "neutral",
-            "confidence": 0,
-            "trendline_level": null
-          }
-        }
-      },
-      "fundamentals": {
-        "roe_pct": null,
-        "debt_to_equity": 1.19,
-        "profit_margin_pct": 4.16,
-        "revenue_growth_pct": 11.1,
-        "earnings_growth_pct": 198.6,
-        "pe_ratio": 41.32,
-        "promoter_pct": 64.66,
-        "fcf_margin_pct": null,
-        "cash_conversion_pct": null,
-        "interest_coverage": 3.44,
-        "current_ratio": null
-      },
-      "sector_rs": {
-        "rs_score": 5,
-        "sector": "Metals",
-        "sector_rank": 5,
-        "sector_peers": 5,
-        "own_ret_50d_pct": 1.58,
-        "sector_avg_50d_pct": 13.06,
-        "own_ret_20d_pct": 13.17
-      },
-      "market_context": "Metals: Nifty Metal mild outperformance vs Nifty",
-      "manip_resistance": {
-        "spike_freq": 0.0664,
-        "vol_cv": 0.8035,
-        "avg_daily_turnover_cr": 273.5,
-        "gap_freq": 0.0295,
-        "manip_resistance_score": 43
-      },
-      "stats_52w": {
-        "high52": 1296.4,
-        "low52": 932.49,
-        "pct_from_high": -3.14,
-        "pct_from_low": 34.66
-      },
-      "rsi": 60.13,
-      "adx": 19.9,
-      "ema_aligned": true,
-      "macd_bullish": true,
-      "rationale": [
-        "Full EMA alignment \u2014 clean bullish structure",
-        "RSI 60 \u2014 ideal momentum zone, not overbought",
-        "MACD bullish and accelerating",
-        "\u20b9274 Cr avg daily turnover \u2014 highly liquid",
-        "OBV rising \u2014 institutional accumulation",
-        "RSI bullish divergence \u2014 price/momentum decoupling",
-        "MACD histogram divergence \u2014 momentum reversal signal",
-        "Revenue +11.1% YoY",
-        "Earnings +198.6% YoY",
-        "Promoter 64.7% \u2014 aligned incentives",
-        "Falling Wedge pattern active \u2014 structural bullish setup"
+        "Sector rank #2/11 \u2014 top quartile in FMCG"
       ]
     },
     {
       "symbol": "NATIONALUM.NS",
-      "price": 437.05,
+      "price": 442.0,
       "shares": 11,
-      "invested": 4807.55,
-      "stop_loss": 399.63,
-      "stop_pct": 8.56,
-      "target": 549.31,
-      "target_pct": 25.69,
-      "max_loss": 411.62,
-      "max_gain": 1234.86,
-      "total_score": 119,
+      "invested": 4862.0,
+      "stop_loss": 406.18,
+      "stop_pct": 8.1,
+      "target": 549.46,
+      "target_pct": 24.31,
+      "max_loss": 394.02,
+      "max_gain": 1182.06,
+      "total_score": 121,
+      "rule_score": 120,
+      "ml_prob": 0.5304,
       "position_size_pct": 100,
       "score_breakdown": {
-        "technical": 46,
+        "technical": 44,
         "signals": 0,
         "chart_patterns": 2,
         "fundamental": 18,
@@ -714,7 +453,7 @@
         "entry_quality": 0,
         "momentum": 15,
         "regime_bonus": 5,
-        "market_boost": 3
+        "market_boost": 6
       },
       "signals": {
         "rsi_bull_div": false,
@@ -725,6 +464,7 @@
         "squeeze_fired": false,
         "momentum_up": false,
         "breakout": false,
+        "breakout_type": null,
         "vol_surge": false,
         "consol_range_pct": 25.45,
         "candle_pattern": null,
@@ -765,7 +505,7 @@
         "profit_margin_pct": 33.94,
         "revenue_growth_pct": 1.5,
         "earnings_growth_pct": 1.9,
-        "pe_ratio": 13.07,
+        "pe_ratio": 13.22,
         "promoter_pct": 51.28,
         "fcf_margin_pct": null,
         "cash_conversion_pct": null,
@@ -777,32 +517,32 @@
         "sector": "Metals",
         "sector_rank": 1,
         "sector_peers": 5,
-        "own_ret_50d_pct": 23.23,
-        "sector_avg_50d_pct": 7.65,
-        "own_ret_20d_pct": 24.96
+        "own_ret_50d_pct": 21.03,
+        "sector_avg_50d_pct": 8.11,
+        "own_ret_20d_pct": 24.63
       },
-      "market_context": "Metals: Nifty Metal mild outperformance vs Nifty",
+      "market_context": "Metals: Nifty Metal outperforming Nifty by +1.3%: sector inflow confirmed",
       "manip_resistance": {
-        "spike_freq": 0.214,
-        "vol_cv": 0.8131,
-        "avg_daily_turnover_cr": 529.4,
-        "gap_freq": 0.0849,
+        "spike_freq": 0.213,
+        "vol_cv": 0.7903,
+        "avg_daily_turnover_cr": 513.4,
+        "gap_freq": 0.0833,
         "manip_resistance_score": 41
       },
       "stats_52w": {
         "high52": 443.15,
         "low52": 143.27,
-        "pct_from_high": -1.38,
-        "pct_from_low": 205.05
+        "pct_from_high": -0.26,
+        "pct_from_low": 208.51
       },
-      "rsi": 64.26,
-      "adx": 22.59,
+      "rsi": 65.93,
+      "adx": 23.25,
       "ema_aligned": true,
       "macd_bullish": true,
       "rationale": [
         "Full EMA alignment \u2014 clean bullish structure",
         "MACD bullish and accelerating",
-        "\u20b9529 Cr avg daily turnover \u2014 highly liquid",
+        "\u20b9513 Cr avg daily turnover \u2014 highly liquid",
         "OBV rising \u2014 institutional accumulation",
         "D/E 0.28 \u2014 near debt-free",
         "Net margin 33.9% \u2014 high-quality business",
@@ -813,29 +553,31 @@
       ]
     },
     {
-      "symbol": "ADANIPORTS.NS",
-      "price": 1585.1,
-      "shares": 3,
-      "invested": 4755.3,
-      "stop_loss": 1468.44,
-      "stop_pct": 7.36,
-      "target": 1935.08,
-      "target_pct": 22.08,
-      "max_loss": 349.98,
-      "max_gain": 1049.94,
-      "total_score": 118,
+      "symbol": "THERMAX.NS",
+      "price": 4046.7,
+      "shares": 1,
+      "invested": 4046.7,
+      "stop_loss": 3679.06,
+      "stop_pct": 9.08,
+      "target": 5149.62,
+      "target_pct": 27.25,
+      "max_loss": 367.64,
+      "max_gain": 1102.92,
+      "total_score": 120,
+      "rule_score": 120,
+      "ml_prob": 0.5148,
       "position_size_pct": 100,
       "score_breakdown": {
-        "technical": 44,
+        "technical": 45,
         "signals": 0,
-        "chart_patterns": 0,
-        "fundamental": 26,
-        "rel_strength": 20,
-        "stability": 8,
-        "entry_quality": 0,
+        "chart_patterns": 2,
+        "fundamental": 15,
+        "rel_strength": 18,
+        "stability": 5,
+        "entry_quality": 12,
         "momentum": 15,
         "regime_bonus": 5,
-        "market_boost": 0
+        "market_boost": 3
       },
       "signals": {
         "rsi_bull_div": false,
@@ -846,8 +588,137 @@
         "squeeze_fired": false,
         "momentum_up": false,
         "breakout": false,
+        "breakout_type": null,
         "vol_surge": false,
-        "consol_range_pct": 20.7,
+        "consol_range_pct": 34.96,
+        "candle_pattern": null,
+        "candle_bullish": null,
+        "sr": {
+          "resistance": [
+            4305.0
+          ],
+          "support": [
+            3050.0,
+            2966.8,
+            2919.9,
+            2750.45
+          ]
+        },
+        "patterns": {
+          "patterns": [],
+          "bullish_patterns": [],
+          "bearish_patterns": [],
+          "neutral_patterns": [],
+          "pattern_score": 2,
+          "pattern_bias": "bullish",
+          "trend_structure": {
+            "structure": "HH/HL",
+            "bias": "bullish",
+            "confidence": 90,
+            "last_high": 4305.0,
+            "last_low": 3050.0
+          },
+          "trendline": {
+            "bullish_break": false,
+            "bearish_break": false,
+            "bias": "neutral",
+            "confidence": 0,
+            "trendline_level": null
+          }
+        }
+      },
+      "fundamentals": {
+        "roe_pct": null,
+        "debt_to_equity": 0.36,
+        "profit_margin_pct": 6.6,
+        "revenue_growth_pct": 5.1,
+        "earnings_growth_pct": 76.1,
+        "pe_ratio": 66.66,
+        "promoter_pct": 73.68,
+        "fcf_margin_pct": null,
+        "cash_conversion_pct": null,
+        "interest_coverage": 6.31,
+        "current_ratio": null
+      },
+      "sector_rs": {
+        "rs_score": 18,
+        "sector": "Infrastructure",
+        "sector_rank": 1,
+        "sector_peers": 13,
+        "own_ret_50d_pct": 39.86,
+        "sector_avg_50d_pct": 9.15,
+        "own_ret_20d_pct": 26.79
+      },
+      "market_context": "Infrastructure: Nifty Infra mild outperformance vs Nifty",
+      "manip_resistance": {
+        "spike_freq": 0.1558,
+        "vol_cv": 2.2276,
+        "avg_daily_turnover_cr": 93.0,
+        "gap_freq": 0.0408,
+        "manip_resistance_score": 21
+      },
+      "stats_52w": {
+        "high52": 4305.0,
+        "low52": 2742.7,
+        "pct_from_high": -6.0,
+        "pct_from_low": 47.54
+      },
+      "rsi": 70.23,
+      "adx": 38.23,
+      "ema_aligned": true,
+      "macd_bullish": true,
+      "rationale": [
+        "Full EMA alignment \u2014 clean bullish structure",
+        "MACD bullish and accelerating",
+        "ADX 38 \u2014 trending market, not noise",
+        "OBV rising \u2014 institutional accumulation",
+        "D/E 0.36 \u2014 manageable leverage",
+        "Earnings +76.1% YoY",
+        "Interest coverage 6.3x",
+        "Promoter 73.7% \u2014 aligned incentives",
+        "Sector rank #1/13 \u2014 top quartile in Infrastructure",
+        "Higher highs / higher lows \u2014 intact uptrend structure"
+      ]
+    },
+    {
+      "symbol": "ADANIPORTS.NS",
+      "price": 1620.7,
+      "shares": 3,
+      "invested": 4862.1,
+      "stop_loss": 1505.73,
+      "stop_pct": 7.09,
+      "target": 1965.61,
+      "target_pct": 21.28,
+      "max_loss": 344.91,
+      "max_gain": 1034.73,
+      "total_score": 119,
+      "rule_score": 118,
+      "ml_prob": 0.5328,
+      "position_size_pct": 100,
+      "score_breakdown": {
+        "technical": 41,
+        "signals": 0,
+        "chart_patterns": 0,
+        "fundamental": 26,
+        "rel_strength": 20,
+        "stability": 8,
+        "entry_quality": 0,
+        "momentum": 15,
+        "regime_bonus": 5,
+        "market_boost": 3
+      },
+      "signals": {
+        "rsi_bull_div": false,
+        "rsi_bear_div": false,
+        "macd_bull_div": false,
+        "macd_bear_div": false,
+        "squeeze_active": false,
+        "squeeze_fired": false,
+        "momentum_up": false,
+        "breakout": false,
+        "breakout_type": null,
+        "vol_surge": false,
+        "consol_range_pct": 21.08,
         "candle_pattern": null,
         "candle_bullish": null,
         "sr": {
@@ -888,7 +759,7 @@
         "profit_margin_pct": 34.24,
         "revenue_growth_pct": 21.9,
         "earnings_growth_pct": 20.3,
-        "pe_ratio": 27.47,
+        "pe_ratio": 28.11,
         "promoter_pct": 68.05,
         "fcf_margin_pct": null,
         "cash_conversion_pct": null,
@@ -900,32 +771,32 @@
         "sector": "Ports_Logistics",
         "sector_rank": 1,
         "sector_peers": 2,
-        "own_ret_50d_pct": 2.22,
-        "sector_avg_50d_pct": -0.65,
-        "own_ret_20d_pct": 21.59
+        "own_ret_50d_pct": 3.78,
+        "sector_avg_50d_pct": -0.54,
+        "own_ret_20d_pct": 20.57
       },
-      "market_context": "",
+      "market_context": "Ports Logistics: Nifty Infra mild outperformance vs Nifty",
       "manip_resistance": {
-        "spike_freq": 0.0941,
-        "vol_cv": 1.2792,
-        "avg_daily_turnover_cr": 531.8,
-        "gap_freq": 0.0701,
+        "spike_freq": 0.0944,
+        "vol_cv": 1.2828,
+        "avg_daily_turnover_cr": 512.9,
+        "gap_freq": 0.0704,
         "manip_resistance_score": 35
       },
       "stats_52w": {
-        "high52": 1618.8,
+        "high52": 1622.3,
         "low52": 1175.48,
-        "pct_from_high": -2.08,
-        "pct_from_low": 34.85
+        "pct_from_high": -0.1,
+        "pct_from_low": 37.88
       },
-      "rsi": 65.67,
-      "adx": 23.05,
+      "rsi": 69.21,
+      "adx": 23.44,
       "ema_aligned": true,
       "macd_bullish": true,
       "rationale": [
         "Full EMA alignment \u2014 clean bullish structure",
         "MACD bullish and accelerating",
-        "\u20b9532 Cr avg daily turnover \u2014 highly liquid",
+        "\u20b9513 Cr avg daily turnover \u2014 highly liquid",
         "OBV rising \u2014 institutional accumulation",
         "ROE 19.4% \u2014 good capital efficiency",
         "Revenue +21.9% YoY",
@@ -937,162 +808,166 @@
       ]
     },
     {
-      "symbol": "OBEROIRLTY.NS",
-      "price": 1687.0,
+      "symbol": "GLENMARK.NS",
+      "price": 2324.0,
       "shares": 2,
-      "invested": 3374.0,
-      "stop_loss": 1559.19,
-      "stop_pct": 7.58,
-      "target": 2070.43,
-      "target_pct": 22.73,
-      "max_loss": 255.62,
-      "max_gain": 766.86,
-      "total_score": 117,
+      "invested": 4648.0,
+      "stop_loss": 2154.9,
+      "stop_pct": 7.28,
+      "target": 2831.3,
+      "target_pct": 21.83,
+      "max_loss": 338.2,
+      "max_gain": 1014.6,
+      "total_score": 119,
+      "rule_score": 118,
+      "ml_prob": 0.5311,
       "position_size_pct": 100,
       "score_breakdown": {
-        "technical": 37,
-        "signals": 5,
-        "chart_patterns": 0,
+        "technical": 42,
+        "signals": 0,
+        "chart_patterns": 4,
         "fundamental": 18,
-        "rel_strength": 20,
-        "stability": 7,
-        "entry_quality": 10,
+        "rel_strength": 16,
+        "stability": 9,
+        "entry_quality": 0,
         "momentum": 15,
         "regime_bonus": 5,
-        "market_boost": 0
+        "market_boost": 9
       },
       "signals": {
         "rsi_bull_div": false,
         "rsi_bear_div": false,
-        "macd_bull_div": true,
+        "macd_bull_div": false,
         "macd_bear_div": false,
         "squeeze_active": false,
         "squeeze_fired": false,
-        "momentum_up": false,
+        "momentum_up": true,
         "breakout": false,
+        "breakout_type": null,
         "vol_surge": false,
-        "consol_range_pct": 21.19,
+        "consol_range_pct": 8.79,
         "candle_pattern": null,
         "candle_bullish": null,
         "sr": {
-          "resistance": [
-            1754.73
-          ],
+          "resistance": [],
           "support": [
-            1626.9,
-            1427.25,
-            1393.35
+            2031.1,
+            1958.8,
+            1910.1,
+            1842.0
           ]
         },
         "patterns": {
           "patterns": [
             {
               "detected": true,
-              "pattern": "Falling Wedge",
+              "pattern": "Trendline Break",
               "bias": "bullish",
-              "confidence": 48
+              "confidence": 80
             }
           ],
           "bullish_patterns": [
-            "Falling Wedge"
+            "Trendline Break"
           ],
           "bearish_patterns": [],
           "neutral_patterns": [],
-          "pattern_score": 0,
-          "pattern_bias": "neutral",
+          "pattern_score": 4,
+          "pattern_bias": "bullish",
           "trend_structure": {
-            "structure": "LH/LL",
-            "bias": "bearish",
-            "confidence": 90,
-            "last_high": 1516.8,
-            "last_low": 1391.2
-          },
-          "trendline": {
-            "bullish_break": false,
-            "bearish_break": false,
+            "structure": "undefined",
             "bias": "neutral",
             "confidence": 0,
-            "trendline_level": null
+            "last_high": null,
+            "last_low": null
+          },
+          "trendline": {
+            "bullish_break": true,
+            "bearish_break": false,
+            "bias": "bullish",
+            "confidence": 80,
+            "trendline_level": 2165.17
           }
         }
       },
       "fundamentals": {
         "roe_pct": null,
-        "debt_to_equity": 0.18,
-        "profit_margin_pct": 41.36,
-        "revenue_growth_pct": 5.8,
-        "earnings_growth_pct": 0.6,
-        "pe_ratio": 27.4,
-        "promoter_pct": 67.7,
+        "debt_to_equity": 0.13,
+        "profit_margin_pct": 6.45,
+        "revenue_growth_pct": 15.1,
+        "earnings_growth_pct": 15.8,
+        "pe_ratio": 61.64,
+        "promoter_pct": 48.96,
         "fcf_margin_pct": null,
         "cash_conversion_pct": null,
-        "interest_coverage": 12.44,
+        "interest_coverage": 41.15,
         "current_ratio": null
       },
       "sector_rs": {
-        "rs_score": 20,
-        "sector": "Realty",
-        "sector_rank": 1,
-        "sector_peers": 3,
-        "own_ret_50d_pct": 10.07,
-        "sector_avg_50d_pct": -3.82,
-        "own_ret_20d_pct": 19.52
+        "rs_score": 16,
+        "sector": "Pharma",
+        "sector_rank": 3,
+        "sector_peers": 16,
+        "own_ret_50d_pct": 17.71,
+        "sector_avg_50d_pct": 4.12,
+        "own_ret_20d_pct": 10.89
       },
-      "market_context": "",
+      "market_context": "Pharma: Nifty Pharma outperforming Nifty by +2.0%: active sector rotation in",
       "manip_resistance": {
-        "spike_freq": 0.1347,
-        "vol_cv": 1.2344,
-        "avg_daily_turnover_cr": 118.9,
-        "gap_freq": 0.0461,
-        "manip_resistance_score": 31
+        "spike_freq": 0.1093,
+        "vol_cv": 1.1606,
+        "avg_daily_turnover_cr": 141.4,
+        "gap_freq": 0.0315,
+        "manip_resistance_score": 37
       },
       "stats_52w": {
-        "high52": 1997.65,
-        "low52": 1391.2,
-        "pct_from_high": -15.55,
-        "pct_from_low": 21.26
+        "high52": 2372.8,
+        "low52": 1351.68,
+        "pct_from_high": -2.06,
+        "pct_from_low": 71.93
       },
-      "rsi": 62.49,
-      "adx": 24.06,
-      "ema_aligned": false,
+      "rsi": 65.39,
+      "adx": 13.85,
+      "ema_aligned": true,
       "macd_bullish": true,
       "rationale": [
+        "Full EMA alignment \u2014 clean bullish structure",
         "MACD bullish and accelerating",
-        "\u20b9119 Cr avg daily turnover \u2014 highly liquid",
+        "\u20b9141 Cr avg daily turnover \u2014 highly liquid",
         "OBV rising \u2014 institutional accumulation",
-        "MACD histogram divergence \u2014 momentum reversal signal",
-        "D/E 0.18 \u2014 near debt-free",
-        "Net margin 41.4% \u2014 high-quality business",
-        "Interest coverage 12.4x \u2014 very safe debt service",
-        "Promoter 67.7% \u2014 aligned incentives",
-        "Sector rank #1/3 \u2014 top quartile in Realty",
-        "Falling Wedge pattern active \u2014 structural bullish setup"
+        "D/E 0.13 \u2014 near debt-free",
+        "Revenue +15.1% YoY",
+        "Earnings +15.8% YoY",
+        "Interest coverage 41.1x \u2014 very safe debt service",
+        "Sector rank #3/16 \u2014 top quartile in Pharma",
+        "Trendline Break pattern active \u2014 structural bullish setup"
       ]
     },
     {
       "symbol": "HINDUNILVR.NS",
-      "price": 2327.3,
+      "price": 2338.0,
       "shares": 2,
-      "invested": 4654.6,
-      "stop_loss": 2169.86,
-      "stop_pct": 6.76,
-      "target": 2799.62,
-      "target_pct": 20.29,
-      "max_loss": 314.88,
-      "max_gain": 944.64,
-      "total_score": 116,
+      "invested": 4676.0,
+      "stop_loss": 2187.93,
+      "stop_pct": 6.42,
+      "target": 2788.21,
+      "target_pct": 19.26,
+      "max_loss": 300.14,
+      "max_gain": 900.42,
+      "total_score": 118,
+      "rule_score": 119,
+      "ml_prob": 0.4794,
       "position_size_pct": 100,
       "score_breakdown": {
-        "technical": 31,
-        "signals": 2,
+        "technical": 41,
+        "signals": 0,
         "chart_patterns": 4,
         "fundamental": 13,
-        "rel_strength": 12,
+        "rel_strength": 10,
         "stability": 21,
         "entry_quality": 10,
         "momentum": 15,
         "regime_bonus": 5,
-        "market_boost": 3
+        "market_boost": 0
       },
       "signals": {
         "rsi_bull_div": false,
@@ -1102,11 +977,12 @@
         "squeeze_active": false,
         "squeeze_fired": false,
         "momentum_up": false,
-        "breakout": true,
-        "vol_surge": true,
+        "breakout": false,
+        "breakout_type": null,
+        "vol_surge": false,
         "consol_range_pct": 9.19,
-        "candle_pattern": "Bearish Engulfing",
-        "candle_bullish": false,
+        "candle_pattern": null,
+        "candle_bullish": null,
         "sr": {
           "resistance": [
             2387.3,
@@ -1125,7 +1001,7 @@
               "detected": true,
               "pattern": "Double Bottom",
               "bias": "bullish",
-              "confidence": 61,
+              "confidence": 59,
               "neckline": 2134.8,
               "trough_level": 2027.9
             },
@@ -1166,7 +1042,7 @@
         "profit_margin_pct": 22.29,
         "revenue_growth_pct": 3.9,
         "earnings_growth_pct": 121.4,
-        "pe_ratio": 54.05,
+        "pe_ratio": 54.19,
         "promoter_pct": 62.26,
         "fcf_margin_pct": null,
         "cash_conversion_pct": null,
@@ -1174,38 +1050,37 @@
         "current_ratio": null
       },
       "sector_rs": {
-        "rs_score": 12,
+        "rs_score": 10,
         "sector": "FMCG",
-        "sector_rank": 4,
-        "sector_peers": 7,
-        "own_ret_50d_pct": -4.0,
-        "sector_avg_50d_pct": -3.2,
-        "own_ret_20d_pct": 13.41
+        "sector_rank": 7,
+        "sector_peers": 11,
+        "own_ret_50d_pct": -3.98,
+        "sector_avg_50d_pct": -0.3,
+        "own_ret_20d_pct": 12.13
       },
-      "market_context": "FMCG: Nifty FMCG mild outperformance vs Nifty",
+      "market_context": "",
       "manip_resistance": {
-        "spike_freq": 0.0314,
-        "vol_cv": 0.6171,
-        "avg_daily_turnover_cr": 542.1,
+        "spike_freq": 0.0315,
+        "vol_cv": 0.619,
+        "avg_daily_turnover_cr": 525.1,
         "gap_freq": 0.0148,
         "manip_resistance_score": 84
       },
       "stats_52w": {
         "high52": 2728.55,
         "low52": 2022.5,
-        "pct_from_high": -14.71,
-        "pct_from_low": 15.07
+        "pct_from_high": -14.31,
+        "pct_from_low": 15.6
       },
-      "rsi": 63.76,
-      "adx": 29.69,
+      "rsi": 64.66,
+      "adx": 30.26,
       "ema_aligned": false,
       "macd_bullish": true,
       "rationale": [
         "MACD bullish and accelerating",
         "ADX 30 \u2014 trending market, not noise",
-        "\u20b9542 Cr avg daily turnover \u2014 highly liquid",
+        "\u20b9525 Cr avg daily turnover \u2014 highly liquid",
         "OBV rising \u2014 institutional accumulation",
-        "Breakout from 9.2% consolidation with volume",
         "D/E 3.61 \u2014 elevated leverage",
         "Earnings +121.4% YoY",
         "Net margin 22.3% \u2014 high-quality business",
@@ -1216,29 +1091,31 @@
       ]
     },
     {
-      "symbol": "BEL.NS",
-      "price": 444.45,
-      "shares": 11,
-      "invested": 4888.95,
-      "stop_loss": 414.95,
-      "stop_pct": 6.64,
-      "target": 532.95,
-      "target_pct": 19.91,
-      "max_loss": 324.5,
-      "max_gain": 973.5,
-      "total_score": 116,
+      "symbol": "HDFCAMC.NS",
+      "price": 2749.0,
+      "shares": 1,
+      "invested": 2749.0,
+      "stop_loss": 2531.67,
+      "stop_pct": 7.91,
+      "target": 3400.99,
+      "target_pct": 23.72,
+      "max_loss": 217.33,
+      "max_gain": 651.99,
+      "total_score": 118,
+      "rule_score": 117,
+      "ml_prob": 0.5452,
       "position_size_pct": 100,
       "score_breakdown": {
         "technical": 45,
         "signals": 0,
         "chart_patterns": 0,
-        "fundamental": 26,
-        "rel_strength": 6,
+        "fundamental": 19,
+        "rel_strength": 20,
         "stability": 10,
-        "entry_quality": 12,
-        "momentum": 12,
+        "entry_quality": 6,
+        "momentum": 15,
         "regime_bonus": 5,
-        "market_boost": 0
+        "market_boost": -3
       },
       "signals": {
         "rsi_bull_div": false,
@@ -1249,19 +1126,150 @@
         "squeeze_fired": false,
         "momentum_up": false,
         "breakout": false,
+        "breakout_type": null,
         "vol_surge": false,
-        "consol_range_pct": 15.65,
+        "consol_range_pct": 25.99,
         "candle_pattern": null,
         "candle_bullish": null,
         "sr": {
           "resistance": [
-            454.81,
-            464.4,
-            473.45
+            2816.8,
+            2901.5
           ],
           "support": [
-            426.02,
-            397.33
+            2455.1,
+            2407.3,
+            2323.0,
+            2205.6
+          ]
+        },
+        "patterns": {
+          "patterns": [],
+          "bullish_patterns": [],
+          "bearish_patterns": [],
+          "neutral_patterns": [],
+          "pattern_score": 0,
+          "pattern_bias": "neutral",
+          "trend_structure": {
+            "structure": "undefined",
+            "bias": "neutral",
+            "confidence": 0,
+            "last_high": null,
+            "last_low": null
+          },
+          "trendline": {
+            "bullish_break": false,
+            "bearish_break": false,
+            "bias": "neutral",
+            "confidence": 0,
+            "trendline_level": null
+          }
+        }
+      },
+      "fundamentals": {
+        "roe_pct": 32.93,
+        "debt_to_equity": null,
+        "profit_margin_pct": 61.83,
+        "revenue_growth_pct": 3.7,
+        "earnings_growth_pct": -2.8,
+        "pe_ratio": 41.2,
+        "promoter_pct": 56.39,
+        "fcf_margin_pct": 51.76,
+        "cash_conversion_pct": 54.69,
+        "interest_coverage": null,
+        "current_ratio": 1.69
+      },
+      "sector_rs": {
+        "rs_score": 20,
+        "sector": "Insurance",
+        "sector_rank": 1,
+        "sector_peers": 5,
+        "own_ret_50d_pct": 0.09,
+        "sector_avg_50d_pct": -13.61,
+        "own_ret_20d_pct": 16.89
+      },
+      "market_context": "Insurance: Nifty Bank mild underperformance vs Nifty",
+      "manip_resistance": {
+        "spike_freq": 0.0963,
+        "vol_cv": 0.7083,
+        "avg_daily_turnover_cr": 403.7,
+        "gap_freq": 0.0296,
+        "manip_resistance_score": 43
+      },
+      "stats_52w": {
+        "high52": 2967.25,
+        "low52": 2049.05,
+        "pct_from_high": -7.36,
+        "pct_from_low": 34.16
+      },
+      "rsi": 60.38,
+      "adx": 25.14,
+      "ema_aligned": true,
+      "macd_bullish": true,
+      "rationale": [
+        "Full EMA alignment \u2014 clean bullish structure",
+        "RSI 60 \u2014 ideal momentum zone, not overbought",
+        "MACD bullish and accelerating",
+        "ADX 25 \u2014 trending market, not noise",
+        "\u20b9404 Cr avg daily turnover \u2014 highly liquid",
+        "ROE 32.9% \u2014 strong capital returns",
+        "Earnings declining -2.8% YoY",
+        "Net margin 61.8% \u2014 high-quality business",
+        "FCF margin 51.8% \u2014 strong cash generation",
+        "Promoter 56.4% \u2014 aligned incentives",
+        "Sector rank #1/5 \u2014 top quartile in Insurance"
+      ]
+    },
+    {
+      "symbol": "LAURUSLABS.NS",
+      "price": 1130.3,
+      "shares": 4,
+      "invested": 4521.2,
+      "stop_loss": 1052.42,
+      "stop_pct": 6.89,
+      "target": 1363.94,
+      "target_pct": 20.67,
+      "max_loss": 311.52,
+      "max_gain": 934.56,
+      "total_score": 118,
+      "rule_score": 119,
+      "ml_prob": 0.4807,
+      "position_size_pct": 100,
+      "score_breakdown": {
+        "technical": 45,
+        "signals": 0,
+        "chart_patterns": 0,
+        "fundamental": 20,
+        "rel_strength": 16,
+        "stability": 9,
+        "entry_quality": 0,
+        "momentum": 15,
+        "regime_bonus": 5,
+        "market_boost": 9
+      },
+      "signals": {
+        "rsi_bull_div": false,
+        "rsi_bear_div": false,
+        "macd_bull_div": false,
+        "macd_bear_div": false,
+        "squeeze_active": false,
+        "squeeze_fired": false,
+        "momentum_up": false,
+        "breakout": false,
+        "breakout_type": null,
+        "vol_surge": false,
+        "consol_range_pct": 20.2,
+        "candle_pattern": null,
+        "candle_bullish": null,
+        "sr": {
+          "resistance": [
+            1142.92
+          ],
+          "support": [
+            996.9,
+            977.55,
+            936.3,
+            917.95
           ]
         },
         "patterns": {
@@ -1275,8 +1283,8 @@
             "structure": "expanding",
             "bias": "neutral",
             "confidence": 48,
-            "last_high": 473.45,
-            "last_low": 399.35
+            "last_high": 1144.85,
+            "last_low": 936.3
           },
           "trendline": {
             "bullish_break": false,
@@ -1289,59 +1297,59 @@
       },
       "fundamentals": {
         "roe_pct": null,
-        "debt_to_equity": 0.27,
-        "profit_margin_pct": 22.48,
-        "revenue_growth_pct": 24.0,
-        "earnings_growth_pct": 20.7,
-        "pe_ratio": 54.33,
-        "promoter_pct": 53.2,
+        "debt_to_equity": 0.45,
+        "profit_margin_pct": 12.55,
+        "revenue_growth_pct": 25.7,
+        "earnings_growth_pct": 171.9,
+        "pe_ratio": 72.48,
+        "promoter_pct": 32.06,
         "fcf_margin_pct": null,
         "cash_conversion_pct": null,
-        "interest_coverage": 1661.38,
+        "interest_coverage": 9.37,
         "current_ratio": null
       },
       "sector_rs": {
-        "rs_score": 6,
-        "sector": "Defense",
-        "sector_rank": 3,
-        "sector_peers": 3,
-        "own_ret_50d_pct": 3.89,
-        "sector_avg_50d_pct": 16.15,
-        "own_ret_20d_pct": 9.61
+        "rs_score": 16,
+        "sector": "Pharma",
+        "sector_rank": 4,
+        "sector_peers": 16,
+        "own_ret_50d_pct": 14.69,
+        "sector_avg_50d_pct": 4.32,
+        "own_ret_20d_pct": 13.87
       },
-      "market_context": "",
+      "market_context": "Pharma: Nifty Pharma outperforming Nifty by +2.0%: active sector rotation in",
       "manip_resistance": {
-        "spike_freq": 0.1328,
-        "vol_cv": 0.911,
-        "avg_daily_turnover_cr": 662.5,
-        "gap_freq": 0.0443,
-        "manip_resistance_score": 41
+        "spike_freq": 0.1333,
+        "vol_cv": 0.9432,
+        "avg_daily_turnover_cr": 194.6,
+        "gap_freq": 0.0278,
+        "manip_resistance_score": 37
       },
       "stats_52w": {
-        "high52": 473.45,
-        "low52": 291.78,
-        "pct_from_high": -6.13,
-        "pct_from_low": 52.32
+        "high52": 1144.85,
+        "low52": 571.78,
+        "pct_from_high": -1.27,
+        "pct_from_low": 97.68
       },
-      "rsi": 52.63,
-      "adx": 11.82,
+      "rsi": 61.48,
+      "adx": 19.82,
       "ema_aligned": true,
       "macd_bullish": true,
       "rationale": [
         "Full EMA alignment \u2014 clean bullish structure",
-        "RSI 53 \u2014 ideal momentum zone, not overbought",
+        "RSI 61 \u2014 ideal momentum zone, not overbought",
         "MACD bullish and accelerating",
-        "\u20b9662 Cr avg daily turnover \u2014 highly liquid",
+        "\u20b9195 Cr avg daily turnover \u2014 highly liquid",
         "OBV rising \u2014 institutional accumulation",
-        "D/E 0.27 \u2014 near debt-free",
-        "Revenue +24.0% YoY",
-        "Earnings +20.7% YoY",
-        "Net margin 22.5% \u2014 high-quality business",
-        "Interest coverage 1661.4x \u2014 very safe debt service",
-        "Promoter 53.2% \u2014 aligned incentives"
+        "D/E 0.45 \u2014 manageable leverage",
+        "Revenue +25.7% YoY",
+        "Earnings +171.9% YoY",
+        "Net margin 12.6%",
+        "Interest coverage 9.4x \u2014 very safe debt service",
+        "Sector rank #4/16 \u2014 top quartile in Pharma"
       ]
     }
   ],
-  "total_analyzed": 92,
+  "total_analyzed": 125,
   "investment_budget": 5000
 }
