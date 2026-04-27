@@ -11,8 +11,12 @@ Designed to be imported by stock_scorer.py with zero latency impact:
 import os
 import pickle
 import json
+import warnings
 import numpy as np
 from typing import Optional
+
+# LightGBM was trained with named features but we pass raw numpy arrays — harmless
+warnings.filterwarnings("ignore", message="X does not have valid feature names", category=UserWarning)
 
 from config import RESULTS_DIR
 from ml_feature_extractor import extract_features, N_FEATURES
