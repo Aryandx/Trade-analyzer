@@ -72,6 +72,8 @@ export interface StockPick {
   max_loss: number;
   max_gain: number;
   total_score: number;
+  rule_score?: number;
+  ml_prob?: number;
   position_size_pct: number;
   score_breakdown: ScoreBreakdown;
   signals: Signals;

@@ -68,18 +68,38 @@ def save_predictions(top_picks: list) -> int:
         candle = sigs.get("candle_pattern")
         if candle and sigs.get("candle_bullish"):  names.append(candle)
 
+        # Save ML feature vector so future retraining doesn't need re-extraction
+        ml_features: list = []
+        try:
+            from ml_predictor import get_feature_vector
+            df_ind = p.get("_df_ind")
+            if df_ind is not None:
+                ml_features = get_feature_vector(
+                    df_ind,
+                    signals=p.get("signals"),
+                    stats52=p.get("stats_52w"),
+                    regime_str=p.get("market_context", "SIDEWAYS"),
+                    vix=15.0,
+                    rule_score=p.get("rule_score") or p.get("total_score"),
+                )
+        except Exception:
+            pass
+
         log["predictions"].append({
-            "date":          today,
-            "symbol":        sym,
-            "entry_price":   p["price"],
-            "target":        p["target"],
-            "stop_loss":     p["stop_loss"],
-            "total_score":   p.get("total_score", 0),
-            "patterns":      list(set(names)),
-            "status":        "pending",
-            "resolved_date": None,
+            "date":           today,
+            "symbol":         sym,
+            "entry_price":    p["price"],
+            "target":         p["target"],
+            "stop_loss":      p["stop_loss"],
+            "total_score":    p.get("total_score", 0),
+            "rule_score":     p.get("rule_score", p.get("total_score", 0)),
+            "ml_prob":        p.get("ml_prob", 0.5),
+            "ml_features":    ml_features,
+            "patterns":       list(set(names)),
+            "status":         "pending",
+            "resolved_date":  None,
             "resolved_price": None,
-            "return_pct":    None,
+            "return_pct":     None,
         })
         added += 1
 

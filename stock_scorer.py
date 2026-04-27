@@ -208,6 +208,22 @@ def score_stock(
         if ts.get("structure") == "HH/HL" and ts.get("confidence", 0) > 60:
             reasons.append("Higher highs / higher lows — intact uptrend structure")
 
+        # ── ML probability overlay ─────────────────────────────────────────────
+        ml_prob         = 0.5
+        ml_adj_total    = total
+        try:
+            from ml_predictor import predict_proba, ml_adjust_score, is_ready
+            if is_ready():
+                ml_prob      = predict_proba(
+                    df_ind, signals=sigs, stats52=stats52,
+                    regime_str=regime.get("regime", "SIDEWAYS"),
+                    vix=regime.get("india_vix") or 15.0,
+                    rule_score=total,
+                )
+                ml_adj_total = ml_adjust_score(total, ml_prob)
+        except Exception:
+            pass
+
         return {
             "symbol":            symbol,
             "price":             round(price, 2),
@@ -219,7 +235,9 @@ def score_stock(
             "target_pct":        target_pct,
             "max_loss":          max_loss,
             "max_gain":          max_gain,
-            "total_score":       total,
+            "total_score":       ml_adj_total,
+            "rule_score":        total,
+            "ml_prob":           round(ml_prob, 4),
             "position_size_pct": int(position_pct * 100),
             "score_breakdown": {
                 "technical":      tech,
@@ -244,6 +262,8 @@ def score_stock(
             "ema_aligned":     bool(ema20 > ema50 > ema200),
             "macd_bullish":    bool(macd_bullish),
             "rationale":       reasons,
+            # Pass df_ind so accuracy_tracker can save features (not serialised to JSON)
+            "_df_ind":         df_ind,
         }
 
     except Exception:

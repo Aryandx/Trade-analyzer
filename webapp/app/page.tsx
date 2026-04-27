@@ -485,6 +485,24 @@ function DesktopTableHeader() {
   );
 }
 
+// ── ML Confidence Badge ───────────────────────────────────────────────────────
+function MlBadge({ prob }: { prob?: number }) {
+  if (prob == null) return null;
+  const pct   = Math.round(prob * 100);
+  const color = prob >= 0.70 ? "#22c55e" : prob >= 0.55 ? "#f59e0b" : prob >= 0.45 ? "#888" : "#ef4444";
+  const label = prob >= 0.70 ? "HIGH" : prob >= 0.55 ? "MED" : prob < 0.40 ? "LOW" : "";
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 4, marginTop: 2 }}>
+      <div style={{ width: 28, height: 3, background: "#1a1a1a", borderRadius: 1, overflow: "hidden" }}>
+        <div style={{ width: `${pct}%`, height: "100%", background: color, borderRadius: 1 }} />
+      </div>
+      <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "0.58rem", color, letterSpacing: "0.05em" }}>
+        {pct}%{label ? ` ${label}` : ""}
+      </span>
+    </div>
+  );
+}
+
 // ── Position Row ──────────────────────────────────────────────────────────────
 function PositionRow({ pick, rank, onExpand, expanded }: { pick: AllocatedPick; rank: number; onExpand: () => void; expanded: boolean }) {
   const isMobile = useIsMobile();
@@ -508,9 +526,12 @@ function PositionRow({ pick, rank, onExpand, expanded }: { pick: AllocatedPick; 
             <span className="mono" style={{ color: "#888", fontSize: "0.72rem" }}>{fmtINR(pick.price)}</span>
             <span className="mono" style={{ color: "#ef4444", fontSize: "0.72rem" }}>SL {fmtINR(pick.stop_loss)}</span>
           </div>
-          <div style={{ display: "flex", gap: 8 }}>
+          <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
             <span className="mono" style={{ color: "#22c55e", fontSize: "0.72rem" }}>+{fmtINR(pick.max_gain)}</span>
-            <span className="mono" style={{ fontSize: "0.62rem", color: pick.total_score >= 100 ? "#ff4500" : "#555" }}>{pick.total_score}/150</span>
+            <div>
+              <span className="mono" style={{ fontSize: "0.62rem", color: pick.total_score >= 100 ? "#ff4500" : "#555" }}>{pick.total_score}/150</span>
+              <MlBadge prob={pick.ml_prob} />
+            </div>
           </div>
         </div>
         <div style={{ marginTop: 4 }}>
@@ -562,8 +583,11 @@ function PositionRow({ pick, rank, onExpand, expanded }: { pick: AllocatedPick; 
             <div key={i} style={{ width: 6, height: 6, borderRadius: "50%", background: ok ? "#ff4500" : "#222" }} />
           ))}
         </div>
-        <div className="mono" style={{ fontSize: "0.72rem", color: pick.total_score >= 100 ? "#ff4500" : pick.total_score >= 80 ? "#888" : "#444" }}>
-          {pick.total_score}/150
+        <div>
+          <div className="mono" style={{ fontSize: "0.72rem", color: pick.total_score >= 100 ? "#ff4500" : pick.total_score >= 80 ? "#888" : "#444" }}>
+            {pick.total_score}/150
+          </div>
+          <MlBadge prob={pick.ml_prob} />
         </div>
       </div>
       {expanded && (
@@ -1535,17 +1559,39 @@ export default function Dashboard() {
                   ))}
                 </div>
                 <div style={{ border: "1px solid #1a1a1a", padding: isMobile ? 16 : 24 }}>
-                  <div className="label" style={{ marginBottom: 14 }}>TOP PICKS — SCORE DISTRIBUTION</div>
+                  <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 14 }}>
+                    <div className="label">TOP PICKS — SCORE DISTRIBUTION</div>
+                    <div style={{ display: "flex", gap: 12 }}>
+                      <span className="label" style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                        <span style={{ width: 10, height: 2, background: "#ff4500", display: "inline-block" }} /> RULE
+                      </span>
+                      <span className="label" style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                        <span style={{ width: 10, height: 2, background: "#22c55e", display: "inline-block" }} /> ML
+                      </span>
+                    </div>
+                  </div>
                   {analysis.top_picks.slice(0, 10).map(p => {
-                    const sym = p.symbol.replace(".NS","");
-                    const pct = (p.total_score / 150) * 100;
+                    const sym     = p.symbol.replace(".NS","");
+                    const rulePct = ((p.rule_score ?? p.total_score) / 150) * 100;
+                    const mlPct   = p.ml_prob != null ? p.ml_prob * 100 : null;
                     return (
-                      <div key={sym} style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
-                        <span className="mono" style={{ width: 70, fontSize: "0.72rem", color: "#888", flexShrink: 0 }}>{sym}</span>
-                        <div style={{ flex: 1, background: "#111", height: 2 }}>
-                          <div style={{ width: `${pct}%`, height: "100%", background: pct >= 70 ? "#ff4500" : pct >= 55 ? "#555" : "#2a2a2a", transition: "width 1s ease" }} />
+                      <div key={sym} style={{ marginBottom: 12 }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 3 }}>
+                          <span className="mono" style={{ width: 70, fontSize: "0.72rem", color: "#888", flexShrink: 0 }}>{sym}</span>
+                          <div style={{ flex: 1, background: "#111", height: 2, position: "relative" }}>
+                            <div style={{ width: `${rulePct}%`, height: "100%", background: rulePct >= 70 ? "#ff4500" : "#555", transition: "width 1s ease" }} />
+                          </div>
+                          <span className="mono" style={{ fontSize: "0.68rem", color: "#444", width: 46, flexShrink: 0 }}>{p.total_score}/150</span>
                         </div>
-                        <span className="mono" style={{ fontSize: "0.68rem", color: "#444", width: 46, flexShrink: 0 }}>{p.total_score}/150</span>
+                        {mlPct != null && (
+                          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                            <span style={{ width: 70, flexShrink: 0 }} />
+                            <div style={{ flex: 1, background: "#111", height: 2 }}>
+                              <div style={{ width: `${mlPct}%`, height: "100%", background: mlPct >= 70 ? "#22c55e" : mlPct >= 50 ? "#f59e0b" : "#ef4444", transition: "width 1s ease" }} />
+                            </div>
+                            <span className="mono" style={{ fontSize: "0.68rem", color: "#444", width: 46, flexShrink: 0 }}>{Math.round(mlPct)}% ML</span>
+                          </div>
+                        )}
                       </div>
                     );
                   })}

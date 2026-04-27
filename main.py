@@ -111,6 +111,17 @@ def run_analysis(quick: bool = False) -> dict:
     scores.sort(key=lambda x: x["total_score"], reverse=True)
     console.print(f"[green]✓ Scored {len(scores)} stocks | {failed} skipped (price/data filter)[/green]")
 
+    # ── ML status line ─────────────────────────────────────────────────────
+    try:
+        from ml_retrainer import print_ml_status
+        print_ml_status(console)
+    except Exception:
+        pass
+
+    # Strip internal df_ind reference before serialisation
+    for s in scores:
+        s.pop("_df_ind", None)
+
     top_picks = scores[:10]
 
     # ── Print Summary Table ────────────────────────────────────────────────
@@ -190,6 +201,14 @@ def run_analysis(quick: bool = False) -> dict:
     added = save_predictions(top_picks)
     if added:
         console.print(f"[dim]✓ Logged {added} new predictions for accuracy tracking[/dim]")
+
+    # ── ML daily retrain ──────────────────────────────────────────────────
+    console.rule("[bold dim]ML Engine — Daily Retrain")
+    try:
+        from ml_retrainer import run_daily_retrain
+        run_daily_retrain()
+    except Exception as e:
+        console.print(f"[dim]ML retrain skipped: {e}[/dim]")
 
     # ── Sync to webapp ─────────────────────────────────────────────────────
     try:
