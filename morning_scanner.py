@@ -331,6 +331,12 @@ def _score_stock(sym: str, df: pd.DataFrame, sector_mom: dict, capital: int) -> 
         if price < 50 or price > 4800:
             return None
 
+        # Skip stocks that already moved >3% today — extended, profit-booking risk tomorrow
+        prev_close = df_ind["close"].iloc[-2] if len(df_ind) >= 2 else price
+        today_move = (price - prev_close) / prev_close * 100 if prev_close > 0 else 0
+        if abs(today_move) > 3.0:
+            return None
+
         rsi, adx = lat["rsi"], lat["adx"]
         ema20, ema50 = lat["ema20"], lat["ema50"]
 
