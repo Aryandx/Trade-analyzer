@@ -1,0 +1,78 @@
+{
+  "trained_at": "2026-04-28T11:36",
+  "n_features": 40,
+  "feature_names": [
+    "rsi",
+    "rsi_zone",
+    "adx",
+    "di_spread",
+    "macd_hist_norm",
+    "macd_bull",
+    "macd_accel",
+    "bb_pct",
+    "bb_width",
+    "stoch_k",
+    "stoch_d",
+    "price_vs_ema20",
+    "price_vs_ema50",
+    "price_vs_ema200",
+    "ema20_vs_50",
+    "ema50_vs_200",
+    "ema_aligned",
+    "vol_ratio",
+    "obv_trend",
+    "roc_10",
+    "roc_20",
+    "atr_pct",
+    "weekly_return",
+    "monthly_return",
+    "pct_from_high",
+    "pct_from_low",
+    "rsi_bull_div",
+    "rsi_bear_div",
+    "macd_bull_div",
+    "squeeze_fired",
+    "squeeze_active",
+    "breakout",
+    "vol_surge",
+    "candle_signal",
+    "consol_range_pct",
+    "net_pattern_score",
+    "trend_hhhl",
+    "trend_confidence",
+    "regime_score",
+    "rule_score_norm"
+  ],
+  "dataset": {
+    "bootstrap_samples": 9765,
+    "prediction_samples": 0,
+    "total_samples": 9765,
+    "positive_rate_pct": 54.4
+  },
+  "cv": {
+    "cv_auc": 0.581,
+    "cv_precision": 0.601,
+    "cv_recall": 0.672,
+    "cv_folds": 5
+  },
+  "holdout": {
+    "lgbm": {
+      "auc": 0.71,
+      "accuracy": 64.1,
+      "precision": 63.4,
+      "recall": 78.0
+    },
+    "xgb": {
+      "auc": 0.678,
+      "accuracy": 61.9,
+      "precision": 61.3,
+      "recall": 78.0
+    },
+    "ensemble": {
+      "auc": 0.707,
+      "accuracy": 63.6,
+      "precision": 62.7,
+      "recall": 78.7
+    }
+  }
+}

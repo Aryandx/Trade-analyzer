@@ -343,12 +343,15 @@ def _score_stock(sym: str, df: pd.DataFrame, sector_mom: dict, capital: int) -> 
         elif adx < 15:
             return None
 
+        # RSI > 75 = overbought intraday — stock already extended, likely to reverse
+        if rsi > 75:
+            return None
         if 45 <= rsi <= 60:
             score += 20; reasons.append(f"RSI {rsi:.0f} — ideal zone, room to extend")
         elif 40 <= rsi <= 65:
             score += 12
-        elif rsi > 70:
-            score -= 15
+        elif rsi > 65:
+            score -= 20  # overbought penalty, stricter than before
         elif rsi < 35:
             score -= 8
 
@@ -360,15 +363,19 @@ def _score_stock(sym: str, df: pd.DataFrame, sector_mom: dict, capital: int) -> 
         sigs  = detect_signals(df_ind)
         btype = sigs.get("breakout_type")
         if btype:
-            score += BREAKOUT_SCORE.get(btype, 15)
-            labels = {
-                "52W_HIGH":      "52-week HIGH breakout — max momentum, path clear",
-                "VCP":           "VCP — 3-stage volatility squeeze about to release",
-                "RESISTANCE":    "Resistance broken — clean air above pivot level",
-                "CONSOLIDATION": f"Base breakout ({sigs['consol_range_pct']:.1f}% range) with volume",
-                "EMA_CROSS":     "20 EMA just crossed 50 EMA — fresh trend shift",
-            }
-            reasons.append(labels.get(btype, f"Breakout ({btype})"))
+            # 52W_HIGH is a swing/position signal — bad for intraday (already extended)
+            if btype == "52W_HIGH":
+                score -= 10  # penalise: overbought, profit-booking risk intraday
+                reasons.append("52W HIGH — caution: extended, profit-booking risk intraday")
+            else:
+                score += BREAKOUT_SCORE.get(btype, 15)
+                labels = {
+                    "VCP":           "VCP — 3-stage volatility squeeze about to release",
+                    "RESISTANCE":    "Resistance broken — clean air above pivot level",
+                    "CONSOLIDATION": f"Base breakout ({sigs['consol_range_pct']:.1f}% range) with volume",
+                    "EMA_CROSS":     "20 EMA just crossed 50 EMA — fresh trend shift",
+                }
+                reasons.append(labels.get(btype, f"Breakout ({btype})"))
         elif sigs.get("squeeze_fired") and sigs.get("momentum_up"):
             score += 22; reasons.append("TTM Squeeze fired upward — explosive move initiating")
 
@@ -397,7 +404,12 @@ def _score_stock(sym: str, df: pd.DataFrame, sector_mom: dict, capital: int) -> 
             if score < 40:
                 return None
 
-        if score < 45:
+        # No breakout pattern + no squeeze = weak intraday catalyst, needs higher bar
+        if not btype and not (sigs.get("squeeze_fired") and sigs.get("momentum_up")):
+            if score < 70:
+                return None
+
+        if score < 55:
             return None
 
         atr = max(lat["atr"], price * 0.005)
