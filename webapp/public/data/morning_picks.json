@@ -1,6 +1,6 @@
 {
   "date": "2026-04-29",
-  "generated_at": "2026-04-29T10:08",
+  "generated_at": "2026-04-29T10:18",
   "capital": 32000,
   "weekly_goal": 4000,
   "week_banked": 45,
@@ -14,7 +14,7 @@
     {
       "symbol": "DRREDDY.NS",
       "price": 1332.5,
-      "score": 80,
+      "score": 90,
       "entry_low": 1328.5,
       "entry_high": 1336.5,
       "day_target": 1385.8,
@@ -25,7 +25,7 @@
       "profit_at_tgt": 1279.2,
       "breakout_type": "CONSOLIDATION",
       "sector": "Pharma",
-      "sector_mom": 0.49,
+      "sector_mom": 0.51,
       "reasons": [
         "ADX 28 \u2014 moderate trend building",
         "Price > EMA20 > EMA50 \u2014 clean bullish structure",
@@ -35,32 +35,9 @@
       ]
     },
     {
-      "symbol": "MOTHERSON.NS",
-      "price": 125.46,
-      "score": 78,
-      "entry_low": 125.08,
-      "entry_high": 125.84,
-      "day_target": 130.48,
-      "day_target_pct": 4.0,
-      "rsi": 55.57,
-      "adx": 26.53,
-      "shares": 255,
-      "profit_at_tgt": 1280.1,
-      "breakout_type": null,
-      "sector": "Auto",
-      "sector_mom": 2.31,
-      "reasons": [
-        "ADX 27 \u2014 moderate trend building",
-        "RSI 56 \u2014 ideal zone, room to extend",
-        "Price > EMA20 > EMA50 \u2014 clean bullish structure",
-        "MACD bullish and accelerating",
-        "Auto sector +2.3% \u2014 strong tailwind"
-      ]
-    },
-    {
       "symbol": "APLLTD.NS",
       "price": 758.35,
-      "score": 76,
+      "score": 86,
       "entry_low": 756.07,
       "entry_high": 760.63,
       "day_target": 788.68,
@@ -71,13 +48,36 @@
       "profit_at_tgt": 1273.86,
       "breakout_type": null,
       "sector": "Pharma",
-      "sector_mom": 0.49,
+      "sector_mom": 0.51,
       "reasons": [
         "ADX 32 \u2014 strong trend, not noise",
         "RSI 57 \u2014 ideal zone, room to extend",
         "Price > EMA20 > EMA50 \u2014 clean bullish structure",
         "Near support \u20b9745 \u2014 tight stop available",
         "MACD bullish and accelerating"
+      ]
+    },
+    {
+      "symbol": "MASTEK.NS",
+      "price": 1690.7,
+      "score": 79,
+      "entry_low": 1685.63,
+      "entry_high": 1695.77,
+      "day_target": 1758.33,
+      "day_target_pct": 4.0,
+      "rsi": 54.51,
+      "adx": 22.09,
+      "shares": 18,
+      "profit_at_tgt": 1217.34,
+      "breakout_type": null,
+      "sector": "IT",
+      "sector_mom": 1.53,
+      "reasons": [
+        "ADX 22 \u2014 moderate trend building",
+        "RSI 55 \u2014 ideal zone, room to extend",
+        "Near support \u20b91,676 \u2014 tight stop available",
+        "MACD bullish and accelerating",
+        "IT sector +1.5% \u2014 strong tailwind"
       ]
     }
   ]
