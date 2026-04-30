@@ -1,84 +1,112 @@
 {
-  "date": "2026-04-29",
-  "generated_at": "2026-04-29T10:18",
+  "date": "2026-04-30",
+  "generated_at": "2026-04-30T10:34",
   "capital": 32000,
   "weekly_goal": 4000,
-  "week_banked": 45,
+  "week_banked": -493,
   "week_entries": [
     {
       "date": "2026-04-28",
       "pnl": 45
+    },
+    {
+      "date": "2026-04-29",
+      "pnl": -538
     }
   ],
   "picks": [
     {
-      "symbol": "DRREDDY.NS",
-      "price": 1332.5,
-      "score": 90,
-      "entry_low": 1328.5,
-      "entry_high": 1336.5,
-      "day_target": 1385.8,
+      "symbol": "TATACHEM.NS",
+      "price": 802.3,
+      "score": 65,
+      "entry_low": 799.89,
+      "entry_high": 804.71,
+      "day_target": 834.39,
       "day_target_pct": 4.0,
-      "rsi": 61.63,
-      "adx": 28.34,
-      "shares": 24,
-      "profit_at_tgt": 1279.2,
-      "breakout_type": "CONSOLIDATION",
-      "sector": "Pharma",
-      "sector_mom": 0.51,
+      "rsi": 73.55,
+      "adx": 36.86,
+      "shares": 15,
+      "profit_at_tgt": 481.35,
+      "breakout_type": "EMA_CROSS",
+      "sector": "",
+      "sector_mom": 0.0,
       "reasons": [
-        "ADX 28 \u2014 moderate trend building",
-        "Price > EMA20 > EMA50 \u2014 clean bullish structure",
-        "Base breakout (9.2% range) with volume",
-        "Volume surge \u2014 institutional participation today",
+        "ADX 37 \u2014 strong directional trend",
+        "Price > EMA20 > EMA50 \u2014 bullish structure intact",
+        "EMA20 crossed above EMA50 \u2014 fresh momentum shift",
+        "Volume surge \u2014 institutional participation confirmed",
         "MACD bullish and accelerating"
-      ]
+      ],
+      "intraday_stop": 785.34,
+      "win_prob": 0.61,
+      "expected_value": 192.2,
+      "tier_scores": {
+        "trend": 4.5,
+        "catalyst": 7.5,
+        "context": 5.0
+      }
     },
     {
-      "symbol": "APLLTD.NS",
-      "price": 758.35,
-      "score": 86,
-      "entry_low": 756.07,
-      "entry_high": 760.63,
-      "day_target": 788.68,
+      "symbol": "INDUSINDBK.NS",
+      "price": 900.55,
+      "score": 59,
+      "entry_low": 897.85,
+      "entry_high": 903.25,
+      "day_target": 936.57,
       "day_target_pct": 4.0,
-      "rsi": 57.35,
-      "adx": 32.19,
-      "shares": 42,
-      "profit_at_tgt": 1273.86,
+      "rsi": 59.5,
+      "adx": 20.03,
+      "shares": 15,
+      "profit_at_tgt": 540.3,
       "breakout_type": null,
-      "sector": "Pharma",
-      "sector_mom": 0.51,
+      "sector": "",
+      "sector_mom": 0.0,
       "reasons": [
-        "ADX 32 \u2014 strong trend, not noise",
-        "RSI 57 \u2014 ideal zone, room to extend",
-        "Price > EMA20 > EMA50 \u2014 clean bullish structure",
-        "Near support \u20b9745 \u2014 tight stop available",
-        "MACD bullish and accelerating"
-      ]
-    },
-    {
-      "symbol": "MASTEK.NS",
-      "price": 1690.7,
-      "score": 79,
-      "entry_low": 1685.63,
-      "entry_high": 1695.77,
-      "day_target": 1758.33,
-      "day_target_pct": 4.0,
-      "rsi": 54.51,
-      "adx": 22.09,
-      "shares": 18,
-      "profit_at_tgt": 1217.34,
-      "breakout_type": null,
-      "sector": "IT",
-      "sector_mom": 1.53,
-      "reasons": [
-        "ADX 22 \u2014 moderate trend building",
-        "RSI 55 \u2014 ideal zone, room to extend",
-        "Near support \u20b91,676 \u2014 tight stop available",
+        "Price > EMA20 > EMA50 \u2014 bullish structure intact",
+        "RSI 60 \u2014 ideal momentum zone, room to extend",
+        "Volume surge \u2014 institutional participation confirmed",
         "MACD bullish and accelerating",
-        "IT sector +1.5% \u2014 strong tailwind"
-      ]
+        "Supertrend bullish \u2014 price above rising ATR band"
+      ],
+      "intraday_stop": 886.74,
+      "win_prob": 0.58,
+      "expected_value": 229.51,
+      "tier_scores": {
+        "trend": 6.0,
+        "catalyst": 4.5,
+        "context": 5.0
+      }
+    },
+    {
+      "symbol": "SUNPHARMA.NS",
+      "price": 1770.4,
+      "score": 55,
+      "entry_low": 1765.09,
+      "entry_high": 1775.71,
+      "day_target": 1841.22,
+      "day_target_pct": 4.0,
+      "rsi": 58.31,
+      "adx": 20.94,
+      "shares": 7,
+      "profit_at_tgt": 495.74,
+      "breakout_type": null,
+      "sector": "",
+      "sector_mom": 0.0,
+      "reasons": [
+        "RSI 58 \u2014 ideal momentum zone, room to extend",
+        "Volume surge \u2014 institutional participation confirmed",
+        "MACD bullish and accelerating",
+        "Supertrend bullish \u2014 price above rising ATR band",
+        "CMF 0.16 \u2014 sustained money inflow"
+      ],
+      "intraday_stop": 1746.43,
+      "win_prob": 0.57,
+      "expected_value": 209.76,
+      "tier_scores": {
+        "trend": 4.5,
+        "catalyst": 4.5,
+        "context": 5.5
+      }
     }
   ]
 }
