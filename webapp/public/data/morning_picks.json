@@ -1,6 +1,6 @@
 {
   "date": "2026-05-04",
-  "generated_at": "2026-05-04T10:02",
+  "generated_at": "2026-05-04T12:15",
   "capital": 32000,
   "weekly_goal": 4000,
   "week_banked": -493,
@@ -47,37 +47,6 @@
       }
     },
     {
-      "symbol": "INDUSINDBK.NS",
-      "price": 900.55,
-      "score": 63,
-      "entry_low": 897.85,
-      "entry_high": 903.25,
-      "day_target": 936.57,
-      "day_target_pct": 4.0,
-      "rsi": 59.5,
-      "adx": 20.03,
-      "shares": 15,
-      "profit_at_tgt": 540.3,
-      "breakout_type": null,
-      "sector": "Banks",
-      "sector_mom": 1.05,
-      "reasons": [
-        "Price > EMA20 > EMA50 \u2014 bullish structure intact",
-        "RSI 60 \u2014 ideal momentum zone, room to extend",
-        "Volume surge \u2014 institutional participation confirmed",
-        "MACD bullish and accelerating",
-        "Supertrend bullish \u2014 price above rising ATR band"
-      ],
-      "intraday_stop": 886.74,
-      "win_prob": 0.6,
-      "expected_value": 240.87,
-      "tier_scores": {
-        "trend": 6.0,
-        "catalyst": 4.5,
-        "context": 6.0
-      }
-    },
-    {
       "symbol": "SUNPHARMA.NS",
       "price": 1770.4,
       "score": 59,
@@ -91,7 +60,7 @@
       "profit_at_tgt": 566.56,
       "breakout_type": null,
       "sector": "Pharma",
-      "sector_mom": 1.08,
+      "sector_mom": 1.05,
       "reasons": [
         "RSI 58 \u2014 ideal momentum zone, room to extend",
         "Volume surge \u2014 institutional participation confirmed",
@@ -106,6 +75,37 @@
         "trend": 4.5,
         "catalyst": 4.5,
         "context": 6.5
+      }
+    },
+    {
+      "symbol": "INDUSINDBK.NS",
+      "price": 900.55,
+      "score": 59,
+      "entry_low": 897.85,
+      "entry_high": 903.25,
+      "day_target": 936.57,
+      "day_target_pct": 4.0,
+      "rsi": 59.5,
+      "adx": 20.03,
+      "shares": 15,
+      "profit_at_tgt": 540.3,
+      "breakout_type": null,
+      "sector": "Banks",
+      "sector_mom": 0.41,
+      "reasons": [
+        "Price > EMA20 > EMA50 \u2014 bullish structure intact",
+        "RSI 60 \u2014 ideal momentum zone, room to extend",
+        "Volume surge \u2014 institutional participation confirmed",
+        "MACD bullish and accelerating",
+        "Supertrend bullish \u2014 price above rising ATR band"
+      ],
+      "intraday_stop": 886.74,
+      "win_prob": 0.58,
+      "expected_value": 229.51,
+      "tier_scores": {
+        "trend": 6.0,
+        "catalyst": 4.5,
+        "context": 5.0
       }
     }
   ]
