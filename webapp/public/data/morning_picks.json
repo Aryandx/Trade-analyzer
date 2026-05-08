@@ -1,6 +1,6 @@
 {
   "date": "2026-05-08",
-  "generated_at": "2026-05-08T11:21",
+  "generated_at": "2026-05-08T11:27",
   "capital": 32000,
   "weekly_goal": 4000,
   "week_banked": -493,
@@ -47,37 +47,6 @@
       }
     },
     {
-      "symbol": "SUNPHARMA.NS",
-      "price": 1770.4,
-      "score": 59,
-      "entry_low": 1765.09,
-      "entry_high": 1775.71,
-      "day_target": 1841.22,
-      "day_target_pct": 4.0,
-      "rsi": 58.31,
-      "adx": 20.94,
-      "shares": 8,
-      "profit_at_tgt": 566.56,
-      "breakout_type": null,
-      "sector": "Pharma",
-      "sector_mom": 0.58,
-      "reasons": [
-        "RSI 58 \u2014 ideal momentum zone, room to extend",
-        "Volume surge \u2014 institutional participation confirmed",
-        "MACD bullish and accelerating",
-        "Supertrend bullish \u2014 price above rising ATR band",
-        "CMF 0.16 \u2014 sustained money inflow"
-      ],
-      "intraday_stop": 1746.43,
-      "win_prob": 0.58,
-      "expected_value": 251.25,
-      "tier_scores": {
-        "trend": 4.5,
-        "catalyst": 4.5,
-        "context": 6.5
-      }
-    },
-    {
       "symbol": "INDUSINDBK.NS",
       "price": 900.55,
       "score": 59,
@@ -106,6 +75,37 @@
         "trend": 6.0,
         "catalyst": 4.5,
         "context": 5.0
+      }
+    },
+    {
+      "symbol": "SUNPHARMA.NS",
+      "price": 1770.4,
+      "score": 55,
+      "entry_low": 1765.09,
+      "entry_high": 1775.71,
+      "day_target": 1841.22,
+      "day_target_pct": 4.0,
+      "rsi": 58.31,
+      "adx": 20.94,
+      "shares": 7,
+      "profit_at_tgt": 495.74,
+      "breakout_type": null,
+      "sector": "Pharma",
+      "sector_mom": 0.43,
+      "reasons": [
+        "RSI 58 \u2014 ideal momentum zone, room to extend",
+        "Volume surge \u2014 institutional participation confirmed",
+        "MACD bullish and accelerating",
+        "Supertrend bullish \u2014 price above rising ATR band",
+        "CMF 0.16 \u2014 sustained money inflow"
+      ],
+      "intraday_stop": 1746.43,
+      "win_prob": 0.57,
+      "expected_value": 209.76,
+      "tier_scores": {
+        "trend": 4.5,
+        "catalyst": 4.5,
+        "context": 5.5
       }
     }
   ]
