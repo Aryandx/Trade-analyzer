@@ -1,6 +1,6 @@
 {
-  "date": "2026-05-14",
-  "generated_at": "2026-05-14T11:32",
+  "date": "2026-05-18",
+  "generated_at": "2026-05-18T09:00",
   "capital": 32000,
   "weekly_goal": 4000,
   "week_banked": -493,
@@ -16,51 +16,20 @@
   ],
   "picks": [
     {
-      "symbol": "APLLTD.NS",
-      "price": 789.2,
-      "score": 67,
-      "entry_low": 786.83,
-      "entry_high": 791.57,
-      "day_target": 820.77,
-      "day_target_pct": 4.0,
-      "rsi": 63.67,
-      "adx": 37.8,
-      "shares": 19,
-      "profit_at_tgt": 599.83,
-      "breakout_type": null,
-      "sector": "Pharma",
-      "sector_mom": 2.02,
-      "reasons": [
-        "ADX 38 \u2014 strong directional trend",
-        "Price > EMA20 > EMA50 \u2014 bullish structure intact",
-        "Volume surge \u2014 institutional participation confirmed",
-        "MACD bullish and accelerating",
-        "Supertrend bullish \u2014 price above rising ATR band"
-      ],
-      "intraday_stop": 777.29,
-      "win_prob": 0.61,
-      "expected_value": 281.44,
-      "tier_scores": {
-        "trend": 7.5,
-        "catalyst": 4.5,
-        "context": 5.5
-      }
-    },
-    {
       "symbol": "DABUR.NS",
       "price": 473.45,
-      "score": 61,
+      "score": 65,
       "entry_low": 472.03,
       "entry_high": 474.87,
       "day_target": 492.24,
       "day_target_pct": 3.97,
       "rsi": 59.47,
       "adx": 28.55,
-      "shares": 30,
-      "profit_at_tgt": 563.7,
+      "shares": 32,
+      "profit_at_tgt": 601.28,
       "breakout_type": null,
       "sector": "FMCG",
-      "sector_mom": 0.42,
+      "sector_mom": 0.54,
       "reasons": [
         "ADX 29 \u2014 trend building",
         "RSI 59 \u2014 ideal momentum zone, room to extend",
@@ -69,18 +38,49 @@
         "Supertrend bullish \u2014 price above rising ATR band"
       ],
       "intraday_stop": 467.19,
-      "win_prob": 0.59,
-      "expected_value": 256.94,
+      "win_prob": 0.61,
+      "expected_value": 286.25,
       "tier_scores": {
         "trend": 6.5,
         "catalyst": 4.5,
-        "context": 5.0
+        "context": 6.0
+      }
+    },
+    {
+      "symbol": "APLLTD.NS",
+      "price": 789.2,
+      "score": 59,
+      "entry_low": 786.83,
+      "entry_high": 791.57,
+      "day_target": 820.77,
+      "day_target_pct": 4.0,
+      "rsi": 63.67,
+      "adx": 37.8,
+      "shares": 17,
+      "profit_at_tgt": 536.69,
+      "breakout_type": null,
+      "sector": "Pharma",
+      "sector_mom": 0.34,
+      "reasons": [
+        "ADX 38 \u2014 strong directional trend",
+        "Price > EMA20 > EMA50 \u2014 bullish structure intact",
+        "Volume surge \u2014 institutional participation confirmed",
+        "MACD bullish and accelerating",
+        "Supertrend bullish \u2014 price above rising ATR band"
+      ],
+      "intraday_stop": 777.29,
+      "win_prob": 0.58,
+      "expected_value": 229.35,
+      "tier_scores": {
+        "trend": 7.5,
+        "catalyst": 4.5,
+        "context": 3.5
       }
     },
     {
       "symbol": "THERMAX.NS",
       "price": 4545.1,
-      "score": 57,
+      "score": 53,
       "entry_low": 4531.46,
       "entry_high": 4558.74,
       "day_target": 4726.9,
@@ -90,8 +90,8 @@
       "shares": 2,
       "profit_at_tgt": 363.6,
       "breakout_type": null,
-      "sector": "Infrastructure",
-      "sector_mom": 0.91,
+      "sector": "",
+      "sector_mom": 0.0,
       "reasons": [
         "ADX 50 \u2014 strong directional trend",
         "Price > EMA20 > EMA50 \u2014 bullish structure intact",
@@ -100,12 +100,12 @@
         "Supertrend bullish \u2014 price above rising ATR band"
       ],
       "intraday_stop": 4450.11,
-      "win_prob": 0.58,
-      "expected_value": 129.21,
+      "win_prob": 0.56,
+      "expected_value": 120.8,
       "tier_scores": {
         "trend": 4.5,
         "catalyst": 4.5,
-        "context": 6.0
+        "context": 5.0
       }
     }
   ]
