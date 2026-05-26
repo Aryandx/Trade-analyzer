@@ -1,6 +1,6 @@
 {
-  "date": "2026-05-18",
-  "generated_at": "2026-05-18T09:00",
+  "date": "2026-05-26",
+  "generated_at": "2026-05-26T12:34",
   "capital": 32000,
   "weekly_goal": 4000,
   "week_banked": -493,
@@ -18,18 +18,18 @@
     {
       "symbol": "DABUR.NS",
       "price": 473.45,
-      "score": 65,
+      "score": 61,
       "entry_low": 472.03,
       "entry_high": 474.87,
       "day_target": 492.24,
       "day_target_pct": 3.97,
       "rsi": 59.47,
       "adx": 28.55,
-      "shares": 32,
-      "profit_at_tgt": 601.28,
+      "shares": 30,
+      "profit_at_tgt": 563.7,
       "breakout_type": null,
       "sector": "FMCG",
-      "sector_mom": 0.54,
+      "sector_mom": 0.17,
       "reasons": [
         "ADX 29 \u2014 trend building",
         "RSI 59 \u2014 ideal momentum zone, room to extend",
@@ -38,12 +38,12 @@
         "Supertrend bullish \u2014 price above rising ATR band"
       ],
       "intraday_stop": 467.19,
-      "win_prob": 0.61,
-      "expected_value": 286.25,
+      "win_prob": 0.59,
+      "expected_value": 256.94,
       "tier_scores": {
         "trend": 6.5,
         "catalyst": 4.5,
-        "context": 6.0
+        "context": 5.0
       }
     },
     {
@@ -59,8 +59,8 @@
       "shares": 17,
       "profit_at_tgt": 536.69,
       "breakout_type": null,
-      "sector": "Pharma",
-      "sector_mom": 0.34,
+      "sector": "",
+      "sector_mom": 0.0,
       "reasons": [
         "ADX 38 \u2014 strong directional trend",
         "Price > EMA20 > EMA50 \u2014 bullish structure intact",
