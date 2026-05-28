@@ -1,6 +1,6 @@
 {
-  "date": "2026-05-27",
-  "generated_at": "2026-05-27T11:43",
+  "date": "2026-05-28",
+  "generated_at": "2026-05-28T11:20",
   "capital": 32000,
   "weekly_goal": 4000,
   "week_banked": -493,
@@ -60,7 +60,7 @@
       "profit_at_tgt": 536.69,
       "breakout_type": null,
       "sector": "Pharma",
-      "sector_mom": 0.08,
+      "sector_mom": 0.23,
       "reasons": [
         "ADX 38 \u2014 strong directional trend",
         "Price > EMA20 > EMA50 \u2014 bullish structure intact",
@@ -91,7 +91,7 @@
       "profit_at_tgt": 363.6,
       "breakout_type": null,
       "sector": "Infrastructure",
-      "sector_mom": 0.6,
+      "sector_mom": 0.86,
       "reasons": [
         "ADX 50 \u2014 strong directional trend",
         "Price > EMA20 > EMA50 \u2014 bullish structure intact",
