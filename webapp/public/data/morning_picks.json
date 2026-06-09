@@ -1,6 +1,6 @@
 {
-  "date": "2026-06-05",
-  "generated_at": "2026-06-05T10:33",
+  "date": "2026-06-09",
+  "generated_at": "2026-06-09T10:36",
   "capital": 32000,
   "weekly_goal": 4000,
   "week_banked": -493,
@@ -29,7 +29,7 @@
       "profit_at_tgt": 568.26,
       "breakout_type": null,
       "sector": "Pharma",
-      "sector_mom": 0.56,
+      "sector_mom": 0.99,
       "reasons": [
         "ADX 38 \u2014 strong directional trend",
         "Price > EMA20 > EMA50 \u2014 bullish structure intact",
@@ -60,7 +60,7 @@
       "profit_at_tgt": 563.7,
       "breakout_type": null,
       "sector": "FMCG",
-      "sector_mom": 0.08,
+      "sector_mom": 0.03,
       "reasons": [
         "ADX 29 \u2014 trend building",
         "RSI 59 \u2014 ideal momentum zone, room to extend",
@@ -90,8 +90,8 @@
       "shares": 2,
       "profit_at_tgt": 363.6,
       "breakout_type": null,
-      "sector": "",
-      "sector_mom": 0.0,
+      "sector": "Infrastructure",
+      "sector_mom": 0.16,
       "reasons": [
         "ADX 50 \u2014 strong directional trend",
         "Price > EMA20 > EMA50 \u2014 bullish structure intact",
