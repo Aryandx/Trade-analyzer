@@ -1,6 +1,6 @@
 {
-  "date": "2026-06-16",
-  "generated_at": "2026-06-16T10:56",
+  "date": "2026-06-19",
+  "generated_at": "2026-06-19T10:17",
   "capital": 32000,
   "weekly_goal": 4000,
   "week_banked": -493,
@@ -18,18 +18,18 @@
     {
       "symbol": "DABUR.NS",
       "price": 473.45,
-      "score": 69,
+      "score": 61,
       "entry_low": 472.03,
       "entry_high": 474.87,
       "day_target": 492.24,
       "day_target_pct": 3.97,
       "rsi": 59.47,
       "adx": 28.55,
-      "shares": 33,
-      "profit_at_tgt": 620.07,
+      "shares": 30,
+      "profit_at_tgt": 563.7,
       "breakout_type": null,
-      "sector": "FMCG",
-      "sector_mom": 1.56,
+      "sector": "",
+      "sector_mom": 0.0,
       "reasons": [
         "ADX 29 \u2014 trend building",
         "RSI 59 \u2014 ideal momentum zone, room to extend",
@@ -38,43 +38,12 @@
         "Supertrend bullish \u2014 price above rising ATR band"
       ],
       "intraday_stop": 467.19,
-      "win_prob": 0.62,
-      "expected_value": 307.76,
+      "win_prob": 0.59,
+      "expected_value": 256.94,
       "tier_scores": {
         "trend": 6.5,
         "catalyst": 4.5,
-        "context": 7.0
-      }
-    },
-    {
-      "symbol": "THERMAX.NS",
-      "price": 4545.1,
-      "score": 61,
-      "entry_low": 4531.46,
-      "entry_high": 4558.74,
-      "day_target": 4726.9,
-      "day_target_pct": 4.0,
-      "rsi": 70.71,
-      "adx": 50.17,
-      "shares": 2,
-      "profit_at_tgt": 363.6,
-      "breakout_type": null,
-      "sector": "Infrastructure",
-      "sector_mom": 2.1,
-      "reasons": [
-        "ADX 50 \u2014 strong directional trend",
-        "Price > EMA20 > EMA50 \u2014 bullish structure intact",
-        "Volume surge \u2014 institutional participation confirmed",
-        "MACD bullish and accelerating",
-        "Supertrend bullish \u2014 price above rising ATR band"
-      ],
-      "intraday_stop": 4450.11,
-      "win_prob": 0.59,
-      "expected_value": 137.63,
-      "tier_scores": {
-        "trend": 4.5,
-        "catalyst": 4.5,
-        "context": 7.0
+        "context": 5.0
       }
     },
     {
@@ -90,8 +59,8 @@
       "shares": 17,
       "profit_at_tgt": 536.69,
       "breakout_type": null,
-      "sector": "",
-      "sector_mom": 0.0,
+      "sector": "Pharma",
+      "sector_mom": 0.36,
       "reasons": [
         "ADX 38 \u2014 strong directional trend",
         "Price > EMA20 > EMA50 \u2014 bullish structure intact",
@@ -106,6 +75,37 @@
         "trend": 7.5,
         "catalyst": 4.5,
         "context": 3.5
+      }
+    },
+    {
+      "symbol": "THERMAX.NS",
+      "price": 4545.1,
+      "score": 53,
+      "entry_low": 4531.46,
+      "entry_high": 4558.74,
+      "day_target": 4726.9,
+      "day_target_pct": 4.0,
+      "rsi": 70.71,
+      "adx": 50.17,
+      "shares": 2,
+      "profit_at_tgt": 363.6,
+      "breakout_type": null,
+      "sector": "",
+      "sector_mom": 0.0,
+      "reasons": [
+        "ADX 50 \u2014 strong directional trend",
+        "Price > EMA20 > EMA50 \u2014 bullish structure intact",
+        "Volume surge \u2014 institutional participation confirmed",
+        "MACD bullish and accelerating",
+        "Supertrend bullish \u2014 price above rising ATR band"
+      ],
+      "intraday_stop": 4450.11,
+      "win_prob": 0.56,
+      "expected_value": 120.8,
+      "tier_scores": {
+        "trend": 4.5,
+        "catalyst": 4.5,
+        "context": 5.0
       }
     }
   ]
