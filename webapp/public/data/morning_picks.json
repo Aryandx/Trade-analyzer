@@ -1,6 +1,6 @@
 {
-  "date": "2026-06-22",
-  "generated_at": "2026-06-22T11:38",
+  "date": "2026-06-24",
+  "generated_at": "2026-06-24T11:15",
   "capital": 32000,
   "weekly_goal": 4000,
   "week_banked": -493,
@@ -15,37 +15,6 @@
     }
   ],
   "picks": [
-    {
-      "symbol": "APLLTD.NS",
-      "price": 789.2,
-      "score": 63,
-      "entry_low": 786.83,
-      "entry_high": 791.57,
-      "day_target": 820.77,
-      "day_target_pct": 4.0,
-      "rsi": 63.67,
-      "adx": 37.8,
-      "shares": 18,
-      "profit_at_tgt": 568.26,
-      "breakout_type": null,
-      "sector": "Pharma",
-      "sector_mom": 0.58,
-      "reasons": [
-        "ADX 38 \u2014 strong directional trend",
-        "Price > EMA20 > EMA50 \u2014 bullish structure intact",
-        "Volume surge \u2014 institutional participation confirmed",
-        "MACD bullish and accelerating",
-        "Supertrend bullish \u2014 price above rising ATR band"
-      ],
-      "intraday_stop": 777.29,
-      "win_prob": 0.6,
-      "expected_value": 254.73,
-      "tier_scores": {
-        "trend": 7.5,
-        "catalyst": 4.5,
-        "context": 4.5
-      }
-    },
     {
       "symbol": "DABUR.NS",
       "price": 473.45,
@@ -78,6 +47,37 @@
       }
     },
     {
+      "symbol": "APLLTD.NS",
+      "price": 789.2,
+      "score": 59,
+      "entry_low": 786.83,
+      "entry_high": 791.57,
+      "day_target": 820.77,
+      "day_target_pct": 4.0,
+      "rsi": 63.67,
+      "adx": 37.8,
+      "shares": 17,
+      "profit_at_tgt": 536.69,
+      "breakout_type": null,
+      "sector": "Pharma",
+      "sector_mom": 0.13,
+      "reasons": [
+        "ADX 38 \u2014 strong directional trend",
+        "Price > EMA20 > EMA50 \u2014 bullish structure intact",
+        "Volume surge \u2014 institutional participation confirmed",
+        "MACD bullish and accelerating",
+        "Supertrend bullish \u2014 price above rising ATR band"
+      ],
+      "intraday_stop": 777.29,
+      "win_prob": 0.58,
+      "expected_value": 229.35,
+      "tier_scores": {
+        "trend": 7.5,
+        "catalyst": 4.5,
+        "context": 3.5
+      }
+    },
+    {
       "symbol": "THERMAX.NS",
       "price": 4545.1,
       "score": 53,
@@ -90,8 +90,8 @@
       "shares": 2,
       "profit_at_tgt": 363.6,
       "breakout_type": null,
-      "sector": "Infrastructure",
-      "sector_mom": 0.5,
+      "sector": "",
+      "sector_mom": 0.0,
       "reasons": [
         "ADX 50 \u2014 strong directional trend",
         "Price > EMA20 > EMA50 \u2014 bullish structure intact",
