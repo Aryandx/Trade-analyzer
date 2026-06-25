@@ -1,6 +1,6 @@
 {
-  "date": "2026-06-24",
-  "generated_at": "2026-06-24T11:15",
+  "date": "2026-06-25",
+  "generated_at": "2026-06-25T10:37",
   "capital": 32000,
   "weekly_goal": 4000,
   "week_banked": -493,
@@ -16,96 +16,96 @@
   ],
   "picks": [
     {
-      "symbol": "DABUR.NS",
-      "price": 473.45,
-      "score": 61,
-      "entry_low": 472.03,
-      "entry_high": 474.87,
-      "day_target": 492.24,
-      "day_target_pct": 3.97,
-      "rsi": 59.47,
-      "adx": 28.55,
-      "shares": 30,
-      "profit_at_tgt": 563.7,
-      "breakout_type": null,
+      "symbol": "RADICO.NS",
+      "price": 3757.7,
+      "score": 73,
+      "entry_low": 3746.43,
+      "entry_high": 3768.97,
+      "day_target": 3889.33,
+      "day_target_pct": 3.5,
+      "rsi": 67.96,
+      "adx": 35.6,
+      "shares": 4,
+      "profit_at_tgt": 526.52,
+      "breakout_type": "CONSOLIDATION",
       "sector": "",
       "sector_mom": 0.0,
       "reasons": [
-        "ADX 29 \u2014 trend building",
-        "RSI 59 \u2014 ideal momentum zone, room to extend",
-        "Volume surge \u2014 institutional participation confirmed",
-        "MACD bullish and accelerating",
-        "Supertrend bullish \u2014 price above rising ATR band"
-      ],
-      "intraday_stop": 467.19,
-      "win_prob": 0.59,
-      "expected_value": 256.94,
-      "tier_scores": {
-        "trend": 6.5,
-        "catalyst": 4.5,
-        "context": 5.0
-      }
-    },
-    {
-      "symbol": "APLLTD.NS",
-      "price": 789.2,
-      "score": 59,
-      "entry_low": 786.83,
-      "entry_high": 791.57,
-      "day_target": 820.77,
-      "day_target_pct": 4.0,
-      "rsi": 63.67,
-      "adx": 37.8,
-      "shares": 17,
-      "profit_at_tgt": 536.69,
-      "breakout_type": null,
-      "sector": "Pharma",
-      "sector_mom": 0.13,
-      "reasons": [
-        "ADX 38 \u2014 strong directional trend",
+        "ADX 36 \u2014 strong directional trend",
         "Price > EMA20 > EMA50 \u2014 bullish structure intact",
+        "Base breakout (4.7% range) with volume",
         "Volume surge \u2014 institutional participation confirmed",
-        "MACD bullish and accelerating",
-        "Supertrend bullish \u2014 price above rising ATR band"
+        "MACD bullish and accelerating"
       ],
-      "intraday_stop": 777.29,
-      "win_prob": 0.58,
-      "expected_value": 229.35,
-      "tier_scores": {
-        "trend": 7.5,
-        "catalyst": 4.5,
-        "context": 3.5
-      }
-    },
-    {
-      "symbol": "THERMAX.NS",
-      "price": 4545.1,
-      "score": 53,
-      "entry_low": 4531.46,
-      "entry_high": 4558.74,
-      "day_target": 4726.9,
-      "day_target_pct": 4.0,
-      "rsi": 70.71,
-      "adx": 50.17,
-      "shares": 2,
-      "profit_at_tgt": 363.6,
-      "breakout_type": null,
-      "sector": "",
-      "sector_mom": 0.0,
-      "reasons": [
-        "ADX 50 \u2014 strong directional trend",
-        "Price > EMA20 > EMA50 \u2014 bullish structure intact",
-        "Volume surge \u2014 institutional participation confirmed",
-        "MACD bullish and accelerating",
-        "Supertrend bullish \u2014 price above rising ATR band"
-      ],
-      "intraday_stop": 4450.11,
-      "win_prob": 0.56,
-      "expected_value": 120.8,
+      "intraday_stop": 3713.82,
+      "win_prob": 0.64,
+      "expected_value": 271.96,
       "tier_scores": {
         "trend": 4.5,
-        "catalyst": 4.5,
-        "context": 5.0
+        "catalyst": 8.5,
+        "context": 6.0
+      }
+    },
+    {
+      "symbol": "KAJARIACER.NS",
+      "price": 1207.7,
+      "score": 65,
+      "entry_low": 1204.08,
+      "entry_high": 1211.32,
+      "day_target": 1251.05,
+      "day_target_pct": 3.59,
+      "rsi": 73.81,
+      "adx": 26.33,
+      "shares": 12,
+      "profit_at_tgt": 520.2,
+      "breakout_type": "VCP",
+      "sector": "",
+      "sector_mom": 0.0,
+      "reasons": [
+        "ADX 26 \u2014 trend building",
+        "Price > EMA20 > EMA50 \u2014 bullish structure intact",
+        "VCP \u2014 3-stage volatility contraction releasing",
+        "Volume surge \u2014 institutional participation confirmed",
+        "MACD bullish and accelerating"
+      ],
+      "intraday_stop": 1193.25,
+      "win_prob": 0.61,
+      "expected_value": 247.62,
+      "tier_scores": {
+        "trend": 3.5,
+        "catalyst": 7.5,
+        "context": 6.0
+      }
+    },
+    {
+      "symbol": "LAURUSLABS.NS",
+      "price": 1454.2,
+      "score": 59,
+      "entry_low": 1449.84,
+      "entry_high": 1458.56,
+      "day_target": 1511.97,
+      "day_target_pct": 3.97,
+      "rsi": 65.53,
+      "adx": 32.89,
+      "shares": 9,
+      "profit_at_tgt": 519.93,
+      "breakout_type": "CONSOLIDATION",
+      "sector": "Pharma",
+      "sector_mom": 0.38,
+      "reasons": [
+        "ADX 33 \u2014 strong directional trend",
+        "Price > EMA20 > EMA50 \u2014 bullish structure intact",
+        "Base breakout (10.0% range) with volume",
+        "Volume surge \u2014 institutional participation confirmed",
+        "Supertrend bullish \u2014 price above rising ATR band"
+      ],
+      "intraday_stop": 1434.94,
+      "win_prob": 0.58,
+      "expected_value": 231.67,
+      "tier_scores": {
+        "trend": 4.5,
+        "catalyst": 5.5,
+        "context": 5.5
       }
     }
   ]
