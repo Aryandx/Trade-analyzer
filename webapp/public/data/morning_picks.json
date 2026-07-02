@@ -1,6 +1,6 @@
 {
-  "date": "2026-07-01",
-  "generated_at": "2026-07-01T11:21",
+  "date": "2026-07-02",
+  "generated_at": "2026-07-02T11:40",
   "capital": 32000,
   "weekly_goal": 4000,
   "week_banked": -493,
@@ -28,8 +28,8 @@
       "shares": 18,
       "profit_at_tgt": 585.54,
       "breakout_type": "CONSOLIDATION",
-      "sector": "",
-      "sector_mom": 0.0,
+      "sector": "Pharma",
+      "sector_mom": 0.42,
       "reasons": [
         "ADX 28 \u2014 trend building",
         "Price > EMA20 > EMA50 \u2014 bullish structure intact",
@@ -44,37 +44,6 @@
         "trend": 6.5,
         "catalyst": 8.5,
         "context": 2.5
-      }
-    },
-    {
-      "symbol": "GODREJPROP.NS",
-      "price": 1866.6,
-      "score": 67,
-      "entry_low": 1861.0,
-      "entry_high": 1872.2,
-      "day_target": 1941.26,
-      "day_target_pct": 4.0,
-      "rsi": 63.51,
-      "adx": 18.92,
-      "shares": 8,
-      "profit_at_tgt": 597.28,
-      "breakout_type": "VCP",
-      "sector": "Realty",
-      "sector_mom": 1.86,
-      "reasons": [
-        "Price > EMA20 > EMA50 \u2014 bullish structure intact",
-        "VCP \u2014 3-stage volatility contraction releasing",
-        "Volume surge \u2014 institutional participation confirmed",
-        "MACD bullish and accelerating",
-        "Supertrend bullish \u2014 price above rising ATR band"
-      ],
-      "intraday_stop": 1840.33,
-      "win_prob": 0.61,
-      "expected_value": 286.09,
-      "tier_scores": {
-        "trend": 4.5,
-        "catalyst": 7.5,
-        "context": 5.5
       }
     },
     {
@@ -106,6 +75,37 @@
         "trend": 4.5,
         "catalyst": 7.5,
         "context": 5.0
+      }
+    },
+    {
+      "symbol": "GODREJPROP.NS",
+      "price": 1866.6,
+      "score": 59,
+      "entry_low": 1861.0,
+      "entry_high": 1872.2,
+      "day_target": 1941.26,
+      "day_target_pct": 4.0,
+      "rsi": 63.51,
+      "adx": 18.92,
+      "shares": 7,
+      "profit_at_tgt": 522.62,
+      "breakout_type": "VCP",
+      "sector": "",
+      "sector_mom": 0.0,
+      "reasons": [
+        "Price > EMA20 > EMA50 \u2014 bullish structure intact",
+        "VCP \u2014 3-stage volatility contraction releasing",
+        "Volume surge \u2014 institutional participation confirmed",
+        "MACD bullish and accelerating",
+        "Supertrend bullish \u2014 price above rising ATR band"
+      ],
+      "intraday_stop": 1840.33,
+      "win_prob": 0.58,
+      "expected_value": 228.85,
+      "tier_scores": {
+        "trend": 4.5,
+        "catalyst": 7.5,
+        "context": 3.5
       }
     }
   ]
