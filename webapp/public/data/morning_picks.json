@@ -1,6 +1,6 @@
 {
-  "date": "2026-07-03",
-  "generated_at": "2026-07-03T14:00",
+  "date": "2026-07-06",
+  "generated_at": "2026-07-06T13:42",
   "capital": 32000,
   "weekly_goal": 4000,
   "week_banked": -493,
@@ -18,7 +18,7 @@
     {
       "symbol": "GRANULES.NS",
       "price": 813.25,
-      "score": 75,
+      "score": 71,
       "entry_low": 810.81,
       "entry_high": 815.69,
       "day_target": 845.78,
@@ -29,7 +29,7 @@
       "profit_at_tgt": 618.07,
       "breakout_type": "CONSOLIDATION",
       "sector": "Pharma",
-      "sector_mom": 1.68,
+      "sector_mom": 0.17,
       "reasons": [
         "ADX 28 \u2014 trend building",
         "Price > EMA20 > EMA50 \u2014 bullish structure intact",
@@ -38,57 +38,26 @@
         "MACD bullish and accelerating"
       ],
       "intraday_stop": 800.55,
-      "win_prob": 0.65,
-      "expected_value": 312.99,
+      "win_prob": 0.63,
+      "expected_value": 299.93,
       "tier_scores": {
         "trend": 6.5,
         "catalyst": 8.5,
-        "context": 4.5
-      }
-    },
-    {
-      "symbol": "ZYDUSLIFE.NS",
-      "price": 1112.6,
-      "score": 65,
-      "entry_low": 1109.26,
-      "entry_high": 1115.94,
-      "day_target": 1147.46,
-      "day_target_pct": 3.13,
-      "rsi": 62.55,
-      "adx": 42.73,
-      "shares": 13,
-      "profit_at_tgt": 453.18,
-      "breakout_type": null,
-      "sector": "Pharma",
-      "sector_mom": 1.68,
-      "reasons": [
-        "ADX 43 \u2014 strong directional trend",
-        "Price > EMA20 > EMA50 \u2014 bullish structure intact",
-        "TTM Squeeze fired upward \u2014 compressed energy releasing",
-        "Supertrend bullish \u2014 price above rising ATR band",
-        "Pharma sector +1.7% \u2014 strong tailwind"
-      ],
-      "intraday_stop": 1100.98,
-      "win_prob": 0.61,
-      "expected_value": 215.71,
-      "tier_scores": {
-        "trend": 7.5,
-        "catalyst": 4.0,
-        "context": 5.5
+        "context": 3.5
       }
     },
     {
       "symbol": "KAJARIACER.NS",
       "price": 1210.4,
-      "score": 65,
+      "score": 69,
       "entry_low": 1206.77,
       "entry_high": 1214.03,
       "day_target": 1258.6,
       "day_target_pct": 3.98,
       "rsi": 71.78,
       "adx": 30.66,
-      "shares": 12,
-      "profit_at_tgt": 578.4,
+      "shares": 13,
+      "profit_at_tgt": 626.6,
       "breakout_type": "VCP",
       "sector": "",
       "sector_mom": 0.0,
@@ -100,12 +69,43 @@
         "MACD bullish and accelerating"
       ],
       "intraday_stop": 1194.33,
-      "win_prob": 0.61,
-      "expected_value": 275.3,
+      "win_prob": 0.62,
+      "expected_value": 310.94,
       "tier_scores": {
         "trend": 4.5,
         "catalyst": 7.5,
-        "context": 5.0
+        "context": 6.0
+      }
+    },
+    {
+      "symbol": "GODREJPROP.NS",
+      "price": 1866.6,
+      "score": 67,
+      "entry_low": 1861.0,
+      "entry_high": 1872.2,
+      "day_target": 1941.26,
+      "day_target_pct": 4.0,
+      "rsi": 63.51,
+      "adx": 18.92,
+      "shares": 8,
+      "profit_at_tgt": 597.28,
+      "breakout_type": "VCP",
+      "sector": "Realty",
+      "sector_mom": 1.48,
+      "reasons": [
+        "Price > EMA20 > EMA50 \u2014 bullish structure intact",
+        "VCP \u2014 3-stage volatility contraction releasing",
+        "Volume surge \u2014 institutional participation confirmed",
+        "MACD bullish and accelerating",
+        "Supertrend bullish \u2014 price above rising ATR band"
+      ],
+      "intraday_stop": 1840.33,
+      "win_prob": 0.61,
+      "expected_value": 286.09,
+      "tier_scores": {
+        "trend": 4.5,
+        "catalyst": 7.5,
+        "context": 5.5
       }
     }
   ]
