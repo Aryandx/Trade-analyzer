@@ -1,6 +1,6 @@
 {
-  "date": "2026-07-07",
-  "generated_at": "2026-07-07T11:34",
+  "date": "2026-07-17",
+  "generated_at": "2026-07-17T09:23",
   "capital": 32000,
   "weekly_goal": 4000,
   "week_banked": -493,
@@ -90,8 +90,8 @@
       "shares": 7,
       "profit_at_tgt": 522.62,
       "breakout_type": "VCP",
-      "sector": "Realty",
-      "sector_mom": 0.3,
+      "sector": "",
+      "sector_mom": 0.0,
       "reasons": [
         "Price > EMA20 > EMA50 \u2014 bullish structure intact",
         "VCP \u2014 3-stage volatility contraction releasing",
