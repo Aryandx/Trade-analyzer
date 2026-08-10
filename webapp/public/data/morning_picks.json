@@ -1,6 +1,6 @@
 {
-  "date": "2026-08-04",
-  "generated_at": "2026-08-04T10:43",
+  "date": "2026-08-10",
+  "generated_at": "2026-08-10T10:11",
   "capital": 32000,
   "weekly_goal": 4000,
   "week_banked": -493,
@@ -28,8 +28,8 @@
       "shares": 18,
       "profit_at_tgt": 585.54,
       "breakout_type": "CONSOLIDATION",
-      "sector": "",
-      "sector_mom": 0.0,
+      "sector": "Pharma",
+      "sector_mom": 0.1,
       "reasons": [
         "ADX 28 \u2014 trend building",
         "Price > EMA20 > EMA50 \u2014 bullish structure intact",
